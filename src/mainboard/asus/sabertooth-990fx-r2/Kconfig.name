@@ -1,0 +1,2 @@
+config BOARD_ASUS_SABERTOOTH_990FX_R2
+	bool "Sabertooth 990FX R2.0"

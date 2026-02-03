@@ -1,0 +1,5 @@
+Board name: Sabertooth 990FX R2.0
+Category: workstation
+ROM package: DIP-8
+ROM protocol: SPI
+ROM socketed: y

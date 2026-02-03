@@ -134,3 +134,6 @@ Documentation/*.pdf
 Documentation/_build
 
 doxygen/*
+*.log
+*.bak
+.direnv
