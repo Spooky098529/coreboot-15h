@@ -18,6 +18,7 @@
 #include <device/device.h>
 #include <device/pnp.h>
 #include <superio/conf_mode.h>
+#include <pc80/keyboard.h>
 #include <superio/ite/common/env_ctrl.h>
 
 #include "chip.h"
