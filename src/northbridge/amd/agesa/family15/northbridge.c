@@ -574,6 +574,17 @@ static unsigned long agesa_write_acpi_tables(struct device *device,
 }
 
 
+/* The NB HT config device is not part of the ACPI namespace,
+ * and returning "" means we don't inject anything into the
+ * ACPI namespace when resolving devicetree entries to ACPI
+ * device paths. If we exclude this field, then it returns NULL
+ * which makes the TPM driver fall back to the default path,
+ * which resolves to a path which is incompatible with the
+ * ACPI and devicetree layout used by the AGESA AMD boards. */
+static const char *northbridge_acpi_name(const struct device *dev) {
+        return "";
+}
+
 static struct device_operations northbridge_operations = {
 	.read_resources	  = nb_read_resources,
 	.set_resources	  = nb_set_resources,
@@ -582,6 +593,7 @@ static struct device_operations northbridge_operations = {
 	.acpi_fill_ssdt_generator = northbridge_fill_ssdt_generator,
 	.write_acpi_tables = agesa_write_acpi_tables,
 	.scan_bus	  = scan_chains,
+	.acpi_name	  = northbridge_acpi_name, // See above comment
 	.enable		  = 0,
 	.ops_pci	  = 0,
 };
