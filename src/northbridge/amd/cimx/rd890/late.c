@@ -227,7 +227,16 @@ static void set_pcie_dereset(void *nbconfig) {
 	u32 val;
 	u32 i;
 
-	val = 0x00000007UL;
+	/*
+	 * HTIU_REGA8 controls PCIe PERST# deassert for all four byte lanes.
+	 * Hardware default is 0x28282828; vendor BIOS sets 0x6F6F6F6F.
+	 * Bits 0,1,2,6 (= 0x47) must be set in each byte to reach 0x6F.
+	 * Writing only 0x7 (bits 0-2 of byte 0) leaves bytes 1-3 at 0x28,
+	 * which keeps PERST# asserted for physical PCIe expansion slots.
+         * The end effect is that without the correct mask here, we'll be
+         * missing some extra slots on NBs like 990FX.
+	 */
+	val = 0x47474747UL;
 	for (i = 0; i < MAX_NB_COUNT; i ++) {
 		nb_addr = pConfig->Northbridges[i].NbPciAddress.AddressValue | NB_HTIU_INDEX;
 		LibNbPciIndexRMW(nb_addr, NB_HTIU_REGA8, AccessS3SaveWidth32, ~val, val, &(pConfig->Northbridges[i]));
@@ -311,6 +320,16 @@ static void rd890_init(void *chip_info) {
 		pcie_cfg[nb_index].CoreSetting[i].SkipConfiguration = OFF;
 		pcie_cfg[nb_index].CoreSetting[i].PerformanceMode = OFF;
 	}
+
+	/*
+	 * GPP3b (CoreId 3) default CoreSetting has CplBufferAllocation=OFF.
+	 * PciePreTrainingInit skips PcieLibCplBufferAllocation() for any core
+	 * with this flag OFF, so force the flag ON so the buffers are set up.
+         * Other cores seem to have this enabled by default.
+         * TODO: Potentially make this conditional on NB revision, if it
+         * causes problems for northbridges which don't have GPP3b (SR5650?)
+	 */
+	pcie_cfg[nb_index].CoreSetting[3].CplBufferAllocation = ON;
 
 	for (i = MIN_PORT_ID; i <= MAX_PORT_ID; i++) {
 		if ((rd890_info->port_enable & (1 << i)) != 0) {

@@ -1886,6 +1886,7 @@ SB_MISC_REGF0                   EQU     0F0h
 
 #define AMD_NB_REG78            0x78
 #define AMD_NB_SCRATCH          AMD_NB_REG78
+#define AMD_NB_BDF              ((0 << 3) + 0)
 #define MailBoxPort             0x3E
 
 // GPP Link Configuration

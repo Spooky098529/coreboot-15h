@@ -29,6 +29,12 @@ static void agesawrapper_post_device(void *unused)
 
 	agesawrapper_amdinitlate();
 
+#if CONFIG(SOUTHBRIDGE_AMD_CIMX_SB800)
+        // Run SB800 late post, it seems to be skipped on fam15h due
+        // to different state machines being used for different families.
+        sb_Late_Post();
+#endif
+
 	if (!acpi_s3_resume_allowed())
 		return;
 

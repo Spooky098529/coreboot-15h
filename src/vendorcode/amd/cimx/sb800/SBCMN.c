@@ -802,6 +802,7 @@ c3PopupSetting (
 {
   AMDSBCFG* Temp;
   UINT8  dbValue;
+  UINT8 dbTemp;
   Temp = pConfig;
   //RPR C-State and VID/FID Change
   dbValue = getNumberOfCpuCores  ();
@@ -813,21 +814,27 @@ c3PopupSetting (
     RWMEM (ACPI_MMIO_BASE + PMIO_BASE + SB_PMIOA_REG80, AccWidthUint8 | S3_SAVE, ~(BIT1 + BIT2), (BIT1 + BIT2));
     RWMEM (ACPI_MMIO_BASE + PMIO_BASE + SB_PMIOA_REG7E, AccWidthUint8 | S3_SAVE, ~BIT6, BIT6);
   }
-  //SB800 needs to changed for RD790 support
-  //PM 0x80 [8] = 0 for system with RS780
-  //Note: RS690 north bridge has AllowLdtStop built for both display and PCIE traffic to wake up the HT link.
-  //BmReq# needs to be ignored otherwise may cause LDTSTP# not to toggle.
-  //PM_IO 0x80[3]=1, Ignore BM_STS_SET message from NB
-  RWMEM (ACPI_MMIO_BASE + PMIO_BASE + SB_PMIOA_REG80, AccWidthUint16 | S3_SAVE, ~(BIT9 + BIT8 + BIT7 + BIT4 + BIT3 + BIT2 + BIT1 + BIT0), 0x21F);
-  //LdtStartTime = 10h for minimum LDTSTP# de-assertion duration of 16us in StutterMode. This is to guarantee that
-  //the HT link has been safely reconnected before it can be disconnected again. If C3 pop-up is enabled, the 16us also
-  //serves as the minimum idle time before LDTSTP# can be asserted again. This allows DMA to finish before the HT
-  //link is disconnected.
+  // SB800 needs to check for NB
+  // PM 0x80 [8] = needs to be 0 for systems with NB to avoid PM on NB<->SB link,
+  // which can cause latency and shutdown of the A-Link interface.
+  // BmReq# needs to be ignored otherwise it may cause LDTSTP# not to
+  // toggle, which is important during sleep.
+  RWMEM(ACPI_MMIO_BASE + PMIO_BASE + SB_PMIOA_REG80, AccWidthUint16 | S3_SAVE,
+        ~(BIT9 + BIT8 + BIT7 + BIT4 + BIT3 + BIT2 + BIT1 + BIT0), 0x21F);
+  // LdtStartTime = 10h for minimum LDTSTP# de-assertion duration of 16us in StutterMode.
+  // This is to ensure that the HT link has been safely reconnected before it can be
+  // disconnected again. If C3 pop-up is enabled, the 16us also serves as the minimum idle
+  // time before LDTSTP# can be asserted again. This allows DMA to finish before the HT
+  // link is disconnected. Also important for sleep timing and avoiding concurrent
+  // shutdown & startup.
   RWMEM (ACPI_MMIO_BASE + PMIO_BASE + SB_PMIOA_REG94 + 2, AccWidthUint8, 0, 0x10);
 
-  //This setting provides 16us delay before the assertion of LDTSTOP# when C3 is entered. The
-  //delay will allow USB DMA to go on in a continuous manner
-  RWMEM (ACPI_MMIO_BASE + PMIO_BASE + SB_PMIOA_REG98 + 1, AccWidthUint8, 0, 0x10);
+  // This setting provides 16us delay before the assertion of LDTSTOP# when C3 is entered.
+  // The delay will allow USB DMA to continue and finalize
+  // We set this lower for systems with a discrete NB to avoid overly aggressive
+  // link power management
+  dbTemp = (HasDiscreteNB()) ? 0x14 : 0x10; // 20µs for server NB, 16µs otherwise
+  RWMEM(ACPI_MMIO_BASE + PMIO_BASE + SB_PMIOA_REG98 + 1, AccWidthUint8, 0, dbTemp);
   // Not in the RPR so far, it's hand writing from ASIC
   RWMEM (ACPI_MMIO_BASE + PMIO_BASE + SB_PMIOA_REG7C, AccWidthUint8 | S3_SAVE, 0, 0x85);
   RWMEM (ACPI_MMIO_BASE + PMIO_BASE + SB_PMIOA_REG7C + 1, AccWidthUint8 | S3_SAVE, 0, 0x01);
@@ -837,8 +844,12 @@ c3PopupSetting (
   RWMEM (ACPI_MMIO_BASE + PMIO_BASE + SB_PMIOA_REG98 + 3, AccWidthUint8, 0, 0x10);
   RWMEM (ACPI_MMIO_BASE + PMIO_BASE + SB_PMIOA_REGB4 + 1, AccWidthUint8, 0, 0x0B);
   RWMEM (ACPI_MMIO_BASE + PMIO_BASE + SB_PMIOA_REG88, AccWidthUint8 | S3_SAVE, 0xFF, BIT4);
-  if (pConfig->LdtStpDisable) {
-    RWMEM (ACPI_MMIO_BASE + PMIO_BASE + SB_PMIOA_REG88, AccWidthUint8 | S3_SAVE, ~BIT5, 0);
+  // If the setting to disable LdtStp is explicitly set, or if we have a known discrete
+  // northbridge (i.e. non-APU boards) we unset the LDTSTP# HT Link Stop setting
+  // to ensure it keeps running, preventing hangs & latency
+  if (pConfig->LdtStpDisable || HasDiscreteNB()) {
+    RWMEM(ACPI_MMIO_BASE + PMIO_BASE + SB_PMIOA_REG88, AccWidthUint8 | S3_SAVE,
+          ~BIT5, 0);
   }
 }
 

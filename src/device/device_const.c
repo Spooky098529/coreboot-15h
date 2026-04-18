@@ -221,8 +221,12 @@ DEVTREE_CONST struct device *pcidev_path_on_root(pci_devfn_t devfn)
 	/* Work around pcidev_path_behind() below failing
 	 * due tue complicated devicetree with topology
 	 * being manipulated on-the-fly.
+	 * AMD Family 15 AGESA boards (e.g. SB800/SB950) nest southbridge
+	 * devices inside the D18F0 chip in the static device tree, placing
+	 * them on _dev7_links[0] rather than the PCI root bus directly.
 	 */
-	if (CONFIG(NORTHBRIDGE_AMD_AMDFAM10))
+	if (CONFIG(NORTHBRIDGE_AMD_AMDFAM10) ||
+	    CONFIG(NORTHBRIDGE_AMD_AGESA_FAMILY15))
 		return dev_find_slot(0, devfn);
 
 	return pcidev_path_behind(pci_root_bus(), devfn);

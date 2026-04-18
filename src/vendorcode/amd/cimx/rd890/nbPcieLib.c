@@ -703,7 +703,8 @@ PcieLibIsValidCoreId (
   CoreAddress = PcieLibGetCoreAddress (CoreId, pConfig);
   NbInfo = LibNbGetRevisionInfo (pConfig);
   if (CoreAddress == GPP3b_CORE) {
-    if (NbInfo.Type == NB_RD890 || NbInfo.Type == NB_SR5690) {
+    /* TODO: Expanded to include 990FX, potentially other NBs such as 970 need to be included here */
+    if (NbInfo.Type == NB_RD890 || NbInfo.Type == NB_SR5690 || NbInfo.Type == NB_990FX) {
       return TRUE;
     } else {
       return FALSE;

@@ -37,6 +37,9 @@ unsigned int  readAlink (IN unsigned int Index);
 void  writeAlink (IN unsigned int Index, IN unsigned int Data);
 void  rwAlink (IN unsigned int Index, IN unsigned int AndMask, IN unsigned int OrMask);
 
+// Discrete NB detection helper
+unsigned char HasDiscreteNB(void);
+
 //AMD Library Routines (LEGACY.C)
 unsigned int   GetFixUp (OUT void);
 
@@ -44,7 +47,6 @@ unsigned int   GetFixUp (OUT void);
 void  ReadIO (IN unsigned short  Address, IN unsigned char OpFlag, IN void *Value);
 void  WriteIO (IN unsigned short Address, IN unsigned char OpFlag, IN void *Value);
 void  RWIO (IN unsigned short Address, IN unsigned char OpFlag, IN unsigned int Mask, IN unsigned int Data);
-
 
 
 //AMD Library Routines (MEMLIB.C)

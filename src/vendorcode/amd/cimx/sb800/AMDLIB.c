@@ -90,3 +90,40 @@ rwAlink (
   writeAlink (Index, (readAlink (Index) & AndMask) | OrMask );
 }
 
+/**
+ *
+ * HasDiscreteNB - A helper to etermine if a discrete NB (i.e. 990FX/RD890)
+ * is used in the system, so we can tweak operation of the SB for PCIe and NB<->SB
+ * link and prevent configuration which is only beneficial on APU systems
+ * where the NB is integrated into the APU, and the SB runs the show.
+ *
+ * A list of NBs this detects:
+ *
+ *      Family           DeviceID
+ *     -------------------------
+ *      RD890TV           0x5956
+ *      RX780             0x5957
+ *      RD780             0x5958
+ *      SR5690            0x5A10
+ *      RD890             0x5A11
+ *      SR5670            0x5A12
+ *      SR5650            0x5A13
+ *      990FX/990X/970    0x5A14
+ *
+ * This helper is only useful for runtime detection rather than gating functionality
+ * based on whether or not the board builds support for the RD890 (for example).
+ * This instead detects the presence at runtime and validates the NB matches
+ * known NB chips.
+ */
+UINT8
+HasDiscreteNB(void)
+{
+	UINT16 DevID;
+
+	ReadPCI((AMD_NB_BDF << 16) + 2, AccWidthUint16, &DevID);
+	return ((DevID == 0x5956) || (DevID == 0x5957) || (DevID == 0x5958) || (DevID == 0x5A10)
+		|| (DevID == 0x5A11) || (DevID == 0x5A12) || (DevID == 0x5A13)
+		|| (DevID == 0x5A14))
+		       ? 1
+		       : 0;
+}
