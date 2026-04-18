@@ -403,6 +403,9 @@ extern F_IS_NB_PSTATE_ENABLED F15IsNbPstateEnabled;
     #if OPTION_C32_SOCKET_SUPPORT == TRUE
       #define OR_MODULES 1
     #endif
+    #if OPTION_AM3_SOCKET_SUPPORT == TRUE
+      #define OR_MODULES 1
+    #endif
     #define OR_RECOVERY_SOCKETS 1
     #define OR_RECOVERY_MODULES 1
     extern F_CPU_GET_SUBFAMILY_ID_ARRAY GetF15OrLogicalIdAndRev;
