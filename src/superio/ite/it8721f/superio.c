@@ -19,7 +19,9 @@
 #include <device/pnp.h>
 #include <pc80/keyboard.h>
 #include <superio/conf_mode.h>
+#include <superio/ite/common/env_ctrl.h>
 
+#include "chip.h"
 #include "it8721f.h"
 
 static void init(struct device *dev)
@@ -28,13 +30,20 @@ static void init(struct device *dev)
 	if (!dev->enabled)
 		return;
 
+        const struct superio_ite_it8721f_config *conf = dev->chip_info;
+        const struct resource *res;
+
 	switch (dev->path.pnp.device) {
 	case IT8721F_FDC: /* TODO. */
 		break;
 	case IT8721F_PP: /* TODO. */
 		break;
-	case IT8721F_EC: /* TODO. */
-		break;
+        case IT8721F_EC:
+                res = find_resource(dev, PNP_IDX_IO0);
+                if (!conf || !res)
+                        break;
+                ite_ec_init(res->base, &conf->ec);
+                break;
 	case IT8721F_KBCK:
 		pc_keyboard_init(NO_AUX_DEVICE);
 		break;
