@@ -92,6 +92,18 @@ unsigned long acpi_fill_mcfg(unsigned long current)
 	return current;
 }
 
+static const char *lpc_acpi_name(const struct device *dev)
+{
+	if (dev->path.type != DEVICE_PATH_PCI)
+		return NULL;
+
+	switch (dev->path.pci.devfn) {
+		case PCI_DEVFN(0x14,0x03):
+			return "LIBR";
+	}
+
+	return NULL;
+}
 
 static struct device_operations lpc_ops = {
 	.read_resources = lpc_read_resources,
@@ -103,6 +115,7 @@ static struct device_operations lpc_ops = {
 	.init = lpc_init,
 	.scan_bus = scan_static_bus,
 	.ops_pci = &lops_pci,
+	.acpi_name = lpc_acpi_name,
 };
 
 static const struct pci_driver lpc_driver __pci_driver = {
