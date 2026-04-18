@@ -14,9 +14,9 @@
  * time.
  */
 
-#include <arch/early_variables.h>
 #include <assert.h>
 #include <string.h>
+#include <arch/early_variables.h>
 #include <security/tpm/tis.h>
 #include <vb2_api.h>
 #include <security/tpm/tss.h>
@@ -152,8 +152,10 @@ static uint8_t tlcl_init_done CAR_GLOBAL;
 
 uint32_t tlcl_lib_init(void)
 {
-	uint8_t done = car_get_var(tlcl_init_done);
-	if (done)
+	uint8_t init_done;
+
+	init_done = car_get_var(tlcl_init_done);
+	if (init_done)
 		return VB2_SUCCESS;
 
 	if (tis_init())
@@ -161,7 +163,8 @@ uint32_t tlcl_lib_init(void)
 	if (tis_open())
 		return VB2_ERROR_UNKNOWN;
 
-	car_set_var(tlcl_init_done, 1);
+	init_done = 1;
+	car_set_var(tlcl_init_done, init_done);
 
 	return VB2_SUCCESS;
 }
@@ -341,8 +344,7 @@ uint32_t tlcl_set_global_lock(void)
 	return tlcl_write(TPM_NV_INDEX0, (uint8_t *) &x, 0);
 }
 
-uint32_t tlcl_extend(int pcr_num,  uint16_t algorithm,
-		     const uint8_t *in_digest, size_t in_digest_len,
+uint32_t tlcl_extend(int pcr_num, const uint8_t *in_digest,
 		     uint8_t *out_digest)
 {
 	struct s_tpm_extend_cmd cmd;
@@ -351,11 +353,8 @@ uint32_t tlcl_extend(int pcr_num,  uint16_t algorithm,
 
 	memcpy(&cmd, &tpm_extend_cmd, sizeof(cmd));
 	to_tpm_uint32(cmd.buffer + tpm_extend_cmd.pcrNum, pcr_num);
-
-	if (in_digest_len != kPcrDigestLength)
-		return TPM_E_HASH_ERROR;
-
 	memcpy(cmd.buffer + cmd.inDigest, in_digest, kPcrDigestLength);
+
 	result = tlcl_send_receive(cmd.buffer, response, sizeof(response));
 	if (result != TPM_SUCCESS)
 		return result;
@@ -363,5 +362,24 @@ uint32_t tlcl_extend(int pcr_num,  uint16_t algorithm,
 	if (out_digest)
 		memcpy(out_digest, response + kTpmResponseHeaderLength,
 		       kPcrDigestLength);
+	return result;
+}
+
+uint32_t tlcl_get_permissions(uint32_t index, uint32_t *permissions)
+{
+	struct s_tpm_getpermissions_cmd cmd;
+	uint8_t response[TPM_LARGE_ENOUGH_COMMAND_SIZE];
+	uint8_t *nvdata;
+	uint32_t result;
+	uint32_t size;
+
+	memcpy(&cmd, &tpm_getpermissions_cmd, sizeof(cmd));
+	to_tpm_uint32(cmd.buffer + tpm_getpermissions_cmd.index, index);
+	result = tlcl_send_receive(cmd.buffer, response, sizeof(response));
+	if (result != TPM_SUCCESS)
+		return result;
+
+	nvdata = response + kTpmResponseHeaderLength + sizeof(size);
+	from_tpm_uint32(nvdata + kNvDataPublicPermissionsOffset, permissions);
 	return result;
 }

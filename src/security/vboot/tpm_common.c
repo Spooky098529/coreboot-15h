@@ -1,15 +1,4 @@
-/*
- * This file is part of the coreboot project.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; version 2 of the License.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- */
+/* SPDX-License-Identifier: GPL-2.0-only */
 
 
 #include <security/tpm/tspi.h>
@@ -46,7 +35,7 @@ vb2_error_t vboot_extend_pcr(struct vb2_context *ctx, int pcr,
 	switch (which_digest) {
 	/* SHA1 of (devmode|recmode|keyblock) bits */
 	case BOOT_MODE_PCR:
-		return tpm_extend_pcr(pcr, VB2_HASH_SHA1, buffer, size,
+		return tpm_extend_pcr(pcr, VB2_HASH_SHA256, buffer, size,
 				      TPM_PCR_BOOT_MODE);
 	 /* SHA256 of HWID */
 	case HWID_DIGEST_PCR:

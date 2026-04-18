@@ -1,163 +1,98 @@
-/*
- * This file is part of the coreboot project.
- *
- * Copyright (C) 2014 The ChromiumOS Authors.  All rights reserved.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; version 2 of the License.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- */
+/* SPDX-License-Identifier: GPL-2.0-only */
 
 #include <assert.h>
 #include <cbmem.h>
 #include <console/console.h>
+#include <fmap.h>
 #include <stdint.h>
-#include <string.h>
 #include <symbols.h>
 #include <vb2_api.h>
 #include <security/vboot/misc.h>
 #include <security/vboot/symbols.h>
 #include <security/vboot/vboot_common.h>
 
-static struct vb2_context *vboot_ctx CAR_GLOBAL;
+static struct vb2_context *vboot_ctx;
 
-struct vboot_working_data *vboot_get_working_data(void)
+static void *vboot_get_workbuf(void)
 {
-	struct vboot_working_data *wd = NULL;
+	void *wb = NULL;
 
 	if (cbmem_possibly_online())
-		wd = cbmem_find(CBMEM_ID_VBOOT_WORKBUF);
+		wb = cbmem_find(CBMEM_ID_VBOOT_WORKBUF);
 
-	if (wd == NULL && CONFIG(VBOOT_STARTS_IN_BOOTBLOCK) &&
+	if (wb == NULL && CONFIG(VBOOT_STARTS_IN_BOOTBLOCK) &&
 	    preram_symbols_available())
-		wd = (struct vboot_working_data *)_vboot2_work;
+		wb = _vboot2_work;
 
-	assert(wd != NULL);
+	assert(wb != NULL);
 
-	return wd;
-}
-
-static inline void *vboot_get_workbuf(struct vboot_working_data *wd)
-{
-	return (void *)((uintptr_t)wd + wd->buffer_offset);
+	return wb;
 }
 
 struct vb2_context *vboot_get_context(void)
 {
-	struct vb2_context **vboot_ctx_ptr = car_get_var_ptr(&vboot_ctx);
-	struct vboot_working_data *wd;
+	void *wb;
 
 	/* Return if context has already been initialized/restored. */
-	if (*vboot_ctx_ptr)
-		return *vboot_ctx_ptr;
+	if (vboot_ctx)
+		return vboot_ctx;
 
-	wd = vboot_get_working_data();
+	wb = vboot_get_workbuf();
 
 	/* Restore context from a previous stage. */
 	if (vboot_logic_executed()) {
-		assert(vb2api_reinit(vboot_get_workbuf(wd),
-				     vboot_ctx_ptr) == VB2_SUCCESS);
-		return *vboot_ctx_ptr;
+		assert(vb2api_reinit(wb, &vboot_ctx) == VB2_SUCCESS);
+		return vboot_ctx;
 	}
 
 	assert(verification_should_run());
 
-	/*
-	 * vboot prefers 16-byte alignment. This takes away 16 bytes
-	 * from the VBOOT2_WORK region, but the vboot devs said that's okay.
-	 */
-	memset(wd, 0, sizeof(*wd));
-	wd->buffer_offset = ALIGN_UP(sizeof(*wd), 16);
-	wd->buffer_size = VB2_FIRMWARE_WORKBUF_RECOMMENDED_SIZE
-			  - wd->buffer_offset;
-
 	/* Initialize vb2_shared_data and friends. */
-	assert(vb2api_init(vboot_get_workbuf(wd), wd->buffer_size,
-			   vboot_ctx_ptr) == VB2_SUCCESS);
+	assert(vb2api_init(wb, VB2_FIRMWARE_WORKBUF_RECOMMENDED_SIZE,
+			   &vboot_ctx) == VB2_SUCCESS);
 
-	return *vboot_ctx_ptr;
+	return vboot_ctx;
 }
 
-int vboot_get_selected_region(struct region *region)
+int vboot_locate_firmware(struct vb2_context *ctx, struct region_device *fw)
 {
-	const struct selected_region *reg =
-		&vboot_get_working_data()->selected_region;
+	const char *name;
 
-	if (reg == NULL)
-		return -1;
+	if (vboot_is_firmware_slot_a(ctx))
+		name = "FW_MAIN_A";
+	else
+		name = "FW_MAIN_B";
 
-	if (reg->offset == 0 && reg->size == 0)
-		return -1;
+	int ret = fmap_locate_area_as_rdev(name, fw);
+	if (ret)
+		return ret;
 
-	region->offset = reg->offset;
-	region->size = reg->size;
-
-	return 0;
+	/* Truncate area to the size that was actually signed by vboot. */
+	return rdev_chain(fw, fw, 0, vb2api_get_firmware_size(ctx));
 }
 
-void vboot_set_selected_region(const struct region *region)
-{
-	struct selected_region *reg =
-		&vboot_get_working_data()->selected_region;
-
-	assert(reg != NULL);
-
-	reg->offset = region_offset(region);
-	reg->size = region_sz(region);
-}
-
-int vboot_is_slot_selected(void)
-{
-	struct selected_region *reg =
-		&vboot_get_working_data()->selected_region;
-
-	assert(reg != NULL);
-
-	return reg->size > 0;
-}
-
-#if CONFIG(VBOOT_STARTS_IN_BOOTBLOCK)
-/*
- * For platforms that do not employ VBOOT_STARTS_IN_ROMSTAGE, vboot
- * verification occurs before CBMEM is brought online, using pre-RAM.
- * In order to make vboot data structures available downstream, copy
- * vboot_working_data from SRAM/CAR into CBMEM.
- */
-static void vboot_migrate_cbmem(int unused)
-{
-	const size_t cbmem_size = VB2_KERNEL_WORKBUF_RECOMMENDED_SIZE;
-	struct vboot_working_data *wd_preram =
-		(struct vboot_working_data *)_vboot2_work;
-	struct vboot_working_data *wd_cbmem =
-		cbmem_add(CBMEM_ID_VBOOT_WORKBUF, cbmem_size);
-	assert(wd_cbmem != NULL);
-	memcpy(wd_cbmem, wd_preram, sizeof(struct vboot_working_data));
-	/*
-	 * TODO(chromium:1021452): buffer_size is uint16_t and not large enough
-	 * to hold the kernel verification workbuf size.  The only code which
-	 * reads this value is in lb_vboot_workbuf() for lb_range->range_size.
-	 * This value being zero doesn't cause any problems, since it is never
-	 * read downstream.  Fix or deprecate vboot_working_data.
-	 */
-	wd_cbmem->buffer_size = 0;
-	vb2api_relocate(vboot_get_workbuf(wd_cbmem),
-			vboot_get_workbuf(wd_preram),
-			cbmem_size - wd_cbmem->buffer_offset,
-			car_get_var_ptr(&vboot_ctx));
-}
-ROMSTAGE_CBMEM_INIT_HOOK(vboot_migrate_cbmem)
-#else
 static void vboot_setup_cbmem(int unused)
 {
-	struct vboot_working_data *wd_cbmem =
-		cbmem_add(CBMEM_ID_VBOOT_WORKBUF,
-			  VB2_KERNEL_WORKBUF_RECOMMENDED_SIZE);
-	assert(wd_cbmem != NULL);
+	vb2_error_t rv;
+	const size_t cbmem_size = VB2_KERNEL_WORKBUF_RECOMMENDED_SIZE;
+	void *wb_cbmem = cbmem_add(CBMEM_ID_VBOOT_WORKBUF, cbmem_size);
+	assert(wb_cbmem != NULL);
+	/*
+	 * For platforms where VBOOT_STARTS_IN_BOOTBLOCK, vboot verification
+	 * occurs before CBMEM is brought online, using pre-RAM. In order to
+	 * make vboot data structures available downstream, copy vboot workbuf
+	 * from SRAM/CAR into CBMEM.
+	 *
+	 * For platforms where VBOOT_STARTS_IN_ROMSTAGE, verification occurs
+	 * after CBMEM is brought online.  Directly initialize vboot data
+	 * structures in CBMEM, which will also be available downstream.
+	 */
+	if (CONFIG(VBOOT_STARTS_IN_BOOTBLOCK))
+		rv = vb2api_relocate(wb_cbmem, _vboot2_work, cbmem_size,
+				     &vboot_ctx);
+	else
+		rv = vb2api_init(wb_cbmem, cbmem_size, &vboot_ctx);
+
+	assert(rv == VB2_SUCCESS);
 }
 ROMSTAGE_CBMEM_INIT_HOOK(vboot_setup_cbmem)
-#endif

@@ -1,19 +1,5 @@
-/*
- * This file is part of the coreboot project.
- *
- * Copyright 2015 Google, Inc.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; version 2 of the License.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- */
+/* SPDX-License-Identifier: GPL-2.0-only */
 
-#include <arch/early_variables.h>
 #include <cbfs.h>
 #include <console/console.h>
 #include <ec/google/chromeec/ec.h>
@@ -33,14 +19,14 @@ _Static_assert(!CONFIG(VBOOT_RETURN_FROM_VERSTAGE) ||
 	       CONFIG(VBOOT_SEPARATE_VERSTAGE),
 	       "return from verstage only makes sense for separate verstages");
 
-int vboot_executed CAR_GLOBAL;
+int vboot_executed;
 
 void vboot_run_logic(void)
 {
 	if (verification_should_run()) {
 		/* Note: this path is not used for VBOOT_RETURN_FROM_VERSTAGE */
 		verstage_main();
-		car_set_var(vboot_executed, 1);
+		vboot_executed = 1;
 	} else if (verstage_should_load()) {
 		struct cbfsf file;
 		struct prog verstage =
@@ -67,28 +53,22 @@ void vboot_run_logic(void)
 		if (!CONFIG(VBOOT_RETURN_FROM_VERSTAGE))
 			return;
 
-		car_set_var(vboot_executed, 1);
+		vboot_executed = 1;
 	}
 }
 
-static int vboot_locate(struct cbfs_props *props)
+int vboot_locate_cbfs(struct region_device *rdev)
 {
-	struct region selected_region;
+	struct vb2_context *ctx;
 
 	/* Don't honor vboot results until the vboot logic has run. */
 	if (!vboot_logic_executed())
 		return -1;
 
-	if (vboot_get_selected_region(&selected_region))
+	ctx = vboot_get_context();
+
+	if (ctx->flags & VB2_CONTEXT_RECOVERY_MODE)
 		return -1;
 
-	props->offset = region_offset(&selected_region);
-	props->size = region_sz(&selected_region);
-
-	return 0;
+	return vboot_locate_firmware(ctx, rdev);
 }
-
-const struct cbfs_locator vboot_locator = {
-	.name = "VBOOT",
-	.locate = vboot_locate,
-};

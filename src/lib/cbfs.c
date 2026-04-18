@@ -23,10 +23,11 @@
 #include <commonlib/compression.h>
 #include <endian.h>
 #include <lib.h>
+#include <security/tpm/tspi/crtm.h>
+#include <security/vboot/vboot_common.h>
 #include <symbols.h>
 #include <timestamp.h>
 #include <fmap.h>
-#include <security/vboot/vboot_crtm.h>
 
 #define ERROR(x...) printk(BIOS_ERR, "CBFS: " x)
 #define LOG(x...) printk(BIOS_INFO, "CBFS: " x)
@@ -78,7 +79,7 @@ int cbfs_boot_locate(struct cbfsf *fh, const char *name, uint32_t *type)
 	}
 
 	if (!ret)
-		if (vboot_measure_cbfs_hook(fh, name))
+		if (tspi_measure_cbfs_hook(fh, name))
 			return -1;
 
 	return ret;

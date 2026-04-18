@@ -1,27 +1,14 @@
-/*
- * This file is part of the coreboot project.
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but without any warranty; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- */
+/* SPDX-License-Identifier: GPL-2.0-or-later */
 
-#include <arch/early_variables.h>
 #include <assert.h>
 #include <commonlib/endian.h>
+#include <commonlib/helpers.h>
 #include <console/console.h>
 #include <delay.h>
 #include <device/i2c_simple.h>
 #include <endian.h>
 #include <lib.h>
 #include <security/tpm/tis.h>
-#include <stdlib.h>
 #include <timer.h>
 #include <types.h>
 
@@ -100,7 +87,7 @@ int tis_sendrecv(const uint8_t *sendbuf, size_t sbuf_size,
 		return -1;
 
 	/* Determine the number of bytes remaining */
-	recv_bytes = min(be32_to_cpu(*(uint32_t *)&header->length),
+	recv_bytes = MIN(be32_to_cpu(*(uint32_t *)&header->length),
 		max_recv_bytes);
 
 	/* Determine if there is additional response data */

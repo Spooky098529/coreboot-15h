@@ -1,18 +1,51 @@
 ##
-## This file is part of the coreboot project.
 ##
-## Copyright (C) 2014 The ChromiumOS Authors.  All rights reserved.
-## Copyright (C) 2018 Siemens AG
 ##
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation; version 2 of the License.
-##
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-##
+## SPDX-License-Identifier: GPL-2.0-only
+
+ifeq ($(CONFIG_VBOOT_LIB),y)
+
+bootblock-y += vboot_lib.c
+verstage-y += vboot_lib.c
+romstage-y += vboot_lib.c
+ramstage-y += vboot_lib.c
+postcar-y += vboot_lib.c
+
+vboot-fixup-includes = $(patsubst -I%,-I$(top)/%,\
+		       $(patsubst $(src)/%.h,$(top)/$(src)/%.h,\
+		       $(filter-out -I$(obj),$(1))))
+
+# call with $1 = stage name to create rules for building the library
+# for the stage and adding it to the stage's set of object files.
+define vboot-for-stage
+VBOOT_LIB_$(1) = $(obj)/external/vboot_reference-$(1)/vboot_fw.a
+VBOOT_CFLAGS_$(1) += $$(call vboot-fixup-includes,$$(CPPFLAGS_$(1)))
+VBOOT_CFLAGS_$(1) += $$(CFLAGS_$(1))
+VBOOT_CFLAGS_$(1) += $$(call vboot-fixup-includes,$$($(1)-c-ccopts))
+VBOOT_CFLAGS_$(1) += -I$(abspath $(obj)) -Wno-missing-prototypes
+VBOOT_CFLAGS_$(1) += -DVBOOT_DEBUG
+
+$$(VBOOT_LIB_$(1)): $(obj)/config.h
+	printf "    MAKE       $(subst $(obj)/,,$(@))\n"
+	+FIRMWARE_ARCH=$$(ARCHDIR-$$(ARCH-$(1)-y)) \
+	CC="$$(CC_$(1))" \
+	CFLAGS="$$(VBOOT_CFLAGS_$(1))" VBOOT2="y" \
+	EC_EFS="$(CONFIG_VBOOT_EC_EFS)" \
+	$(MAKE) -C $(VBOOT_SOURCE) \
+		BUILD=$$(abspath $$(dir $$(VBOOT_LIB_$(1)))) \
+		V=$(V) \
+		fwlib
+
+$(1)-srcs += $$(VBOOT_LIB_$(1))
+
+endef # vboot-for-stage
+
+$(eval $(call vboot-for-stage,bootblock))
+$(eval $(call vboot-for-stage,romstage))
+$(eval $(call vboot-for-stage,ramstage))
+$(eval $(call vboot-for-stage,postcar))
+
+endif # CONFIG_VBOOT_LIB
 
 ifeq ($(CONFIG_VBOOT),y)
 
@@ -22,20 +55,14 @@ ramstage-y += bootmode.c
 verstage-y += bootmode.c
 postcar-y += bootmode.c
 
-# When VBOOT_STARTS_IN_ROMSTAGE is selected, DRAM is already up by
-# the time verstage runs.
-ifneq ($(CONFIG_VBOOT_STARTS_IN_ROMSTAGE),y)
-verstage-generic-ccopts += -D__PRE_RAM__
-endif
-
 verstage-generic-ccopts += -D__VERSTAGE__
-
-ramstage-y += gbb.c
 
 bootblock-y += vbnv.c
 verstage-y += vbnv.c
 romstage-y += vbnv.c
 ramstage-y += vbnv.c
+
+romstage-$(CONFIG_VBOOT_EARLY_EC_SYNC) += ec_sync.c
 
 bootblock-$(CONFIG_VBOOT_VBNV_CMOS) += vbnv_cmos.c
 verstage-$(CONFIG_VBOOT_VBNV_CMOS) += vbnv_cmos.c
@@ -69,72 +96,30 @@ romstage-y += vboot_common.c
 ramstage-y += vboot_common.c
 postcar-y += vboot_common.c
 
-ifeq ($(CONFIG_VBOOT_MEASURED_BOOT),y)
-bootblock-y += vboot_crtm.c
-verstage-y += vboot_crtm.c
-romstage-y += vboot_crtm.c
-ramstage-y += vboot_crtm.c
-postcar-y += vboot_crtm.c
-endif
-
 bootblock-y += common.c
 verstage-y += vboot_logic.c
 verstage-y += common.c
 verstage-$(CONFIG_VBOOT_SEPARATE_VERSTAGE) += verstage.c
 ifeq (${CONFIG_VBOOT_MOCK_SECDATA},y)
 verstage-y += secdata_mock.c
-romstage-$(CONFIG_VBOOT_SEPARATE_VERSTAGE) += secdata_mock.c
+romstage-y += secdata_mock.c
+ramstage-y += secdata_mock.c
 else
 verstage-y += secdata_tpm.c
-romstage-$(CONFIG_VBOOT_SEPARATE_VERSTAGE) += secdata_tpm.c
+romstage-y += secdata_tpm.c
+ramstage-y += secdata_tpm.c
 endif
 
 ifneq ($(CONFIG_TPM1)$(CONFIG_TPM2),)
 verstage-y += tpm_common.c
 endif
 
-romstage-y += vboot_logic.c
 romstage-y += common.c
 
 ramstage-y += common.c
 postcar-y += common.c
 
 romstage-$(CONFIG_FSP2_0_USES_TPM_MRC_HASH) += mrc_cache_hash_tpm.c
-
-vboot-fixup-includes = $(patsubst -I%,-I$(top)/%,\
-		       $(patsubst $(src)/%.h,$(top)/$(src)/%.h,\
-		       $(filter-out -I$(obj),$(1))))
-
-# call with $1 = stage name to create rules for building the library
-# for the stage and adding it to the stage's set of object files.
-define vboot-for-stage
-VB2_LIB_$(1) = $(obj)/external/vboot_reference-$(1)/vboot_fw20.a
-VBOOT_CFLAGS_$(1) += $$(call vboot-fixup-includes,$$(CPPFLAGS_$(1)))
-VBOOT_CFLAGS_$(1) += $$(CFLAGS_$(1))
-VBOOT_CFLAGS_$(1) += $$(call vboot-fixup-includes,$$($(1)-c-ccopts))
-VBOOT_CFLAGS_$(1) += -I$(abspath $(obj)) -Wno-missing-prototypes
-VBOOT_CFLAGS_$(1) += -DVBOOT_DEBUG
-
-$$(VB2_LIB_$(1)): $(obj)/config.h
-	printf "    MAKE       $(subst $(obj)/,,$(@))\n"
-	+FIRMWARE_ARCH=$$(ARCHDIR-$$(ARCH-$(1)-y)) \
-	CC="$$(CC_$(1))" \
-	CFLAGS="$$(VBOOT_CFLAGS_$(1))" VBOOT2="y" \
-	$(MAKE) -C $(VBOOT_SOURCE) \
-		BUILD=$$(abspath $$(dir $$(VB2_LIB_$(1)))) \
-		V=$(V) \
-		fwlib20
-
-$(1)-srcs += $$(VB2_LIB_$(1))
-
-endef # vboot-for-stage
-
-CFLAGS_common += -I3rdparty/vboot/firmware/2lib/include
-
-$(eval $(call vboot-for-stage,bootblock))
-$(eval $(call vboot-for-stage,romstage))
-$(eval $(call vboot-for-stage,ramstage))
-$(eval $(call vboot-for-stage,postcar))
 
 ifeq ($(CONFIG_VBOOT_SEPARATE_VERSTAGE),y)
 
@@ -224,7 +209,7 @@ GBB_FLAGS := $(call int-add, \
 	$(call bool-to-mask,$(CONFIG_GBB_FLAG_DISABLE_FW_ROLLBACK_CHECK),0x20) \
 	$(call bool-to-mask,$(CONFIG_GBB_FLAG_ENTER_TRIGGERS_TONORM),0x40) \
 	$(call bool-to-mask,$(CONFIG_GBB_FLAG_FORCE_DEV_BOOT_LEGACY),0x80) \
-	$(call bool-to-mask,$(CONFIG_GBB_FLAG_FAFT_KEY_OVERIDE),0x100) \
+	$(call bool-to-mask,$(CONFIG_GBB_FLAG_RUNNING_FAFT),0x100) \
 	$(call bool-to-mask,$(CONFIG_GBB_FLAG_DISABLE_EC_SOFTWARE_SYNC),0x200) \
 	$(call bool-to-mask,$(CONFIG_GBB_FLAG_DEFAULT_DEV_BOOT_LEGACY),0x400) \
 	$(call bool-to-mask,$(CONFIG_GBB_FLAG_DISABLE_PD_SOFTWARE_SYNC),0x800) \

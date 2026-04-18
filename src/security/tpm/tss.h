@@ -171,6 +171,11 @@ uint32_t tlcl_set_nv_locked(void);
 uint32_t tlcl_force_clear(void);
 
 /**
+ * Set Clear Control. The TPM error code is returned.
+ */
+uint32_t tlcl_clear_control(bool disable);
+
+/**
  * Set the bGlobalLock flag, which only a reboot can clear.  The TPM error
  * code is returned.
  */
@@ -184,13 +189,17 @@ uint32_t tlcl_lock_nv_write(uint32_t index);
 /**
  * Perform a TPM_Extend.
  */
-uint32_t tlcl_extend(int pcr_num,  uint16_t algorithm,
-		     const uint8_t *in_digest, size_t in_digest_len,
+uint32_t tlcl_extend(int pcr_num, const uint8_t *in_digest,
 		     uint8_t *out_digest);
 
 /**
  * Disable platform hierarchy. Specific to TPM2. The TPM error code is returned.
  */
 uint32_t tlcl_disable_platform_hierarchy(void);
+
+/**
+ * Get the permission bits for the NVRAM space with |index|.
+ */
+uint32_t tlcl_get_permissions(uint32_t index, uint32_t *permissions);
 
 #endif /* TSS_H_ */

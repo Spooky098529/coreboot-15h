@@ -14,12 +14,14 @@
  * GNU General Public License for more details.
  */
 
+#include <arch/acpi.h>
 #include <arch/exception.h>
 #include <bootblock_common.h>
 #include <console/console.h>
 #include <delay.h>
 #include <pc80/mc146818rtc.h>
 #include <program_loading.h>
+#include <security/tpm/tspi.h>
 #include <symbols.h>
 #include <timestamp.h>
 
@@ -66,6 +68,11 @@ static void bootblock_main_with_timestamp(uint64_t base_timestamp,
 
 	bootblock_soc_init();
 	bootblock_mainboard_init();
+
+	if (CONFIG(TPM_MEASURED_BOOT_INIT_BOOTBLOCK)) {
+		int s3resume = acpi_is_wakeup_s3();
+		tpm_setup(s3resume);
+	}
 
 	timestamp_add_now(TS_END_BOOTBLOCK);
 

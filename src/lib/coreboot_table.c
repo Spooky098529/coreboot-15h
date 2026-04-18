@@ -218,18 +218,6 @@ static void lb_vbnv(struct lb_header *header)
 }
 #endif /* CONFIG_CHROMEOS */
 
-static void lb_vboot_workbuf(struct lb_header *header)
-{
-	struct lb_range *vbwb;
-	struct vboot_working_data *wd = vboot_get_working_data();
-
-	vbwb = (struct lb_range *)lb_new_record(header);
-	vbwb->tag = LB_TAG_VBOOT_WORKBUF;
-	vbwb->size = sizeof(*vbwb);
-	vbwb->range_start = (uintptr_t)wd + wd->buffer_offset;
-	vbwb->range_size = wd->buffer_size;
-}
-
 __weak uint32_t board_id(void) { return UNDEFINED_STRAPPING_ID; }
 __weak uint32_t ram_code(void) { return UNDEFINED_STRAPPING_ID; }
 __weak uint32_t sku_id(void) { return UNDEFINED_STRAPPING_ID; }
@@ -552,11 +540,6 @@ static uintptr_t write_coreboot_table(uintptr_t rom_table_end)
 	/* pass along VBNV offsets in CMOS */
 	lb_vbnv(head);
 #endif
-
-	if (CONFIG(VBOOT)) {
-		/* pass along the vboot workbuf address. */
-		lb_vboot_workbuf(head);
-	}
 
 	/* Add strapping IDs if available */
 	lb_board_id(head);

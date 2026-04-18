@@ -5,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-#include <arch/early_variables.h>
 #include <console/console.h>
 #include <endian.h>
 #include <string.h>
@@ -30,11 +29,9 @@ void *tpm_process_command(TPM_CC command, void *command_body)
 	size_t in_size;
 	const uint8_t *sendb;
 	/* Command/response buffer. */
-	static uint8_t cr_buffer[TPM_BUFFER_SIZE] CAR_GLOBAL;
+	static uint8_t cr_buffer[TPM_BUFFER_SIZE];
 
-	uint8_t *cr_buffer_ptr = car_get_var_ptr(cr_buffer);
-
-	obuf_init(&ob, cr_buffer_ptr, sizeof(cr_buffer));
+	obuf_init(&ob, cr_buffer, sizeof(cr_buffer));
 
 	if (tpm_marshal_command(command, command_body, &ob) < 0) {
 		printk(BIOS_ERR, "command %#x\n", command);
@@ -44,12 +41,12 @@ void *tpm_process_command(TPM_CC command, void *command_body)
 	sendb = obuf_contents(&ob, &out_size);
 
 	in_size = sizeof(cr_buffer);
-	if (tis_sendrecv(sendb, out_size, cr_buffer_ptr, &in_size)) {
+	if (tis_sendrecv(sendb, out_size, cr_buffer, &in_size)) {
 		printk(BIOS_ERR, "tpm transaction failed\n");
 		return NULL;
 	}
 
-	ibuf_init(&ib, cr_buffer_ptr, in_size);
+	ibuf_init(&ib, cr_buffer, in_size);
 
 	return tpm_unmarshal_response(command, &ib);
 }
@@ -127,47 +124,21 @@ uint32_t tlcl_assert_physical_presence(void)
 }
 
 /*
- * The caller will provide the pcr index, digest algorithm and
- * a byte buffer to extend into the TPM.
+ * The caller will provide the digest in a 32 byte buffer, let's consider it a
+ * sha256 digest.
  */
-uint32_t tlcl_extend(int pcr_num, uint16_t algorithm,
-		     const uint8_t *in_digest, size_t in_digest_len,
+uint32_t tlcl_extend(int pcr_num, const uint8_t *in_digest,
 		     uint8_t *out_digest)
 {
 	struct tpm2_pcr_extend_cmd pcr_ext_cmd;
 	struct tpm2_response *response;
-	uint16_t algorithm_size;
 
 	pcr_ext_cmd.pcrHandle = HR_PCR + pcr_num;
 	pcr_ext_cmd.digests.count = 1;
-	pcr_ext_cmd.digests.digests[0].hashAlg = algorithm;
-	algorithm_size = tlcl_get_hash_size_from_algo(algorithm);
+	pcr_ext_cmd.digests.digests[0].hashAlg = TPM_ALG_SHA256;
+	memcpy(pcr_ext_cmd.digests.digests[0].digest.sha256, in_digest,
+	       sizeof(pcr_ext_cmd.digests.digests[0].digest.sha256));
 
-	if (algorithm_size == 0)
-		return TPM_E_HASH_ERROR;
-
-	if (in_digest_len != algorithm_size)
-		return TPM_E_HASH_ERROR;
-
-	switch (algorithm) {
-	case TPM_ALG_SHA1:
-		memcpy(pcr_ext_cmd.digests.digests[0].digest.sha1, in_digest, in_digest_len);
-		break;
-	case TPM_ALG_SHA256:
-		memcpy(pcr_ext_cmd.digests.digests[0].digest.sha256, in_digest, in_digest_len);
-		break;
-	case TPM_ALG_SHA384:
-		memcpy(pcr_ext_cmd.digests.digests[0].digest.sha384, in_digest, in_digest_len);
-		break;
-	case TPM_ALG_SHA512:
-		memcpy(pcr_ext_cmd.digests.digests[0].digest.sha512, in_digest, in_digest_len);
-		break;
-	case TPM_ALG_SM3_256:
-		memcpy(pcr_ext_cmd.digests.digests[0].digest.sm3_256, in_digest, in_digest_len);
-		break;
-	default:
-		return TPM_E_HASH_ERROR;
-	}
 	response = tpm_process_command(TPM2_PCR_Extend, &pcr_ext_cmd);
 
 	printk(BIOS_INFO, "%s: response is %x\n",
@@ -199,13 +170,29 @@ uint32_t tlcl_force_clear(void)
 	return TPM_SUCCESS;
 }
 
-static uint8_t tlcl_init_done CAR_GLOBAL;
+uint32_t tlcl_clear_control(bool disable)
+{
+	struct tpm2_response *response;
+	struct tpm2_clear_control_cmd cc = {
+		.disable = 0,
+	};
+
+	response = tpm_process_command(TPM2_ClearControl, &cc);
+	printk(BIOS_INFO, "%s: response is %x\n",
+		__func__, response ? response->hdr.tpm_code : -1);
+
+	if (!response || response->hdr.tpm_code)
+		return TPM_E_IOERROR;
+
+	return TPM_SUCCESS;
+}
+
+static uint8_t tlcl_init_done;
 
 /* This function is called directly by vboot, uses vboot return types. */
 uint32_t tlcl_lib_init(void)
 {
-	uint8_t done = car_get_var(tlcl_init_done);
-	if (done)
+	if (tlcl_init_done)
 		return VB2_SUCCESS;
 
 	if (tis_init()) {
@@ -218,7 +205,7 @@ uint32_t tlcl_lib_init(void)
 		return VB2_ERROR_UNKNOWN;
 	}
 
-	car_set_var(tlcl_init_done, 1);
+	tlcl_init_done = 1;
 
 	return VB2_SUCCESS;
 }

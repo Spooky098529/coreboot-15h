@@ -1,30 +1,15 @@
-/*
- * This file is part of the coreboot project.
- *
- * Copyright (c) 2013 The Chromium OS Authors. All rights reserved.
- * Copyright 2017 Facebook Inc.
- * Copyright 2018 Siemens AG
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; version 2 of the License.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- */
+/* SPDX-License-Identifier: GPL-2.0-only */
 
 #include <console/cbmem_console.h>
 #include <console/console.h>
+#include <security/tpm/tspi/crtm.h>
 #include <security/tpm/tspi.h>
 #include <security/tpm/tss.h>
-#include <stdlib.h>
-#if CONFIG(VBOOT)
+#include <assert.h>
+#include <security/vboot/misc.h>
+#include <string.h>
 #include <vb2_api.h>
 #include <vb2_sha.h>
-#include <assert.h>
-#endif
 
 #if CONFIG(TPM1)
 static uint32_t tpm1_invoke_state_machine(void)
@@ -104,6 +89,31 @@ static uint32_t tpm_setup_epilogue(uint32_t result)
 	return result;
 }
 
+static int tpm_is_setup;
+static inline int tspi_tpm_is_setup(void)
+{
+	/*
+	 * vboot_logic_executed() only starts returning true at the end of
+	 * verstage, but the vboot logic itself already wants to extend PCRs
+	 * before that. So in the stage where verification actually runs, we
+	 * need to check tpm_is_setup. Skip that check in all other stages so
+	 * this whole function can be evaluated at compile time.
+	 */
+	if (CONFIG(VBOOT)) {
+		if (verification_should_run())
+			return tpm_is_setup;
+		return vboot_logic_executed();
+	}
+
+	if (CONFIG(TPM_MEASURED_BOOT_INIT_BOOTBLOCK))
+		return ENV_BOOTBLOCK ? tpm_is_setup : 1;
+
+	if (ENV_RAMSTAGE)
+		return tpm_is_setup;
+
+	return 0;
+}
+
 /*
  * tpm_setup starts the TPM and establishes the root of trust for the
  * anti-rollback mechanism.  tpm_setup can fail for three reasons.  1 A bug.
@@ -174,7 +184,10 @@ uint32_t tpm_setup(int s3flag)
 #if CONFIG(TPM1)
 	result = tpm1_invoke_state_machine();
 #endif
+	if (CONFIG(TPM_MEASURED_BOOT))
+		result = tspi_measure_cache_to_pcr();
 
+	tpm_is_setup = 1;
 	return tpm_setup_epilogue(result);
 }
 
@@ -210,39 +223,31 @@ uint32_t tpm_extend_pcr(int pcr, enum vb2_hash_algorithm digest_algo,
 			uint8_t *digest, size_t digest_len, const char *name)
 {
 	uint32_t result;
-	uint16_t algorithm = 0;
 
 	if (!digest)
 		return TPM_E_IOERROR;
 
-#if CONFIG(TPM2)
-	switch (digest_algo) {
-	case VB2_HASH_SHA1:
-		algorithm = TPM_ALG_SHA1;
-		break;
-	case VB2_HASH_SHA256:
-		algorithm = TPM_ALG_SHA256;
-		break;
-	case VB2_HASH_SHA512:
-		algorithm = TPM_ALG_SHA512;
-		break;
-	default:
-		return TPM_E_HASH_ERROR;
+	if (tspi_tpm_is_setup()) {
+		result = tlcl_lib_init();
+		if (result != TPM_SUCCESS) {
+			printk(BIOS_ERR, "TPM: Can't initialize library.\n");
+			return result;
+		}
+
+		printk(BIOS_DEBUG, "TPM: Extending digest for %s into PCR %d\n", name, pcr);
+		result = tlcl_extend(pcr, digest, NULL);
+		if (result != TPM_SUCCESS)
+			return result;
 	}
-#endif
 
-	result = tlcl_extend(pcr, algorithm, digest, digest_len, NULL);
-	if (result != TPM_SUCCESS)
-		return result;
-
-	if (CONFIG(VBOOT_MEASURED_BOOT))
+	if (CONFIG(TPM_MEASURED_BOOT))
 		tcpa_log_add_table_entry(name, pcr, digest_algo,
 			digest, digest_len);
 
 	return TPM_SUCCESS;
 }
 
-#if CONFIG(VBOOT)
+#if CONFIG(VBOOT_LIB)
 uint32_t tpm_measure_region(const struct region_device *rdev, uint8_t pcr,
 			    const char *rname)
 {
@@ -255,11 +260,7 @@ uint32_t tpm_measure_region(const struct region_device *rdev, uint8_t pcr,
 
 	if (!rdev || !rname)
 		return TPM_E_INVALID_ARG;
-	result = tlcl_lib_init();
-	if (result != TPM_SUCCESS) {
-		printk(BIOS_ERR, "TPM: Can't initialize library.\n");
-		return result;
-	}
+
 	if (CONFIG(TPM1)) {
 		hash_alg = VB2_HASH_SHA1;
 	} else { /* CONFIG_TPM2 */
@@ -298,7 +299,8 @@ uint32_t tpm_measure_region(const struct region_device *rdev, uint8_t pcr,
 		printk(BIOS_ERR, "TPM: Extending hash into PCR failed.\n");
 		return result;
 	}
-	printk(BIOS_DEBUG, "TPM: Measured %s into PCR %d\n", rname, pcr);
+	printk(BIOS_DEBUG, "TPM: Digest of %s to PCR %d %s\n",
+	       rname, pcr, tspi_tpm_is_setup() ? "measured" : "logged");
 	return TPM_SUCCESS;
 }
-#endif /* VBOOT */
+#endif /* VBOOT_LIB */
