@@ -41,7 +41,7 @@ void acpi_create_fadt(acpi_fadt_t * fadt, acpi_facs_t * facs, void *dsdt)
 	header->length = 244;
 	header->revision = 3;
 	memcpy(header->oem_id, OEM_ID, 6);
-	memcpy(header->oem_table_id, "AMD     ", 8);
+	memcpy(header->oem_table_id, ACPI_TABLE_CREATOR, 8);
 	memcpy(header->asl_compiler_id, ASLC, 4);
 	header->asl_compiler_revision = 0;
 
@@ -143,7 +143,7 @@ void acpi_create_fadt(acpi_fadt_t * fadt, acpi_facs_t * facs, void *dsdt)
 
 
 	fadt->x_pm2_cnt_blk.space_id = 1;
-	fadt->x_pm2_cnt_blk.bit_width = 0;
+	fadt->x_pm2_cnt_blk.bit_width = 8;
 	fadt->x_pm2_cnt_blk.bit_offset = 0;
 	fadt->x_pm2_cnt_blk.access_size = 0;
 	fadt->x_pm2_cnt_blk.addrl = ACPI_PMA_CNT_BLK_ADDRESS;
@@ -159,7 +159,7 @@ void acpi_create_fadt(acpi_fadt_t * fadt, acpi_facs_t * facs, void *dsdt)
 
 
 	fadt->x_gpe0_blk.space_id = 1;
-	fadt->x_gpe0_blk.bit_width = 32;
+	fadt->x_gpe0_blk.bit_width = 64;
 	fadt->x_gpe0_blk.bit_offset = 0;
 	fadt->x_gpe0_blk.access_size = 0;
 	fadt->x_gpe0_blk.addrl = GPE0_BLK_ADDRESS;
