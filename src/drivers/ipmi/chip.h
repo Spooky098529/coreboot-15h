@@ -11,7 +11,7 @@
  * GNU General Public License for more details.
  */
 
-#ifndef _IMPI_CHIP_H_
+#ifndef _IPMI_CHIP_H_
 #define _IPMI_CHIP_H_
 
 struct drivers_ipmi_config {
@@ -35,4 +35,4 @@ struct drivers_ipmi_config {
 	u16 bmc_boot_timeout;
 };
 
-#endif /* _IMPI_CHIP_H_ */
+#endif /* _IPMI_CHIP_H_ */
