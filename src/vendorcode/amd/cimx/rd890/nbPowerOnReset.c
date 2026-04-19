@@ -363,6 +363,24 @@ NbPowerOnResetInit (
     NbConfigPtr
     );
 
+  // HTIU and S1 clock power management (CLK config space, function 1)
+  {
+    PCI_ADDR ClkPciAddress;
+    ClkPciAddress = NbConfigPtr->NbPciAddress;
+    ClkPciAddress.Address.Function = 1;
+    LibNbEnableClkConfig (NbConfigPtr);
+
+    // Dynamic HTIU clock gating: clear disable bits for HTM/RP/FCB/GCM/NB1/NB2
+    ClkPciAddress.Address.Register = NB_CLK_REGF8;
+    LibNbPciRMW (ClkPciAddress.AddressValue, AccessS3SaveWidth32, 0xFFFFF555, 0x00000000, NbConfigPtr);
+
+    // Enable Deep S1 (clear DEEP_S1_DISABLE)
+    ClkPciAddress.Address.Register = NB_CLK_REG94;
+    LibNbPciRMW (ClkPciAddress.AddressValue, AccessS3SaveWidth32, (UINT32)~BIT30, 0x00000000, NbConfigPtr);
+
+    LibNbDisableClkConfig (NbConfigPtr);
+  }
+
   CIMX_TRACE ((TRACE_DATA (GET_BLOCK_CONFIG_PTR (NbConfigPtr), CIMX_NBPOR_TRACE), "[NBPOR]NbPowerOnResetInit Exit\n"));
   return Status;
 }

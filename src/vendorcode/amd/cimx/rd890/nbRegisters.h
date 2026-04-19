@@ -378,6 +378,7 @@
 #define NB_BIFNBP_REGA3   0xA3
 #define NB_BIFNBP_REGA4   0xA4
 #define NB_BIFNBP_REGA5   0xA5
+#define NB_BIFNBP_REGB0   0xB0
 #define NB_BIFNBP_REGB1   0xB1
 #define NB_BIFNBP_REGC0   0xC0
 #define NB_BIFNBP_REGC1   0xC1

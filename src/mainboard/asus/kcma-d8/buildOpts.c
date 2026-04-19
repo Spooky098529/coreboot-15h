@@ -341,6 +341,9 @@ be defined with a valid IO port value, else the feature cannot be enabled.
 #define BLDCFG_PLATFORM_C1E_OPDATA2               0x00
 #define BLDCFG_PLATFORM_C1E_OPDATA3               0x80
 
+#define BLDCFG_PLATFORM_CSTATE_MODE               CStateModeC6
+#define BLDCFG_PLATFORM_CSTATE_IO_BASE_ADDRESS    0x840
+
 /* BLDCFG_AMD_PSTATE_CAP_VALUE
 Disables CPU PStates based on TDP (mW) */
 #define BLDCFG_AMD_PSTATE_CAP_VALUE               0
@@ -451,7 +454,7 @@ current “in-rush” component.
 
 The default action is to set a value of zero, indicating to disable the feature. To
 specify a threshold, the value must be specified in milli-amps. */
-#define BLDCFG_VRM_LOW_POWER_THRESHOLD            0
+#define BLDCFG_VRM_LOW_POWER_THRESHOLD            24000
 
 /*** IO Configuration ***/
 

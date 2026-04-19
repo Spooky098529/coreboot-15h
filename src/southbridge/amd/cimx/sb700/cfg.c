@@ -102,8 +102,9 @@ void sb700_cimx_config(AMDSBCFG *sb_config)
 	sb_config->Usb2Ehci  = 1; //0:disable  1:enable Bus 0 Dev 19 Func2
 	sb_config->Usb3Ohci  = 1; //0:disable  1:enable Bus 0 Dev 20 Func5
 	sb_config->UsbOhciLegacyEmulation = 1; //0:Enable  1:Disable
+	sb_config->UsbPhyPowerDown = 1;	// power down PHY on disconnected ports
 
-	sb_config->AcpiS1Supported = 1;
+	sb_config->AcpiS1Supported = 0;	// S1 hides SATA PM cap; S3 is the real sleep state
 
 	/* SATA */
 	sb_config->SataController = 1;
@@ -118,7 +119,7 @@ void sb700_cimx_config(AMDSBCFG *sb_config)
 	sb_config->SataEspPort = 0;
 	sb_config->SataClkAutoOffAhciMode = 1;
 	sb_config->SataHpcpButNonESP = 0;
-	sb_config->SataHideUnusedPort = 0;
+	sb_config->SataHideUnusedPort = CONFIG(SB700_SATA_HIDE_UNUSED_PORTS) ? 1 : 0;
 
 	/* Azalia HDA */
 	sb_config->AzaliaController = AZALIA_CONTROLLER;

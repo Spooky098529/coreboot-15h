@@ -83,9 +83,11 @@ void sataInitBeforePciEnum(AMDSBCFG*	pConfig){
 	tempptr= (UINT32 *) FIXUP_PTR (&sataIfCodeTable[0]);
 	ddValue=tempptr[dbValue];
 
-	// BIT0: Enable write access to PCI header (reg 08h-0Bh) by setting SATA PCI register 40h, bit 0
-	// BIT4:disable fast boot
-	RWPCI(((SATA_BUS_DEV_FUN << 16) + SB_SATA_REG40), AccWidthUint8 | S3_SAVE, 0xff, BIT4+BIT0);
+	// BIT0: write access to PCI header (reg 08h-0Bh)
+	// BIT1: gate SATA core clock when all ports idle
+	// BIT4: disable fast boot
+	// BIT5: gate B-Link interface clock when no DMA outstanding
+	RWPCI(((SATA_BUS_DEV_FUN << 16) + SB_SATA_REG40), AccWidthUint8 | S3_SAVE, 0xff, BIT5+BIT4+BIT1+BIT0);
 
 	// Write the class code to SATA PCI register 08h-0Bh
 	RWPCI(((SATA_BUS_DEV_FUN << 16) + SB_SATA_REG08), AccWidthUint32 | S3_SAVE, 0, ddValue);

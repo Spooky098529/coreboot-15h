@@ -373,6 +373,12 @@ INDIRECT_REG_ENTRY  PciePortInitTable[] = {
     BIT11
   },
   {
+    // Power down LC logic in L1/L23, deassert RX in L0s
+    NB_BIFNBP_REGB0,
+    0xffffffff,
+    BIT17 + BIT18 + BIT19
+  },
+  {
     NB_BIFNBP_REGB1,
     0xffffffff,
     BIT28 + BIT23 + BIT19 + BIT20

@@ -494,7 +494,8 @@ void    commonInitLateBoot(AMDSBCFG* pConfig){
                 RWPMIO(SB_PMIO_REGD0, AccWidthUint8, ~(UINT32)BIT0, 0);
                 //Enable the 25Mhz oscillator
                 RWPMIO(SB_PMIO_REGD4, AccWidthUint8, ~(UINT32)BIT7, 0);
-                RWPMIO(SB_PMIO_REGCA, AccWidthUint8, 0xFF, 0x00);
+                //Gate unused auxiliary clock outputs
+                RWPMIO(SB_PMIO_REGCA, AccWidthUint8, 0xFF, 0x7E);
         }
 }
 

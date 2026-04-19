@@ -33,6 +33,7 @@ ramstage-y += gpio.c
 
 ramstage-y   += smbus.c
 ramstage-y   += lpc.c
+ramstage-$(CONFIG_HAVE_ACPI_TABLES) += fadt.c
 
 romstage-$(CONFIG_USBDEBUG_IN_PRE_RAM) += ../../sb700/enable_usbdebug.c
 ramstage-$(CONFIG_USBDEBUG) += ../../sb700/enable_usbdebug.c

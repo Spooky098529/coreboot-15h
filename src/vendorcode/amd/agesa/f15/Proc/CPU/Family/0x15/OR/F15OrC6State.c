@@ -152,10 +152,19 @@ F15OrInitializeC6 (
 
   if ((EntryPoint & CPU_FEAT_AFTER_PM_INIT) != 0) {
     // Initialize F4x118
+    // bits[8]  PwrGateEnCstAct0 = 1
     // bits[24] PwrGateEnCstAct1 = 1
     PciAddress.Address.Function = FUNC_4;
     PciAddress.Address.Register = CSTATE_CTRL1_REG;
-    LocalPciRegister = 0x01000000;
+    LocalPciRegister = 0x01000100;
+    PciMask = 0xFFFFFFFF;
+    OptionMultiSocketConfiguration.ModifyCurrSocketPci (&PciAddress, PciMask, LocalPciRegister, StdHeader);
+
+    // Enable deeper register power gating during CC6
+    // D18F5x128[5] CC6PwrDwnRegEn = 1
+    PciAddress.Address.Function = FUNC_5;
+    PciAddress.Address.Register = 0x128;
+    LocalPciRegister = BIT5;
     PciMask = 0xFFFFFFFF;
     OptionMultiSocketConfiguration.ModifyCurrSocketPci (&PciAddress, PciMask, LocalPciRegister, StdHeader);
   }

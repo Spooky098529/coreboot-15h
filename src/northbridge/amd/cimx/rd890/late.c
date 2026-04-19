@@ -200,6 +200,45 @@ static const struct pci_driver rd890_ht_driver __pci_driver = {
 	.devices = ht_devices,
 };
 
+/*
+ * RD890 PCIe bridge port driver -- uses pci_scan_bridge instead of
+ * pciexp_scan_bridge so coreboot's generic ASPM/Common-Clock/CLK-PM
+ * tuning doesn't race with CIMx.  AmdPcieLateInit handles all of
+ * this later with proper NB-internal register setup (PLL-off-in-L1,
+ * exit latency timers, etc.).  Without this, coreboot enables L1 on
+ * the link registers before the NB side is ready, and endpoints drop
+ * off the bus.
+ */
+static struct device_operations rd890_pcie_ops = {
+	.read_resources   = pci_bus_read_resources,
+	.set_resources    = pci_dev_set_resources,
+	.enable_resources = pci_bus_enable_resources,
+	.init             = 0,
+	.scan_bus         = pci_scan_bridge,
+	.ops_pci          = &rd890_ht_ops_pci,
+};
+
+static const unsigned short pcie_devs[] = {
+	PCI_DEVICE_ID_AMD_SR5650_PCIE_DEV2,
+	PCI_DEVICE_ID_AMD_SR5650_PCIE_DEV3,
+	PCI_DEVICE_ID_AMD_SR5650_PCIE_DEV4,
+	PCI_DEVICE_ID_AMD_SR5650_PCIE_DEV5,
+	PCI_DEVICE_ID_AMD_SR5650_PCIE_DEV6,
+	PCI_DEVICE_ID_AMD_SR5650_PCIE_DEV7,
+	PCI_DEVICE_ID_AMD_SR5650_PCIE_DEV9,
+	PCI_DEVICE_ID_AMD_SR5650_PCIE_DEV10,
+	PCI_DEVICE_ID_AMD_SR5650_PCIE_DEV11,
+	PCI_DEVICE_ID_AMD_SR5650_PCIE_DEV12,
+	PCI_DEVICE_ID_AMD_SR5650_PCIE_DEV13,
+	0
+};
+
+static const struct pci_driver rd890_pcie_driver __pci_driver = {
+	.ops = &rd890_pcie_ops,
+	.vendor = PCI_VENDOR_ID_ATI,
+	.devices = pcie_devs,
+};
+
 static void rd890_enable(struct device *dev)
 {
 	struct northbridge_amd_cimx_rd890_config *rd890_info = dev->chip_info;
@@ -331,10 +370,17 @@ static void rd890_init(void *chip_info) {
 	 */
 	pcie_cfg[nb_index].CoreSetting[3].CplBufferAllocation = ON;
 
-	for (i = MIN_PORT_ID; i <= MAX_PORT_ID; i++) {
-		if ((rd890_info->port_enable & (1 << i)) != 0) {
-			pcie_cfg[nb_index].PortConfiguration[i].PortPresent = ON;
-			pcie_cfg[nb_index].PortConfiguration[i].PortLinkMode = PcieLinkModeGen2;
+	{
+		uint8_t aspm = rd890_info->port_aspm;
+		if (!aspm)
+			aspm = CONFIG_RD890_PCIE_ASPM;
+
+		for (i = MIN_PORT_ID; i <= MAX_PORT_ID; i++) {
+			if ((rd890_info->port_enable & (1 << i)) != 0) {
+				pcie_cfg[nb_index].PortConfiguration[i].PortPresent = ON;
+				pcie_cfg[nb_index].PortConfiguration[i].PortLinkMode = PcieLinkModeGen2;
+				pcie_cfg[nb_index].PortConfiguration[i].PortAspm = aspm;
+			}
 		}
 	}
 

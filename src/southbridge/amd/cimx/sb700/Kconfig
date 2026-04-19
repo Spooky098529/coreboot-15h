@@ -59,6 +59,12 @@ config BOOTBLOCK_SOUTHBRIDGE_INIT
 	string
 	default "southbridge/amd/cimx/sb700/bootblock.c"
 
+config SB700_SATA_HIDE_UNUSED_PORTS
+	bool "Hide unused SATA ports"
+	default y
+	help
+	  Hide unconnected SATA ports from the OS to cut polling overhead.
+
 config ENABLE_SB_CIMX_DEBUGGER
 	bool "Enable CIMx Debugging"
 	default n

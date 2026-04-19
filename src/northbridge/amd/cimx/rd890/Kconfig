@@ -32,4 +32,30 @@ config NORTHBRIDGE_AMD_CIMX_RD890_IOMMU
 	bool "Enable IOMMU"
 	default y
 
+# RD890/990FX is PCIe Gen2 -- no CLKREQ# and no L1 Substates support
+config PCIEXP_CLK_PM
+	bool
+	default n
+
+config PCIEXP_L1_SUB_STATE
+	bool
+	default n
+
+config RD890_PCIE_ASPM
+	int "PCIe ASPM mode for NB ports (0=off, 2=L1, 3=L0s+L1)"
+	default 2
+	help
+	  ASPM mode for RD890 NB PCIe ports. CIMx negotiates with each
+	  endpoint and only enables modes both sides support.
+
+	  0 = Disabled
+	  1 = L0s only
+	  2 = L1 only (good power/compatibility balance)
+	  3 = L0s and L1
+	  4 = L0s downstream only
+	  5 = L0s downstream only and L1
+
+	  PLL power-off in L1 activates automatically when the endpoint's
+	  L1 exit latency tolerance allows it.
+
 endif # NORTHBRIDGE_AMD_CIMX_RD890

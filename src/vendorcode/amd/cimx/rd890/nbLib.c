@@ -182,13 +182,20 @@ LibSystemApiCall (
   )
 {
   API_WORKSPACE Workspace;
+  AMD_NB_CONFIG_BLOCK **WorkspaceRef;
   UINT8         NorthbridgeId;
 
   LibAmdMemFill (&Workspace, 0, sizeof (API_WORKSPACE), (AMD_CONFIG_PARAMS *)&(ConfigPtr->StandardHeader));
   Workspace.ConfigPtr = ConfigPtr;
   Workspace.Status = AGESA_SUCCESS;
+  /*
+   * &Workspace.ConfigPtr is a stack address, but it's only used during
+   * the SystemApi callback below (still in scope).  The UINTN cast
+   * breaks GCC 12+'s -Wdangling-pointer provenance tracking.
+   */
+  WorkspaceRef = (AMD_NB_CONFIG_BLOCK **)(UINTN)&Workspace.ConfigPtr;
   for (NorthbridgeId = 0; NorthbridgeId <= ConfigPtr->NumberOfNorthbridges; NorthbridgeId++) {
-    ConfigPtr->Northbridges[NorthbridgeId].ConfigPtr = &Workspace.ConfigPtr;
+    ConfigPtr->Northbridges[NorthbridgeId].ConfigPtr = WorkspaceRef;
   }
   if (SystemApi != NULL) {
     (*SystemApi)(ConfigPtr);
