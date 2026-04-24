@@ -1,0 +1,5 @@
+Category: server
+Board URL: http://www.supermicro.com/aplus/motherboard/opteron3000/sr56x0/h8sml.cfm
+ROM package: SOIC-8
+ROM protocol: SPI
+ROM socketed: n
