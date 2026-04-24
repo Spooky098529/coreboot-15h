@@ -31,10 +31,10 @@
 #include <cbmem.h>
 #include <superio/nuvoton/wpcm450/wpcm450.h>
 #include <superio/winbond/common/winbond.h>
-#include <superio/winbond/w83627dhg/w83627dhg.h>
+#include <superio/winbond/w83527hg/w83527hg.h>
 
 /* though UARTs are on the NUVOTON BMC, port 0x164E
- * PS2 keyboard and mouse are on SUPERIO_WINBOND_W83627DHG, port 0x2E
+ * PS2 keyboard and mouse are on SUPERIO_WINBOND_W83527HG, port 0x2E
  */
 #define SIO_PORT 0x164e
 
@@ -82,13 +82,8 @@ void cache_as_ram_main(unsigned long bist, unsigned long cpu_init_detectedx)
 	agesawrapper_amdinitearly();
 
 	post_code(0x3C);
-	/* W83627DHG pin89,90 function select is RSTOUT3#, RSTOUT2# by default.
-	 * In order to access W83795G/ADG HWM using I2C protocol,
-	 * we select function to SDA, SCL function (or GP33, GP32 function).
-	 */
-	w83627dhg_enable_i2c(PNP_DEV(0x2E, W83627DHG_SPI));
-
 	nb_Ht_Init();
+
 	post_code(0x3D);
 	/* Reset for HT, FIDVID, PLL and ucode patch(errata) changes to take affect. */
 	if (!warm_reset_detect(0)) {
