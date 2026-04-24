@@ -17,6 +17,7 @@
 bootblock-$(CONFIG_SUPERIO_WINBOND_COMMON_PRE_RAM) += common/early_init.c
 romstage-$(CONFIG_SUPERIO_WINBOND_COMMON_PRE_RAM) += common/early_init.c
 
+subdirs-y += w83527hg
 subdirs-y += w83627dhg
 subdirs-y += w83627ehg
 subdirs-y += w83627hf
