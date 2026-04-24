@@ -65,8 +65,8 @@
 
 /*  Declare the instance of the WHEA option configuration structure  */
 OPTION_SRAT_CONFIGURATION OptionSratConfiguration = {
-  SRAT_STRUCT_VERSION,
-  USER_SRAT_OPTION
+  .OptSratVersion = SRAT_STRUCT_VERSION,
+  .SratFeature = USER_SRAT_OPTION
 };
 
 #endif  // _OPTION_WHEA_INSTALL_H_

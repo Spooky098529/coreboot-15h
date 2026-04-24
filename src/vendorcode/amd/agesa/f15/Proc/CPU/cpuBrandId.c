@@ -72,10 +72,10 @@ CONST CHAR8 ROMDATA strEngSample[] = "AMD Engineering Sample";
 CONST CHAR8 ROMDATA strTtkSample[] = "AMD Thermal Test Kit";
 CONST CHAR8 ROMDATA strUnknown[] = "AMD Processor Model Unknown";
 
-CONST AMD_CPU_BRAND ROMDATA EngSample_Str = {0, 0, 0, SOCKET_IGNORE, strEngSample, sizeof (strEngSample)};
-CONST AMD_CPU_BRAND ROMDATA TtkSample_Str = {0, 1, 0, SOCKET_IGNORE, strTtkSample, sizeof (strTtkSample)};
-CONST AMD_CPU_BRAND ROMDATA Dflt_Str1 = {0, 0, 0, SOCKET_IGNORE, strUnknown, sizeof (strUnknown)};
-CONST AMD_CPU_BRAND ROMDATA Dflt_Str2 = {0, 0, 0, SOCKET_IGNORE, DR_NO_STRING, DR_NO_STRING};
+CONST AMD_CPU_BRAND ROMDATA EngSample_Str = {.Cores = 0, .Page = 0, .Index = 0, .Socket = SOCKET_IGNORE, .Stringstart = strEngSample, .Stringlength = sizeof (strEngSample)};
+CONST AMD_CPU_BRAND ROMDATA TtkSample_Str = {.Cores = 0, .Page = 1, .Index = 0, .Socket = SOCKET_IGNORE, .Stringstart = strTtkSample, .Stringlength = sizeof (strTtkSample)};
+CONST AMD_CPU_BRAND ROMDATA Dflt_Str1 = {.Cores = 0, .Page = 0, .Index = 0, .Socket = SOCKET_IGNORE, .Stringstart = strUnknown, .Stringlength = sizeof (strUnknown)};
+CONST AMD_CPU_BRAND ROMDATA Dflt_Str2 = {.Cores = 0, .Page = 0, .Index = 0, .Socket = SOCKET_IGNORE, .Stringstart = DR_NO_STRING, .Stringlength = DR_NO_STRING};
 
 
 /*----------------------------------------------------------------------------------------

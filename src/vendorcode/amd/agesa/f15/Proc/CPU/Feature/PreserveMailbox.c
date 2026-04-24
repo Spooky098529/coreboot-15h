@@ -212,8 +212,8 @@ PreserveMailboxes (
 
 CONST CPU_FEATURE_DESCRIPTOR ROMDATA CpuFeaturePreserveAroundMailbox =
 {
-  PreserveAroundMailbox,
-  (CPU_FEAT_AFTER_COHERENT_DISCOVERY | CPU_FEAT_INIT_LATE_END | CPU_FEAT_AFTER_RESUME_MTRR_SYNC),
-  IsPreserveAroundMailboxEnabled,
-  PreserveMailboxes
+  .Feature = PreserveAroundMailbox,
+  .EntryPoint = (CPU_FEAT_AFTER_COHERENT_DISCOVERY | CPU_FEAT_INIT_LATE_END | CPU_FEAT_AFTER_RESUME_MTRR_SYNC),
+  .IsEnabled = IsPreserveAroundMailboxEnabled,
+  .InitializeFeature = PreserveMailboxes
 };

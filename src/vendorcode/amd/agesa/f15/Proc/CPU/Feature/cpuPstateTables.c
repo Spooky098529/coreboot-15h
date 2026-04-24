@@ -77,15 +77,15 @@ extern CPU_FAMILY_SUPPORT_TABLE            IoCstateFamilyServiceTable;
 
 STATIC ACPI_TABLE_HEADER  ROMDATA CpuSsdtHdrStruct =
 {
-  {'S','S','D','T'},
-  0,
-  1,
-  0,
-  {'A','M','D',' ',' ',' '},
-  {'P','O','W','E','R','N','O','W'},
-  1,
-  {'A','M','D',' '},
-  1
+  .Sign = {'S','S','D','T'},
+  .TableLength = 0,
+  .Revision = 1,
+  .Checksum = 0,
+  .OemId = {'A','M','D',' ',' ',' '},
+  .OemTableId = {'P','O','W','E','R','N','O','W'},
+  .OemRev = 1,
+  .CreatorId = {'A','M','D',' '},
+  .CreatorRev = 1
 };
 
 

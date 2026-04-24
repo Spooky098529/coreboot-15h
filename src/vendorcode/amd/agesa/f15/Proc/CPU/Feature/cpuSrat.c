@@ -97,17 +97,17 @@ GetAcpiSratMain (
  */
 STATIC CPU_SRAT_HEADER  ROMDATA CpuSratHdrStruct =
 {
-  {'S','R','A','T'},
-  0,
-  2,
-  0,
-  {'A','M','D',' ',' ',' '},
-  {'A','G','E','S','A',' ',' ',' '},
-  1,
-  {'A','M','D',' '},
-  1,
-  1,
-  {0, 0, 0, 0, 0, 0, 0, 0}
+  .Sign = {'S','R','A','T'},
+  .TableLength = 0,
+  .Revision = 2,
+  .Checksum = 0,
+  .OemId = {'A','M','D',' ',' ',' '},
+  .OemTableId = {'A','G','E','S','A',' ',' ',' '},
+  .OemRev = 1,
+  .CreatorId = {'A','M','D',' '},
+  .CreatorRev = 1,
+  .TableRev = 1,
+  .Reserved = {0, 0, 0, 0, 0, 0, 0, 0}
 };
 
 /*----------------------------------------------------------------------------------------

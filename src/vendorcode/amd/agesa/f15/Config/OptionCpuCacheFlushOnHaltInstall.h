@@ -119,8 +119,8 @@ CONST CPU_SPECIFIC_SERVICES_XLAT ROMDATA CacheFlushOnHaltFamilyServiceArray[] =
 };
 CONST CPU_FAMILY_SUPPORT_TABLE ROMDATA CacheFlushOnHaltFamilyServiceTable =
 {
-  (sizeof (CacheFlushOnHaltFamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
-  &CacheFlushOnHaltFamilyServiceArray[0]
+  .Elements = (sizeof (CacheFlushOnHaltFamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
+  .FamilyTable = &CacheFlushOnHaltFamilyServiceArray[0]
 };
 
 #endif  // _OPTION_CPU_CACHEFLUSHONHALT_INSTALL_H_

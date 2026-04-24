@@ -95,7 +95,7 @@ RDATA_GROUP (G3_DXE)
 /**
  * @todo:  Add Comments with field descriptions
  */
-CONST MEM_FREQ_CHANGE_PARAM FreqChangeParamOr = {0x0190, 7, 7, 14, 3, 18, 470, 946};
+CONST MEM_FREQ_CHANGE_PARAM FreqChangeParamOr = {.PllLockTimeDefault = 0x0190, .RdPtrInit667orHigher = 7, .RdPtrInitLower667 = 7, .NclkPeriodMul2x = 14, .MemClkPeriodMul2x = 3, .SyncTimeMul4x = 18, .TDataProp800orHigher = 470, .TDataPropLower800 = 946};
 
 /*----------------------------------------------------------------------------
  *                            EXPORTED FUNCTIONS

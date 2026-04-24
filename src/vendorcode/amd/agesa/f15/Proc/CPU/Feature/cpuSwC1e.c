@@ -171,8 +171,8 @@ InitializeSwC1eFeature (
 
 CONST CPU_FEATURE_DESCRIPTOR ROMDATA CpuFeatureSwC1e =
 {
-  SoftwareC1e,
-  CPU_FEAT_AFTER_PM_INIT,
-  IsSwC1eFeatureEnabled,
-  InitializeSwC1eFeature
+  .Feature = SoftwareC1e,
+  .EntryPoint = CPU_FEAT_AFTER_PM_INIT,
+  .IsEnabled = IsSwC1eFeatureEnabled,
+  .InitializeFeature = InitializeSwC1eFeature
 };

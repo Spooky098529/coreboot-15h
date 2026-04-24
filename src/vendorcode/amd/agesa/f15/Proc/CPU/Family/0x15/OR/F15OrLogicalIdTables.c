@@ -84,24 +84,24 @@ GetF15OrLogicalIdAndRev (
 STATIC CONST CPU_LOGICAL_ID_XLAT ROMDATA CpuF15OrLogicalIdAndRevArray[] =
 {
   {
-    0x6012,
-    AMD_F15_OR_B2
+    .RawId = 0x6012,
+    .LogicalId = AMD_F15_OR_B2
   },
   {
-    0x6011,
-    AMD_F15_OR_B1
+    .RawId = 0x6011,
+    .LogicalId = AMD_F15_OR_B1
   },
   {
-    0x6010,
-    AMD_F15_OR_B0
+    .RawId = 0x6010,
+    .LogicalId = AMD_F15_OR_B0
   },
   {
-    0x6001,
-    AMD_F15_OR_A1
+    .RawId = 0x6001,
+    .LogicalId = AMD_F15_OR_A1
   },
   {
-    0x6000,
-    AMD_F15_OR_A0
+    .RawId = 0x6000,
+    .LogicalId = AMD_F15_OR_A0
   }
 };
 

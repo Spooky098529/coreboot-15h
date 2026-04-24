@@ -543,24 +543,24 @@ BOOLEAN MemFS3DefConstructorRet (
     #define MEM_FEATURE_TRAINING  MemFStandardTraining
 
     MEM_FEAT_BLOCK_NB  MemFeatBlockDr = {
-      MEM_FEAT_BLOCK_NB_STRUCT_VERSION,
-      MEM_FEATURE_ONLINE_SPARE,
-      MEM_FEATURE_BANK_INTERLEAVE,
-      MEM_FEATURE_UNDO_BANK_INTERLEAVE,
-      MEM_FEATURE_NODE_INTERLEAVE_CHECK,
-      MEM_FEATURE_NODE_INTERLEAVE,
-      MEM_FEATURE_CHANNEL_INTERLEAVE,
-      MemFDefRet,
-      MEM_FEATURE_CK_ECC,
-      MEM_FEATURE_ECC,
-      MEM_FEATURE_TRAINING,
-      MEM_FEATURE_LVDDR3,
-      MemFDefRet,
-      MEM_TECH_FEATURE_DRAMINIT,
-      MEM_FEATURE_DIMM_EXCLUDE,
-      MemFDefRet,
-      MEM_TECH_FEATURE_CPG,
-      MEM_TECH_FEATURE_HWRXEN
+      .OptMemFeatVersion = MEM_FEAT_BLOCK_NB_STRUCT_VERSION,
+      .OnlineSpare = MEM_FEATURE_ONLINE_SPARE,
+      .InterleaveBanks = MEM_FEATURE_BANK_INTERLEAVE,
+      .UndoInterleaveBanks = MEM_FEATURE_UNDO_BANK_INTERLEAVE,
+      .CheckInterleaveNodes = MEM_FEATURE_NODE_INTERLEAVE_CHECK,
+      .InterleaveNodes = MEM_FEATURE_NODE_INTERLEAVE,
+      .InterleaveChannels = MEM_FEATURE_CHANNEL_INTERLEAVE,
+      .InterleaveRegion = MemFDefRet,
+      .CheckEcc = MEM_FEATURE_CK_ECC,
+      .InitEcc = MEM_FEATURE_ECC,
+      .Training = MEM_FEATURE_TRAINING,
+      .LvDdr3 = MEM_FEATURE_LVDDR3,
+      .OnDimmThermal = MemFDefRet,
+      .DramInit = MEM_TECH_FEATURE_DRAMINIT,
+      .ExcludeDIMM = MEM_FEATURE_DIMM_EXCLUDE,
+      .InitEarlySampleSupport = MemFDefRet,
+      .InitCPG = MEM_TECH_FEATURE_CPG,
+      .InitHwRxEn = MEM_TECH_FEATURE_HWRXEN
     };
 
     #undef MEM_NB_SUPPORT_DR
@@ -604,24 +604,24 @@ BOOLEAN MemFS3DefConstructorRet (
 
     #if (OPTION_MEMCTLR_Ni == TRUE)
       MEM_FEAT_BLOCK_NB  MemFeatBlockNi = {
-        MEM_FEAT_BLOCK_NB_STRUCT_VERSION,
-        MemFDefRet,
-        MEM_FEATURE_BANK_INTERLEAVE,
-        MEM_FEATURE_UNDO_BANK_INTERLEAVE,
-        MemFDefRet,
-        MemFDefRet,
-        MEM_FEATURE_CHANNEL_INTERLEAVE,
-        MEM_FEATURE_REGION_INTERLEAVE,
-        MEM_FEATURE_CK_ECC,
-        MEM_FEATURE_ECC,
-        MEM_FEATURE_TRAINING,
-        MEM_FEATURE_LVDDR3,
-        MemFDefRet,
-        MEM_TECH_FEATURE_DRAMINIT,
-        MEM_FEATURE_DIMM_EXCLUDE,
-        MemFDefRet,
-        MEM_TECH_FEATURE_CPG,
-        MEM_TECH_FEATURE_HWRXEN
+        .OptMemFeatVersion = MEM_FEAT_BLOCK_NB_STRUCT_VERSION,
+        .OnlineSpare = MemFDefRet,
+        .InterleaveBanks = MEM_FEATURE_BANK_INTERLEAVE,
+        .UndoInterleaveBanks = MEM_FEATURE_UNDO_BANK_INTERLEAVE,
+        .CheckInterleaveNodes = MemFDefRet,
+        .InterleaveNodes = MemFDefRet,
+        .InterleaveChannels = MEM_FEATURE_CHANNEL_INTERLEAVE,
+        .InterleaveRegion = MEM_FEATURE_REGION_INTERLEAVE,
+        .CheckEcc = MEM_FEATURE_CK_ECC,
+        .InitEcc = MEM_FEATURE_ECC,
+        .Training = MEM_FEATURE_TRAINING,
+        .LvDdr3 = MEM_FEATURE_LVDDR3,
+        .OnDimmThermal = MemFDefRet,
+        .DramInit = MEM_TECH_FEATURE_DRAMINIT,
+        .ExcludeDIMM = MEM_FEATURE_DIMM_EXCLUDE,
+        .InitEarlySampleSupport = MemFDefRet,
+        .InitCPG = MEM_TECH_FEATURE_CPG,
+        .InitHwRxEn = MEM_TECH_FEATURE_HWRXEN
       };
 
       #undef MEM_NB_SUPPORT_Ni
@@ -633,24 +633,24 @@ BOOLEAN MemFS3DefConstructorRet (
 
     #if (OPTION_MEMCTLR_PH == TRUE)
       MEM_FEAT_BLOCK_NB  MemFeatBlockPh = {
-        MEM_FEAT_BLOCK_NB_STRUCT_VERSION,
-        MemFDefRet,
-        MEM_FEATURE_BANK_INTERLEAVE,
-        MEM_FEATURE_UNDO_BANK_INTERLEAVE,
-        MemFDefRet,
-        MemFDefRet,
-        MEM_FEATURE_CHANNEL_INTERLEAVE,
-        MEM_FEATURE_REGION_INTERLEAVE,
-        MEM_FEATURE_CK_ECC,
-        MEM_FEATURE_ECC,
-        MEM_FEATURE_TRAINING,
-        MEM_FEATURE_LVDDR3,
-        MemFDefRet,
-        MEM_TECH_FEATURE_DRAMINIT,
-        MEM_FEATURE_DIMM_EXCLUDE,
-        MemFDefRet,
-        MEM_TECH_FEATURE_CPG,
-        MEM_TECH_FEATURE_HWRXEN
+        .OptMemFeatVersion = MEM_FEAT_BLOCK_NB_STRUCT_VERSION,
+        .OnlineSpare = MemFDefRet,
+        .InterleaveBanks = MEM_FEATURE_BANK_INTERLEAVE,
+        .UndoInterleaveBanks = MEM_FEATURE_UNDO_BANK_INTERLEAVE,
+        .CheckInterleaveNodes = MemFDefRet,
+        .InterleaveNodes = MemFDefRet,
+        .InterleaveChannels = MEM_FEATURE_CHANNEL_INTERLEAVE,
+        .InterleaveRegion = MEM_FEATURE_REGION_INTERLEAVE,
+        .CheckEcc = MEM_FEATURE_CK_ECC,
+        .InitEcc = MEM_FEATURE_ECC,
+        .Training = MEM_FEATURE_TRAINING,
+        .LvDdr3 = MEM_FEATURE_LVDDR3,
+        .OnDimmThermal = MemFDefRet,
+        .DramInit = MEM_TECH_FEATURE_DRAMINIT,
+        .ExcludeDIMM = MEM_FEATURE_DIMM_EXCLUDE,
+        .InitEarlySampleSupport = MemFDefRet,
+        .InitCPG = MEM_TECH_FEATURE_CPG,
+        .InitHwRxEn = MEM_TECH_FEATURE_HWRXEN
       };
 
       #undef MEM_NB_SUPPORT_PH
@@ -662,24 +662,24 @@ BOOLEAN MemFS3DefConstructorRet (
 
     #if (OPTION_MEMCTLR_RB == TRUE)
       MEM_FEAT_BLOCK_NB  MemFeatBlockRb = {
-        MEM_FEAT_BLOCK_NB_STRUCT_VERSION,
-        MemFDefRet,
-        MEM_FEATURE_BANK_INTERLEAVE,
-        MEM_FEATURE_UNDO_BANK_INTERLEAVE,
-        MemFDefRet,
-        MemFDefRet,
-        MEM_FEATURE_CHANNEL_INTERLEAVE,
-        MEM_FEATURE_REGION_INTERLEAVE,
-        MEM_FEATURE_CK_ECC,
-        MEM_FEATURE_ECC,
-        MEM_FEATURE_TRAINING,
-        MEM_FEATURE_LVDDR3,
-        MemFDefRet,
-        MEM_TECH_FEATURE_DRAMINIT,
-        MEM_FEATURE_DIMM_EXCLUDE,
-        MemFDefRet,
-        MEM_TECH_FEATURE_CPG,
-        MEM_TECH_FEATURE_HWRXEN
+        .OptMemFeatVersion = MEM_FEAT_BLOCK_NB_STRUCT_VERSION,
+        .OnlineSpare = MemFDefRet,
+        .InterleaveBanks = MEM_FEATURE_BANK_INTERLEAVE,
+        .UndoInterleaveBanks = MEM_FEATURE_UNDO_BANK_INTERLEAVE,
+        .CheckInterleaveNodes = MemFDefRet,
+        .InterleaveNodes = MemFDefRet,
+        .InterleaveChannels = MEM_FEATURE_CHANNEL_INTERLEAVE,
+        .InterleaveRegion = MEM_FEATURE_REGION_INTERLEAVE,
+        .CheckEcc = MEM_FEATURE_CK_ECC,
+        .InitEcc = MEM_FEATURE_ECC,
+        .Training = MEM_FEATURE_TRAINING,
+        .LvDdr3 = MEM_FEATURE_LVDDR3,
+        .OnDimmThermal = MemFDefRet,
+        .DramInit = MEM_TECH_FEATURE_DRAMINIT,
+        .ExcludeDIMM = MEM_FEATURE_DIMM_EXCLUDE,
+        .InitEarlySampleSupport = MemFDefRet,
+        .InitCPG = MEM_TECH_FEATURE_CPG,
+        .InitHwRxEn = MEM_TECH_FEATURE_HWRXEN
       };
 
       #undef MEM_NB_SUPPORT_RB
@@ -691,24 +691,24 @@ BOOLEAN MemFS3DefConstructorRet (
 
     #if (OPTION_MEMCTLR_DA == TRUE)
       MEM_FEAT_BLOCK_NB  MemFeatBlockDA = {
-        MEM_FEAT_BLOCK_NB_STRUCT_VERSION,
-        MemFDefRet,
-        MEM_FEATURE_BANK_INTERLEAVE,
-        MEM_FEATURE_UNDO_BANK_INTERLEAVE,
-        MemFDefRet,
-        MemFDefRet,
-        MEM_FEATURE_CHANNEL_INTERLEAVE,
-        MEM_FEATURE_REGION_INTERLEAVE,
-        MEM_FEATURE_CK_ECC,
-        MEM_FEATURE_ECC,
-        MEM_FEATURE_TRAINING,
-        MEM_FEATURE_LVDDR3,
-        MemFDefRet,
-        MEM_TECH_FEATURE_DRAMINIT,
-        MEM_FEATURE_DIMM_EXCLUDE,
-        MemFDefRet,
-        MEM_TECH_FEATURE_CPG,
-        MEM_TECH_FEATURE_HWRXEN
+        .OptMemFeatVersion = MEM_FEAT_BLOCK_NB_STRUCT_VERSION,
+        .OnlineSpare = MemFDefRet,
+        .InterleaveBanks = MEM_FEATURE_BANK_INTERLEAVE,
+        .UndoInterleaveBanks = MEM_FEATURE_UNDO_BANK_INTERLEAVE,
+        .CheckInterleaveNodes = MemFDefRet,
+        .InterleaveNodes = MemFDefRet,
+        .InterleaveChannels = MEM_FEATURE_CHANNEL_INTERLEAVE,
+        .InterleaveRegion = MEM_FEATURE_REGION_INTERLEAVE,
+        .CheckEcc = MEM_FEATURE_CK_ECC,
+        .InitEcc = MEM_FEATURE_ECC,
+        .Training = MEM_FEATURE_TRAINING,
+        .LvDdr3 = MEM_FEATURE_LVDDR3,
+        .OnDimmThermal = MemFDefRet,
+        .DramInit = MEM_TECH_FEATURE_DRAMINIT,
+        .ExcludeDIMM = MEM_FEATURE_DIMM_EXCLUDE,
+        .InitEarlySampleSupport = MemFDefRet,
+        .InitCPG = MEM_TECH_FEATURE_CPG,
+        .InitHwRxEn = MEM_TECH_FEATURE_HWRXEN
       };
 
       #undef MEM_NB_SUPPORT_DA
@@ -752,24 +752,24 @@ BOOLEAN MemFS3DefConstructorRet (
     #define MEM_FEATURE_TRAINING  MemFStandardTraining
 
     MEM_FEAT_BLOCK_NB  MemFeatBlockHy = {
-      MEM_FEAT_BLOCK_NB_STRUCT_VERSION,
-      MEM_FEATURE_ONLINE_SPARE,
-      MEM_FEATURE_BANK_INTERLEAVE,
-      MEM_FEATURE_UNDO_BANK_INTERLEAVE,
-      MEM_FEATURE_NODE_INTERLEAVE_CHECK,
-      MEM_FEATURE_NODE_INTERLEAVE,
-      MEM_FEATURE_CHANNEL_INTERLEAVE,
-      MemFDefRet,
-      MEM_FEATURE_CK_ECC,
-      MEM_FEATURE_ECC,
-      MEM_FEATURE_TRAINING,
-      MEM_FEATURE_LVDDR3,
-      MEM_FEATURE_ONDIMMTHERMAL,
-      MEM_TECH_FEATURE_DRAMINIT,
-      MEM_FEATURE_DIMM_EXCLUDE,
-      MemFDefRet,
-      MEM_TECH_FEATURE_CPG,
-      MEM_TECH_FEATURE_HWRXEN
+      .OptMemFeatVersion = MEM_FEAT_BLOCK_NB_STRUCT_VERSION,
+      .OnlineSpare = MEM_FEATURE_ONLINE_SPARE,
+      .InterleaveBanks = MEM_FEATURE_BANK_INTERLEAVE,
+      .UndoInterleaveBanks = MEM_FEATURE_UNDO_BANK_INTERLEAVE,
+      .CheckInterleaveNodes = MEM_FEATURE_NODE_INTERLEAVE_CHECK,
+      .InterleaveNodes = MEM_FEATURE_NODE_INTERLEAVE,
+      .InterleaveChannels = MEM_FEATURE_CHANNEL_INTERLEAVE,
+      .InterleaveRegion = MemFDefRet,
+      .CheckEcc = MEM_FEATURE_CK_ECC,
+      .InitEcc = MEM_FEATURE_ECC,
+      .Training = MEM_FEATURE_TRAINING,
+      .LvDdr3 = MEM_FEATURE_LVDDR3,
+      .OnDimmThermal = MEM_FEATURE_ONDIMMTHERMAL,
+      .DramInit = MEM_TECH_FEATURE_DRAMINIT,
+      .ExcludeDIMM = MEM_FEATURE_DIMM_EXCLUDE,
+      .InitEarlySampleSupport = MemFDefRet,
+      .InitCPG = MEM_TECH_FEATURE_CPG,
+      .InitHwRxEn = MEM_TECH_FEATURE_HWRXEN
     };
 
     #undef MEM_NB_SUPPORT_HY
@@ -831,24 +831,24 @@ BOOLEAN MemFS3DefConstructorRet (
     #define MEM_FEATURE_TRAINING  MemFStandardTraining
 
     MEM_FEAT_BLOCK_NB  MemFeatBlockOr = {
-      MEM_FEAT_BLOCK_NB_STRUCT_VERSION,
-      MEM_FEATURE_ONLINE_SPARE,
-      MEM_FEATURE_BANK_INTERLEAVE,
-      MEM_FEATURE_UNDO_BANK_INTERLEAVE,
-      MEM_FEATURE_NODE_INTERLEAVE_CHECK,
-      MEM_FEATURE_NODE_INTERLEAVE,
-      MEM_FEATURE_CHANNEL_INTERLEAVE,
-      MEM_FEATURE_REGION_INTERLEAVE,
-      MEM_FEATURE_CK_ECC,
-      MEM_FEATURE_ECC,
-      MEM_FEATURE_TRAINING,
-      MEM_FEATURE_LVDDR3,
-      MEM_FEATURE_ONDIMMTHERMAL,
-      MEM_TECH_FEATURE_DRAMINIT,
-      MEM_FEATURE_DIMM_EXCLUDE,
-      MEM_EARLY_SAMPLE_SUPPORT,
-      MEM_TECH_FEATURE_CPG,
-      MEM_TECH_FEATURE_HWRXEN
+      .OptMemFeatVersion = MEM_FEAT_BLOCK_NB_STRUCT_VERSION,
+      .OnlineSpare = MEM_FEATURE_ONLINE_SPARE,
+      .InterleaveBanks = MEM_FEATURE_BANK_INTERLEAVE,
+      .UndoInterleaveBanks = MEM_FEATURE_UNDO_BANK_INTERLEAVE,
+      .CheckInterleaveNodes = MEM_FEATURE_NODE_INTERLEAVE_CHECK,
+      .InterleaveNodes = MEM_FEATURE_NODE_INTERLEAVE,
+      .InterleaveChannels = MEM_FEATURE_CHANNEL_INTERLEAVE,
+      .InterleaveRegion = MEM_FEATURE_REGION_INTERLEAVE,
+      .CheckEcc = MEM_FEATURE_CK_ECC,
+      .InitEcc = MEM_FEATURE_ECC,
+      .Training = MEM_FEATURE_TRAINING,
+      .LvDdr3 = MEM_FEATURE_LVDDR3,
+      .OnDimmThermal = MEM_FEATURE_ONDIMMTHERMAL,
+      .DramInit = MEM_TECH_FEATURE_DRAMINIT,
+      .ExcludeDIMM = MEM_FEATURE_DIMM_EXCLUDE,
+      .InitEarlySampleSupport = MEM_EARLY_SAMPLE_SUPPORT,
+      .InitCPG = MEM_TECH_FEATURE_CPG,
+      .InitHwRxEn = MEM_TECH_FEATURE_HWRXEN
     };
 
     #undef MEM_NB_SUPPORT_OR
@@ -892,24 +892,24 @@ BOOLEAN MemFS3DefConstructorRet (
     #define MEM_FEATURE_TRAINING  MemFStandardTraining
 
     MEM_FEAT_BLOCK_NB  MemFeatBlockC32 = {
-      MEM_FEAT_BLOCK_NB_STRUCT_VERSION,
-      MEM_FEATURE_ONLINE_SPARE,
-      MEM_FEATURE_BANK_INTERLEAVE,
-      MEM_FEATURE_UNDO_BANK_INTERLEAVE,
-      MEM_FEATURE_NODE_INTERLEAVE_CHECK,
-      MEM_FEATURE_NODE_INTERLEAVE,
-      MEM_FEATURE_CHANNEL_INTERLEAVE,
-      MemFDefRet,
-      MEM_FEATURE_CK_ECC,
-      MEM_FEATURE_ECC,
-      MEM_FEATURE_TRAINING,
-      MEM_FEATURE_LVDDR3,
-      MEM_FEATURE_ONDIMMTHERMAL,
-      MEM_TECH_FEATURE_DRAMINIT,
-      MEM_FEATURE_DIMM_EXCLUDE,
-      MemFDefRet,
-      MEM_TECH_FEATURE_CPG,
-      MEM_TECH_FEATURE_HWRXEN
+      .OptMemFeatVersion = MEM_FEAT_BLOCK_NB_STRUCT_VERSION,
+      .OnlineSpare = MEM_FEATURE_ONLINE_SPARE,
+      .InterleaveBanks = MEM_FEATURE_BANK_INTERLEAVE,
+      .UndoInterleaveBanks = MEM_FEATURE_UNDO_BANK_INTERLEAVE,
+      .CheckInterleaveNodes = MEM_FEATURE_NODE_INTERLEAVE_CHECK,
+      .InterleaveNodes = MEM_FEATURE_NODE_INTERLEAVE,
+      .InterleaveChannels = MEM_FEATURE_CHANNEL_INTERLEAVE,
+      .InterleaveRegion = MemFDefRet,
+      .CheckEcc = MEM_FEATURE_CK_ECC,
+      .InitEcc = MEM_FEATURE_ECC,
+      .Training = MEM_FEATURE_TRAINING,
+      .LvDdr3 = MEM_FEATURE_LVDDR3,
+      .OnDimmThermal = MEM_FEATURE_ONDIMMTHERMAL,
+      .DramInit = MEM_TECH_FEATURE_DRAMINIT,
+      .ExcludeDIMM = MEM_FEATURE_DIMM_EXCLUDE,
+      .InitEarlySampleSupport = MemFDefRet,
+      .InitCPG = MEM_TECH_FEATURE_CPG,
+      .InitHwRxEn = MEM_TECH_FEATURE_HWRXEN
     };
 
     #undef MEM_NB_SUPPORT_C32
@@ -923,18 +923,18 @@ BOOLEAN MemFS3DefConstructorRet (
    *---------------------------------------------------------------------------------------------------
    */
   MEM_FEAT_BLOCK_MAIN MemFeatMain = {
-    MEM_FEAT_BLOCK_MAIN_STRUCT_VERSION,
-    MEM_MAIN_FEATURE_TRAINING,
-    MEM_MAIN_FEATURE_DIMM_EXCLUDE,
-    MEM_MAIN_FEATURE_ONLINE_SPARE,
-    MEM_MAIN_FEATURE_NODE_INTERLEAVE,
-    MEM_MAIN_FEATURE_ECC,
-    MEM_MAIN_FEATURE_MEM_CLEAR,
-    MEM_MAIN_FEATURE_MEM_DMI,
-    MEM_MAIN_FEATURE_LVDDR3,
-    MEM_MAIN_FEATURE_UMAALLOC,
-    MEM_MAIN_FEATURE_MEM_SAVE,
-    MEM_MAIN_FEATURE_MEM_RESTORE
+    .OptMemFeatVersion = MEM_FEAT_BLOCK_MAIN_STRUCT_VERSION,
+    .Training = MEM_MAIN_FEATURE_TRAINING,
+    .ExcludeDIMM = MEM_MAIN_FEATURE_DIMM_EXCLUDE,
+    .OnlineSpare = MEM_MAIN_FEATURE_ONLINE_SPARE,
+    .InterleaveNodes = MEM_MAIN_FEATURE_NODE_INTERLEAVE,
+    .InitEcc = MEM_MAIN_FEATURE_ECC,
+    .MemClr = MEM_MAIN_FEATURE_MEM_CLEAR,
+    .MemDmi = MEM_MAIN_FEATURE_MEM_DMI,
+    .LvDDR3 = MEM_MAIN_FEATURE_LVDDR3,
+    .UmaAllocation = MEM_MAIN_FEATURE_UMAALLOC,
+    .MemSave = MEM_MAIN_FEATURE_MEM_SAVE,
+    .MemRestore = MEM_MAIN_FEATURE_MEM_RESTORE
   };
 
 
@@ -993,21 +993,21 @@ BOOLEAN MemFS3DefConstructorRet (
     #endif
       #define TECH_TRAIN_DQS____DDR2    MemTFeatDef
       MEM_TECH_FEAT_BLOCK  memTechTrainingFeatSequenceDDR2Dr = {
-        MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
-        TECH_TRAIN_ENTER_HW_TRN_DDR2,
-        TECH_TRAIN_SW_WL_DDR2,
-        TECH_TRAIN_HW_WL_P1_DDR2,
-        TECH_TRAIN_HW_DQS_REC_EN_P1_DDR2,
-        TECH_TRAIN_HW_WL_P2_DDR2,
-        TECH_TRAIN_HW_DQS_REC_EN_P2_DDR2,
-        TECH_TRAIN_EXIT_HW_TRN_DDR2,
-        TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR2,
-        TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR2,
-        TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR2,
-        TECH_TRAIN_OPT_SW_RD_WR_POS_DDR2,
-        TECH_TRAIN_MAX_RD_LAT_DDR2,
-        TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR2,
-        TECH_TRAIN_DQS____DDR2
+        .OptMemTechFeatVersion = MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
+        .EnterHardwareTraining = TECH_TRAIN_ENTER_HW_TRN_DDR2,
+        .SwWLTraining = TECH_TRAIN_SW_WL_DDR2,
+        .HwBasedWLTrainingPart1 = TECH_TRAIN_HW_WL_P1_DDR2,
+        .HwBasedDQSReceiverEnableTrainingPart1 = TECH_TRAIN_HW_DQS_REC_EN_P1_DDR2,
+        .HwBasedWLTrainingPart2 = TECH_TRAIN_HW_WL_P2_DDR2,
+        .HwBasedDQSReceiverEnableTrainingPart2 = TECH_TRAIN_HW_DQS_REC_EN_P2_DDR2,
+        .TrainExitHwTrn = TECH_TRAIN_EXIT_HW_TRN_DDR2,
+        .NonOptimizedSWDQSRecEnTrainingPart1 = TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR2,
+        .OptimizedSwDqsRecEnTrainingPart1 = TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR2,
+        .NonOptimizedSRdWrPosTraining = TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR2,
+        .OptimizedSRdWrPosTraining = TECH_TRAIN_OPT_SW_RD_WR_POS_DDR2,
+        .MaxRdLatencyTraining = TECH_TRAIN_MAX_RD_LAT_DDR2,
+        .RdPosTraining = TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR2,
+        .RdDqs__Training = TECH_TRAIN_DQS____DDR2
       };
       extern OPTION_MEM_FEATURE_NB MemNDQSTiming2Nb;
       #define NB_TRAIN_FLOW_DDR2    MemNDQSTiming2Nb
@@ -1098,21 +1098,21 @@ BOOLEAN MemFS3DefConstructorRet (
       #define NB_TRAIN_FLOW_DDR3    MemNDQSTiming3Nb
       extern OPTION_MEM_FEATURE_NB memNEnableTrainSequenceDr;
       MEM_TECH_FEAT_BLOCK  memTechTrainingFeatSequenceDDR3Dr = {
-        MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
-        TECH_TRAIN_ENTER_HW_TRN_DDR3,
-        TECH_TRAIN_SW_WL_DDR3,
-        TECH_TRAIN_HW_WL_P1_DDR3,
-        TECH_TRAIN_HW_DQS_REC_EN_P1_DDR3,
-        TECH_TRAIN_HW_WL_P2_DDR3,
-        TECH_TRAIN_HW_DQS_REC_EN_P2_DDR3,
-        TECH_TRAIN_EXIT_HW_TRN_DDR3,
-        TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR3,
-        TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR3,
-        TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR3,
-        TECH_TRAIN_OPT_SW_RD_WR_POS_DDR3,
-        TECH_TRAIN_MAX_RD_LAT_DDR3,
-        TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR3,
-        TECH_TRAIN_DQS____DDR3
+        .OptMemTechFeatVersion = MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
+        .EnterHardwareTraining = TECH_TRAIN_ENTER_HW_TRN_DDR3,
+        .SwWLTraining = TECH_TRAIN_SW_WL_DDR3,
+        .HwBasedWLTrainingPart1 = TECH_TRAIN_HW_WL_P1_DDR3,
+        .HwBasedDQSReceiverEnableTrainingPart1 = TECH_TRAIN_HW_DQS_REC_EN_P1_DDR3,
+        .HwBasedWLTrainingPart2 = TECH_TRAIN_HW_WL_P2_DDR3,
+        .HwBasedDQSReceiverEnableTrainingPart2 = TECH_TRAIN_HW_DQS_REC_EN_P2_DDR3,
+        .TrainExitHwTrn = TECH_TRAIN_EXIT_HW_TRN_DDR3,
+        .NonOptimizedSWDQSRecEnTrainingPart1 = TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR3,
+        .OptimizedSwDqsRecEnTrainingPart1 = TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR3,
+        .NonOptimizedSRdWrPosTraining = TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR3,
+        .OptimizedSRdWrPosTraining = TECH_TRAIN_OPT_SW_RD_WR_POS_DDR3,
+        .MaxRdLatencyTraining = TECH_TRAIN_MAX_RD_LAT_DDR3,
+        .RdPosTraining = TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR3,
+        .RdDqs__Training = TECH_TRAIN_DQS____DDR3
     };
       #define MEM_TECH_ENABLE_TRAINING_SEQUENCE_DDR3_DR { MEM_TECH_TRAIN_SEQUENCE_STRUCT_VERSION, memNSequenceDDR3Nb, memNEnableTrainSequenceDr, &memTechTrainingFeatSequenceDDR3Dr },
     #else
@@ -1185,72 +1185,72 @@ BOOLEAN MemFS3DefConstructorRet (
       #endif
       #define TECH_TRAIN_DQS____DDR2    MemTFeatDef
       MEM_TECH_FEAT_BLOCK  memTechTrainingFeatSequenceDDR2DA = {
-        MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
-        TECH_TRAIN_ENTER_HW_TRN_DDR2,
-        TECH_TRAIN_SW_WL_DDR2,
-        TECH_TRAIN_HW_WL_P1_DDR2,
-        TECH_TRAIN_HW_DQS_REC_EN_P1_DDR2,
-        TECH_TRAIN_HW_WL_P2_DDR2,
-        TECH_TRAIN_HW_DQS_REC_EN_P2_DDR2,
-        TECH_TRAIN_EXIT_HW_TRN_DDR2,
-        TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR2,
-        TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR2,
-        TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR2,
-        TECH_TRAIN_OPT_SW_RD_WR_POS_DDR2,
-        TECH_TRAIN_MAX_RD_LAT_DDR2,
-        TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR2,
-        TECH_TRAIN_DQS____DDR2
+        .OptMemTechFeatVersion = MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
+        .EnterHardwareTraining = TECH_TRAIN_ENTER_HW_TRN_DDR2,
+        .SwWLTraining = TECH_TRAIN_SW_WL_DDR2,
+        .HwBasedWLTrainingPart1 = TECH_TRAIN_HW_WL_P1_DDR2,
+        .HwBasedDQSReceiverEnableTrainingPart1 = TECH_TRAIN_HW_DQS_REC_EN_P1_DDR2,
+        .HwBasedWLTrainingPart2 = TECH_TRAIN_HW_WL_P2_DDR2,
+        .HwBasedDQSReceiverEnableTrainingPart2 = TECH_TRAIN_HW_DQS_REC_EN_P2_DDR2,
+        .TrainExitHwTrn = TECH_TRAIN_EXIT_HW_TRN_DDR2,
+        .NonOptimizedSWDQSRecEnTrainingPart1 = TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR2,
+        .OptimizedSwDqsRecEnTrainingPart1 = TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR2,
+        .NonOptimizedSRdWrPosTraining = TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR2,
+        .OptimizedSRdWrPosTraining = TECH_TRAIN_OPT_SW_RD_WR_POS_DDR2,
+        .MaxRdLatencyTraining = TECH_TRAIN_MAX_RD_LAT_DDR2,
+        .RdPosTraining = TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR2,
+        .RdDqs__Training = TECH_TRAIN_DQS____DDR2
       };
       MEM_TECH_FEAT_BLOCK  memTechTrainingFeatSequenceDDR2PH = {
-        MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
-        TECH_TRAIN_ENTER_HW_TRN_DDR2,
-        TECH_TRAIN_SW_WL_DDR2,
-        TECH_TRAIN_HW_WL_P1_DDR2,
-        TECH_TRAIN_HW_DQS_REC_EN_P1_DDR2,
-        TECH_TRAIN_HW_WL_P2_DDR2,
-        TECH_TRAIN_HW_DQS_REC_EN_P2_DDR2,
-        TECH_TRAIN_EXIT_HW_TRN_DDR2,
-        TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR2,
-        TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR2,
-        TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR2,
-        TECH_TRAIN_OPT_SW_RD_WR_POS_DDR2,
-        TECH_TRAIN_MAX_RD_LAT_DDR2,
-        TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR2,
-        TECH_TRAIN_DQS____DDR2
+        .OptMemTechFeatVersion = MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
+        .EnterHardwareTraining = TECH_TRAIN_ENTER_HW_TRN_DDR2,
+        .SwWLTraining = TECH_TRAIN_SW_WL_DDR2,
+        .HwBasedWLTrainingPart1 = TECH_TRAIN_HW_WL_P1_DDR2,
+        .HwBasedDQSReceiverEnableTrainingPart1 = TECH_TRAIN_HW_DQS_REC_EN_P1_DDR2,
+        .HwBasedWLTrainingPart2 = TECH_TRAIN_HW_WL_P2_DDR2,
+        .HwBasedDQSReceiverEnableTrainingPart2 = TECH_TRAIN_HW_DQS_REC_EN_P2_DDR2,
+        .TrainExitHwTrn = TECH_TRAIN_EXIT_HW_TRN_DDR2,
+        .NonOptimizedSWDQSRecEnTrainingPart1 = TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR2,
+        .OptimizedSwDqsRecEnTrainingPart1 = TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR2,
+        .NonOptimizedSRdWrPosTraining = TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR2,
+        .OptimizedSRdWrPosTraining = TECH_TRAIN_OPT_SW_RD_WR_POS_DDR2,
+        .MaxRdLatencyTraining = TECH_TRAIN_MAX_RD_LAT_DDR2,
+        .RdPosTraining = TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR2,
+        .RdDqs__Training = TECH_TRAIN_DQS____DDR2
       };
       MEM_TECH_FEAT_BLOCK  memTechTrainingFeatSequenceDDR2Rb = {
-        MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
-        TECH_TRAIN_ENTER_HW_TRN_DDR2,
-        TECH_TRAIN_SW_WL_DDR2,
-        TECH_TRAIN_HW_WL_P1_DDR2,
-        TECH_TRAIN_HW_DQS_REC_EN_P1_DDR2,
-        TECH_TRAIN_HW_WL_P2_DDR2,
-        TECH_TRAIN_HW_DQS_REC_EN_P2_DDR2,
-        TECH_TRAIN_EXIT_HW_TRN_DDR2,
-        TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR2,
-        TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR2,
-        TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR2,
-        TECH_TRAIN_OPT_SW_RD_WR_POS_DDR2,
-        TECH_TRAIN_MAX_RD_LAT_DDR2,
-        TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR2,
-        TECH_TRAIN_DQS____DDR2
+        .OptMemTechFeatVersion = MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
+        .EnterHardwareTraining = TECH_TRAIN_ENTER_HW_TRN_DDR2,
+        .SwWLTraining = TECH_TRAIN_SW_WL_DDR2,
+        .HwBasedWLTrainingPart1 = TECH_TRAIN_HW_WL_P1_DDR2,
+        .HwBasedDQSReceiverEnableTrainingPart1 = TECH_TRAIN_HW_DQS_REC_EN_P1_DDR2,
+        .HwBasedWLTrainingPart2 = TECH_TRAIN_HW_WL_P2_DDR2,
+        .HwBasedDQSReceiverEnableTrainingPart2 = TECH_TRAIN_HW_DQS_REC_EN_P2_DDR2,
+        .TrainExitHwTrn = TECH_TRAIN_EXIT_HW_TRN_DDR2,
+        .NonOptimizedSWDQSRecEnTrainingPart1 = TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR2,
+        .OptimizedSwDqsRecEnTrainingPart1 = TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR2,
+        .NonOptimizedSRdWrPosTraining = TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR2,
+        .OptimizedSRdWrPosTraining = TECH_TRAIN_OPT_SW_RD_WR_POS_DDR2,
+        .MaxRdLatencyTraining = TECH_TRAIN_MAX_RD_LAT_DDR2,
+        .RdPosTraining = TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR2,
+        .RdDqs__Training = TECH_TRAIN_DQS____DDR2
       };
       MEM_TECH_FEAT_BLOCK  memTechTrainingFeatSequenceDDR2Ni = {
-        MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
-        TECH_TRAIN_ENTER_HW_TRN_DDR2,
-        TECH_TRAIN_SW_WL_DDR2,
-        TECH_TRAIN_HW_WL_P1_DDR2,
-        TECH_TRAIN_HW_DQS_REC_EN_P1_DDR2,
-        TECH_TRAIN_HW_WL_P2_DDR2,
-        TECH_TRAIN_HW_DQS_REC_EN_P2_DDR2,
-        TECH_TRAIN_EXIT_HW_TRN_DDR2,
-        TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR2,
-        TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR2,
-        TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR2,
-        TECH_TRAIN_OPT_SW_RD_WR_POS_DDR2,
-        TECH_TRAIN_MAX_RD_LAT_DDR2,
-        TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR2,
-        TECH_TRAIN_DQS____DDR2
+        .OptMemTechFeatVersion = MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
+        .EnterHardwareTraining = TECH_TRAIN_ENTER_HW_TRN_DDR2,
+        .SwWLTraining = TECH_TRAIN_SW_WL_DDR2,
+        .HwBasedWLTrainingPart1 = TECH_TRAIN_HW_WL_P1_DDR2,
+        .HwBasedDQSReceiverEnableTrainingPart1 = TECH_TRAIN_HW_DQS_REC_EN_P1_DDR2,
+        .HwBasedWLTrainingPart2 = TECH_TRAIN_HW_WL_P2_DDR2,
+        .HwBasedDQSReceiverEnableTrainingPart2 = TECH_TRAIN_HW_DQS_REC_EN_P2_DDR2,
+        .TrainExitHwTrn = TECH_TRAIN_EXIT_HW_TRN_DDR2,
+        .NonOptimizedSWDQSRecEnTrainingPart1 = TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR2,
+        .OptimizedSwDqsRecEnTrainingPart1 = TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR2,
+        .NonOptimizedSRdWrPosTraining = TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR2,
+        .OptimizedSRdWrPosTraining = TECH_TRAIN_OPT_SW_RD_WR_POS_DDR2,
+        .MaxRdLatencyTraining = TECH_TRAIN_MAX_RD_LAT_DDR2,
+        .RdPosTraining = TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR2,
+        .RdDqs__Training = TECH_TRAIN_DQS____DDR2
       };
       extern OPTION_MEM_FEATURE_NB MemNDQSTiming2Nb;
       #define NB_TRAIN_FLOW_DDR2    MemNDQSTiming2Nb
@@ -1373,72 +1373,72 @@ BOOLEAN MemFS3DefConstructorRet (
       #endif
       #define TECH_TRAIN_DQS____DDR3 MemTFeatDef
       MEM_TECH_FEAT_BLOCK  memTechTrainingFeatSequenceDDR3DA = {
-        MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
-        TECH_TRAIN_ENTER_HW_TRN_DDR3,
-        TECH_TRAIN_SW_WL_DDR3,
-        TECH_TRAIN_HW_WL_P1_DDR3,
-        TECH_TRAIN_HW_DQS_REC_EN_P1_DDR3,
-        TECH_TRAIN_HW_WL_P2_DDR3,
-        TECH_TRAIN_HW_DQS_REC_EN_P2_DDR3,
-        TECH_TRAIN_EXIT_HW_TRN_DDR3,
-        TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR3,
-        TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR3,
-        TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR3,
-        TECH_TRAIN_OPT_SW_RD_WR_POS_DDR3,
-        TECH_TRAIN_MAX_RD_LAT_DDR3,
-        TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR3,
-        TECH_TRAIN_DQS____DDR3
+        .OptMemTechFeatVersion = MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
+        .EnterHardwareTraining = TECH_TRAIN_ENTER_HW_TRN_DDR3,
+        .SwWLTraining = TECH_TRAIN_SW_WL_DDR3,
+        .HwBasedWLTrainingPart1 = TECH_TRAIN_HW_WL_P1_DDR3,
+        .HwBasedDQSReceiverEnableTrainingPart1 = TECH_TRAIN_HW_DQS_REC_EN_P1_DDR3,
+        .HwBasedWLTrainingPart2 = TECH_TRAIN_HW_WL_P2_DDR3,
+        .HwBasedDQSReceiverEnableTrainingPart2 = TECH_TRAIN_HW_DQS_REC_EN_P2_DDR3,
+        .TrainExitHwTrn = TECH_TRAIN_EXIT_HW_TRN_DDR3,
+        .NonOptimizedSWDQSRecEnTrainingPart1 = TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR3,
+        .OptimizedSwDqsRecEnTrainingPart1 = TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR3,
+        .NonOptimizedSRdWrPosTraining = TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR3,
+        .OptimizedSRdWrPosTraining = TECH_TRAIN_OPT_SW_RD_WR_POS_DDR3,
+        .MaxRdLatencyTraining = TECH_TRAIN_MAX_RD_LAT_DDR3,
+        .RdPosTraining = TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR3,
+        .RdDqs__Training = TECH_TRAIN_DQS____DDR3
       };
       MEM_TECH_FEAT_BLOCK  memTechTrainingFeatSequenceDDR3Ph = {
-        MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
-        TECH_TRAIN_ENTER_HW_TRN_DDR3,
-        TECH_TRAIN_SW_WL_DDR3,
-        TECH_TRAIN_HW_WL_P1_DDR3,
-        TECH_TRAIN_HW_DQS_REC_EN_P1_DDR3,
-        TECH_TRAIN_HW_WL_P2_DDR3,
-        TECH_TRAIN_HW_DQS_REC_EN_P2_DDR3,
-        TECH_TRAIN_EXIT_HW_TRN_DDR3,
-        TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR3,
-        TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR3,
-        TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR3,
-        TECH_TRAIN_OPT_SW_RD_WR_POS_DDR3,
-        TECH_TRAIN_MAX_RD_LAT_DDR3,
-        TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR3,
-        TECH_TRAIN_DQS____DDR3
+        .OptMemTechFeatVersion = MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
+        .EnterHardwareTraining = TECH_TRAIN_ENTER_HW_TRN_DDR3,
+        .SwWLTraining = TECH_TRAIN_SW_WL_DDR3,
+        .HwBasedWLTrainingPart1 = TECH_TRAIN_HW_WL_P1_DDR3,
+        .HwBasedDQSReceiverEnableTrainingPart1 = TECH_TRAIN_HW_DQS_REC_EN_P1_DDR3,
+        .HwBasedWLTrainingPart2 = TECH_TRAIN_HW_WL_P2_DDR3,
+        .HwBasedDQSReceiverEnableTrainingPart2 = TECH_TRAIN_HW_DQS_REC_EN_P2_DDR3,
+        .TrainExitHwTrn = TECH_TRAIN_EXIT_HW_TRN_DDR3,
+        .NonOptimizedSWDQSRecEnTrainingPart1 = TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR3,
+        .OptimizedSwDqsRecEnTrainingPart1 = TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR3,
+        .NonOptimizedSRdWrPosTraining = TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR3,
+        .OptimizedSRdWrPosTraining = TECH_TRAIN_OPT_SW_RD_WR_POS_DDR3,
+        .MaxRdLatencyTraining = TECH_TRAIN_MAX_RD_LAT_DDR3,
+        .RdPosTraining = TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR3,
+        .RdDqs__Training = TECH_TRAIN_DQS____DDR3
       };
       MEM_TECH_FEAT_BLOCK  memTechTrainingFeatSequenceDDR3Rb = {
-        MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
-        TECH_TRAIN_ENTER_HW_TRN_DDR3,
-        TECH_TRAIN_SW_WL_DDR3,
-        TECH_TRAIN_HW_WL_P1_DDR3,
-        TECH_TRAIN_HW_DQS_REC_EN_P1_DDR3,
-        TECH_TRAIN_HW_WL_P2_DDR3,
-        TECH_TRAIN_HW_DQS_REC_EN_P2_DDR3,
-        TECH_TRAIN_EXIT_HW_TRN_DDR3,
-        TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR3,
-        TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR3,
-        TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR3,
-        TECH_TRAIN_OPT_SW_RD_WR_POS_DDR3,
-        TECH_TRAIN_MAX_RD_LAT_DDR3,
-        TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR3,
-        TECH_TRAIN_DQS____DDR3
+        .OptMemTechFeatVersion = MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
+        .EnterHardwareTraining = TECH_TRAIN_ENTER_HW_TRN_DDR3,
+        .SwWLTraining = TECH_TRAIN_SW_WL_DDR3,
+        .HwBasedWLTrainingPart1 = TECH_TRAIN_HW_WL_P1_DDR3,
+        .HwBasedDQSReceiverEnableTrainingPart1 = TECH_TRAIN_HW_DQS_REC_EN_P1_DDR3,
+        .HwBasedWLTrainingPart2 = TECH_TRAIN_HW_WL_P2_DDR3,
+        .HwBasedDQSReceiverEnableTrainingPart2 = TECH_TRAIN_HW_DQS_REC_EN_P2_DDR3,
+        .TrainExitHwTrn = TECH_TRAIN_EXIT_HW_TRN_DDR3,
+        .NonOptimizedSWDQSRecEnTrainingPart1 = TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR3,
+        .OptimizedSwDqsRecEnTrainingPart1 = TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR3,
+        .NonOptimizedSRdWrPosTraining = TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR3,
+        .OptimizedSRdWrPosTraining = TECH_TRAIN_OPT_SW_RD_WR_POS_DDR3,
+        .MaxRdLatencyTraining = TECH_TRAIN_MAX_RD_LAT_DDR3,
+        .RdPosTraining = TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR3,
+        .RdDqs__Training = TECH_TRAIN_DQS____DDR3
       };
       MEM_TECH_FEAT_BLOCK  memTechTrainingFeatSequenceDDR3Ni = {
-        MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
-        TECH_TRAIN_ENTER_HW_TRN_DDR3,
-        TECH_TRAIN_SW_WL_DDR3,
-        TECH_TRAIN_HW_WL_P1_DDR3,
-        TECH_TRAIN_HW_DQS_REC_EN_P1_DDR3,
-        TECH_TRAIN_HW_WL_P2_DDR3,
-        TECH_TRAIN_HW_DQS_REC_EN_P2_DDR3,
-        TECH_TRAIN_EXIT_HW_TRN_DDR3,
-        TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR3,
-        TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR3,
-        TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR3,
-        TECH_TRAIN_OPT_SW_RD_WR_POS_DDR3,
-        TECH_TRAIN_MAX_RD_LAT_DDR3,
-        TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR3,
-        TECH_TRAIN_DQS____DDR3
+        .OptMemTechFeatVersion = MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
+        .EnterHardwareTraining = TECH_TRAIN_ENTER_HW_TRN_DDR3,
+        .SwWLTraining = TECH_TRAIN_SW_WL_DDR3,
+        .HwBasedWLTrainingPart1 = TECH_TRAIN_HW_WL_P1_DDR3,
+        .HwBasedDQSReceiverEnableTrainingPart1 = TECH_TRAIN_HW_DQS_REC_EN_P1_DDR3,
+        .HwBasedWLTrainingPart2 = TECH_TRAIN_HW_WL_P2_DDR3,
+        .HwBasedDQSReceiverEnableTrainingPart2 = TECH_TRAIN_HW_DQS_REC_EN_P2_DDR3,
+        .TrainExitHwTrn = TECH_TRAIN_EXIT_HW_TRN_DDR3,
+        .NonOptimizedSWDQSRecEnTrainingPart1 = TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR3,
+        .OptimizedSwDqsRecEnTrainingPart1 = TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR3,
+        .NonOptimizedSRdWrPosTraining = TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR3,
+        .OptimizedSRdWrPosTraining = TECH_TRAIN_OPT_SW_RD_WR_POS_DDR3,
+        .MaxRdLatencyTraining = TECH_TRAIN_MAX_RD_LAT_DDR3,
+        .RdPosTraining = TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR3,
+        .RdDqs__Training = TECH_TRAIN_DQS____DDR3
       };
       #define NB_TRAIN_FLOW_DDR3    MemNDQSTiming3Nb
       #if (OPTION_MEMCTLR_DA)
@@ -1545,21 +1545,21 @@ BOOLEAN MemFS3DefConstructorRet (
       #endif
       #define TECH_TRAIN_DQS____DDR2    MemTFeatDef
       MEM_TECH_FEAT_BLOCK  memTechTrainingFeatSequenceDDR2Hy = {
-        MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
-        TECH_TRAIN_ENTER_HW_TRN_DDR2,
-        TECH_TRAIN_SW_WL_DDR2,
-        TECH_TRAIN_HW_WL_P1_DDR2,
-        TECH_TRAIN_HW_DQS_REC_EN_P1_DDR2,
-        TECH_TRAIN_HW_WL_P2_DDR2,
-        TECH_TRAIN_HW_DQS_REC_EN_P2_DDR2,
-        TECH_TRAIN_EXIT_HW_TRN_DDR2,
-        TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR2,
-        TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR2,
-        TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR2,
-        TECH_TRAIN_OPT_SW_RD_WR_POS_DDR2,
-        TECH_TRAIN_MAX_RD_LAT_DDR2,
-        TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR2,
-        TECH_TRAIN_DQS____DDR2
+        .OptMemTechFeatVersion = MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
+        .EnterHardwareTraining = TECH_TRAIN_ENTER_HW_TRN_DDR2,
+        .SwWLTraining = TECH_TRAIN_SW_WL_DDR2,
+        .HwBasedWLTrainingPart1 = TECH_TRAIN_HW_WL_P1_DDR2,
+        .HwBasedDQSReceiverEnableTrainingPart1 = TECH_TRAIN_HW_DQS_REC_EN_P1_DDR2,
+        .HwBasedWLTrainingPart2 = TECH_TRAIN_HW_WL_P2_DDR2,
+        .HwBasedDQSReceiverEnableTrainingPart2 = TECH_TRAIN_HW_DQS_REC_EN_P2_DDR2,
+        .TrainExitHwTrn = TECH_TRAIN_EXIT_HW_TRN_DDR2,
+        .NonOptimizedSWDQSRecEnTrainingPart1 = TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR2,
+        .OptimizedSwDqsRecEnTrainingPart1 = TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR2,
+        .NonOptimizedSRdWrPosTraining = TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR2,
+        .OptimizedSRdWrPosTraining = TECH_TRAIN_OPT_SW_RD_WR_POS_DDR2,
+        .MaxRdLatencyTraining = TECH_TRAIN_MAX_RD_LAT_DDR2,
+        .RdPosTraining = TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR2,
+        .RdDqs__Training = TECH_TRAIN_DQS____DDR2
       };
       extern OPTION_MEM_FEATURE_NB MemNDQSTiming2Nb;
       #define NB_TRAIN_FLOW_DDR2    MemNDQSTiming2Nb
@@ -1654,21 +1654,21 @@ BOOLEAN MemFS3DefConstructorRet (
       #endif
       #define TECH_TRAIN_DQS____DDR3 MemTFeatDef
       MEM_TECH_FEAT_BLOCK  memTechTrainingFeatSequenceDDR3Hy = {
-        MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
-        TECH_TRAIN_ENTER_HW_TRN_DDR3,			// MemTPreparePhyAssistedTraining
-        TECH_TRAIN_SW_WL_DDR3,				// MemTFeatDef
-        TECH_TRAIN_HW_WL_P1_DDR3,			// MemTWriteLevelizationHw3Pass1	// Write Levelization Training, Pass 1
-        TECH_TRAIN_HW_DQS_REC_EN_P1_DDR3,		// MemTFeatDef
-        TECH_TRAIN_HW_WL_P2_DDR3,			// MemTWriteLevelizationHw3Pass2	// Write Levelization Training, Pass 2
-        TECH_TRAIN_HW_DQS_REC_EN_P2_DDR3,		// MemTFeatDef
-        TECH_TRAIN_EXIT_HW_TRN_DDR3,			// MemTExitPhyAssistedTraining
-        TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR3,	// MemTFeatDef
-        TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR3,		// MemTTrainOptRcvrEnSwPass1		// DQS Receiver Enable Training
-        TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR3,		// MemTFeatDef
-        TECH_TRAIN_OPT_SW_RD_WR_POS_DDR3,		// MemTTrainDQSEdgeDetectSw 		// DQS Position Training (FAILS)
-        TECH_TRAIN_MAX_RD_LAT_DDR3,			// MemTTrainMaxLatency 			// MaxRdLatency Training
-        TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR3,		// MemTTrainDQSEdgeDetect
-        TECH_TRAIN_DQS____DDR3				// MemTFeatDef
+        .OptMemTechFeatVersion = MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
+        .EnterHardwareTraining = TECH_TRAIN_ENTER_HW_TRN_DDR3,			// MemTPreparePhyAssistedTraining
+        .SwWLTraining = TECH_TRAIN_SW_WL_DDR3,				// MemTFeatDef
+        .HwBasedWLTrainingPart1 = TECH_TRAIN_HW_WL_P1_DDR3,			// MemTWriteLevelizationHw3Pass1	// Write Levelization Training, Pass 1
+        .HwBasedDQSReceiverEnableTrainingPart1 = TECH_TRAIN_HW_DQS_REC_EN_P1_DDR3,		// MemTFeatDef
+        .HwBasedWLTrainingPart2 = TECH_TRAIN_HW_WL_P2_DDR3,			// MemTWriteLevelizationHw3Pass2	// Write Levelization Training, Pass 2
+        .HwBasedDQSReceiverEnableTrainingPart2 = TECH_TRAIN_HW_DQS_REC_EN_P2_DDR3,		// MemTFeatDef
+        .TrainExitHwTrn = TECH_TRAIN_EXIT_HW_TRN_DDR3,			// MemTExitPhyAssistedTraining
+        .NonOptimizedSWDQSRecEnTrainingPart1 = TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR3,	// MemTFeatDef
+        .OptimizedSwDqsRecEnTrainingPart1 = TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR3,		// MemTTrainOptRcvrEnSwPass1		// DQS Receiver Enable Training
+        .NonOptimizedSRdWrPosTraining = TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR3,		// MemTFeatDef
+        .OptimizedSRdWrPosTraining = TECH_TRAIN_OPT_SW_RD_WR_POS_DDR3,		// MemTTrainDQSEdgeDetectSw 		// DQS Position Training (FAILS)
+        .MaxRdLatencyTraining = TECH_TRAIN_MAX_RD_LAT_DDR3,			// MemTTrainMaxLatency 			// MaxRdLatency Training
+        .RdPosTraining = TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR3,		// MemTTrainDQSEdgeDetect
+        .RdDqs__Training = TECH_TRAIN_DQS____DDR3				// MemTFeatDef
       };
       #define NB_TRAIN_FLOW_DDR3    MemNDQSTiming3Nb
       #define MEM_TECH_ENABLE_TRAINING_SEQUENCE_DDR3_HY {MEM_TECH_TRAIN_SEQUENCE_STRUCT_VERSION,memNSequenceDDR3Nb, memNEnableTrainSequenceHy, &memTechTrainingFeatSequenceDDR3Hy },
@@ -1743,21 +1743,21 @@ BOOLEAN MemFS3DefConstructorRet (
       #endif
       #define TECH_TRAIN_DQS____DDR2    MemTFeatDef
       MEM_TECH_FEAT_BLOCK  memTechTrainingFeatSequenceDDR2C32 = {
-        MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
-        TECH_TRAIN_ENTER_HW_TRN_DDR2,
-        TECH_TRAIN_SW_WL_DDR2,
-        TECH_TRAIN_HW_WL_P1_DDR2,
-        TECH_TRAIN_HW_DQS_REC_EN_P1_DDR2,
-        TECH_TRAIN_HW_WL_P2_DDR2,
-        TECH_TRAIN_HW_DQS_REC_EN_P2_DDR2,
-        TECH_TRAIN_EXIT_HW_TRN_DDR2,
-        TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR2,
-        TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR2,
-        TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR2,
-        TECH_TRAIN_OPT_SW_RD_WR_POS_DDR2,
-        TECH_TRAIN_MAX_RD_LAT_DDR2,
-        TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR2,
-        TECH_TRAIN_DQS____DDR2
+        .OptMemTechFeatVersion = MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
+        .EnterHardwareTraining = TECH_TRAIN_ENTER_HW_TRN_DDR2,
+        .SwWLTraining = TECH_TRAIN_SW_WL_DDR2,
+        .HwBasedWLTrainingPart1 = TECH_TRAIN_HW_WL_P1_DDR2,
+        .HwBasedDQSReceiverEnableTrainingPart1 = TECH_TRAIN_HW_DQS_REC_EN_P1_DDR2,
+        .HwBasedWLTrainingPart2 = TECH_TRAIN_HW_WL_P2_DDR2,
+        .HwBasedDQSReceiverEnableTrainingPart2 = TECH_TRAIN_HW_DQS_REC_EN_P2_DDR2,
+        .TrainExitHwTrn = TECH_TRAIN_EXIT_HW_TRN_DDR2,
+        .NonOptimizedSWDQSRecEnTrainingPart1 = TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR2,
+        .OptimizedSwDqsRecEnTrainingPart1 = TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR2,
+        .NonOptimizedSRdWrPosTraining = TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR2,
+        .OptimizedSRdWrPosTraining = TECH_TRAIN_OPT_SW_RD_WR_POS_DDR2,
+        .MaxRdLatencyTraining = TECH_TRAIN_MAX_RD_LAT_DDR2,
+        .RdPosTraining = TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR2,
+        .RdDqs__Training = TECH_TRAIN_DQS____DDR2
       };
       extern OPTION_MEM_FEATURE_NB MemNDQSTiming2Nb;
       #define NB_TRAIN_FLOW_DDR2    MemNDQSTiming2Nb
@@ -1851,21 +1851,21 @@ BOOLEAN MemFS3DefConstructorRet (
       #endif
       #define TECH_TRAIN_DQS____DDR3 MemTFeatDef
       MEM_TECH_FEAT_BLOCK  memTechTrainingFeatSequenceDDR3C32 = {
-        MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
-        TECH_TRAIN_ENTER_HW_TRN_DDR3,
-        TECH_TRAIN_SW_WL_DDR3,
-        TECH_TRAIN_HW_WL_P1_DDR3,
-        TECH_TRAIN_HW_DQS_REC_EN_P1_DDR3,
-        TECH_TRAIN_HW_WL_P2_DDR3,
-        TECH_TRAIN_HW_DQS_REC_EN_P2_DDR3,
-        TECH_TRAIN_EXIT_HW_TRN_DDR3,
-        TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR3,
-        TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR3,
-        TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR3,
-        TECH_TRAIN_OPT_SW_RD_WR_POS_DDR3,
-        TECH_TRAIN_MAX_RD_LAT_DDR3,
-        TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR3,
-        TECH_TRAIN_DQS____DDR3
+        .OptMemTechFeatVersion = MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
+        .EnterHardwareTraining = TECH_TRAIN_ENTER_HW_TRN_DDR3,
+        .SwWLTraining = TECH_TRAIN_SW_WL_DDR3,
+        .HwBasedWLTrainingPart1 = TECH_TRAIN_HW_WL_P1_DDR3,
+        .HwBasedDQSReceiverEnableTrainingPart1 = TECH_TRAIN_HW_DQS_REC_EN_P1_DDR3,
+        .HwBasedWLTrainingPart2 = TECH_TRAIN_HW_WL_P2_DDR3,
+        .HwBasedDQSReceiverEnableTrainingPart2 = TECH_TRAIN_HW_DQS_REC_EN_P2_DDR3,
+        .TrainExitHwTrn = TECH_TRAIN_EXIT_HW_TRN_DDR3,
+        .NonOptimizedSWDQSRecEnTrainingPart1 = TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR3,
+        .OptimizedSwDqsRecEnTrainingPart1 = TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR3,
+        .NonOptimizedSRdWrPosTraining = TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR3,
+        .OptimizedSRdWrPosTraining = TECH_TRAIN_OPT_SW_RD_WR_POS_DDR3,
+        .MaxRdLatencyTraining = TECH_TRAIN_MAX_RD_LAT_DDR3,
+        .RdPosTraining = TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR3,
+        .RdDqs__Training = TECH_TRAIN_DQS____DDR3
       };
       #define NB_TRAIN_FLOW_DDR3    MemNDQSTiming3Nb
       #define MEM_TECH_ENABLE_TRAINING_SEQUENCE_DDR3_C32 {MEM_TECH_TRAIN_SEQUENCE_STRUCT_VERSION,memNSequenceDDR3Nb, memNEnableTrainSequenceC32, &memTechTrainingFeatSequenceDDR3C32 },
@@ -1984,21 +1984,21 @@ BOOLEAN MemFS3DefConstructorRet (
       #endif
       #define TECH_TRAIN_DQS____DDR3 MemTFeatDef
       MEM_TECH_FEAT_BLOCK  memTechTrainingFeatSequenceDDR3OR = {
-        MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
-        TECH_TRAIN_ENTER_HW_TRN_DDR3,			// MemTPreparePhyAssistedTraining
-        TECH_TRAIN_SW_WL_DDR3,				// MemTFeatDef
-        TECH_TRAIN_HW_WL_P1_DDR3,			// MemTWriteLevelizationHw3Pass1
-        TECH_TRAIN_HW_DQS_REC_EN_P1_DDR3,		// MemTDqsTrainRcvrEnHwPass1
-        TECH_TRAIN_HW_WL_P2_DDR3,			// MemTWriteLevelizationHw3Pass2
-        TECH_TRAIN_HW_DQS_REC_EN_P2_DDR3,		// MemTDqsTrainRcvrEnHwPass2
-        TECH_TRAIN_EXIT_HW_TRN_DDR3,			// MemTExitPhyAssistedTraining
-        TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR3,	// MemTFeatDef
-        TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR3,		// MemTFeatDef
-        TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR3,		// MemTFeatDef
-        TECH_TRAIN_OPT_SW_RD_WR_POS_DDR3,		// MemTTrainDQSEdgeDetectSw
-        TECH_TRAIN_MAX_RD_LAT_DDR3,			// MemTTrainMaxLatency
-        TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR3,		// MemTRdPosWithRxEnDlySeeds3
-        TECH_TRAIN_DQS____DDR3				// MemTFeatDef
+        .OptMemTechFeatVersion = MEM_TECH_FEAT_BLOCK_STRUCT_VERSION,
+        .EnterHardwareTraining = TECH_TRAIN_ENTER_HW_TRN_DDR3,			// MemTPreparePhyAssistedTraining
+        .SwWLTraining = TECH_TRAIN_SW_WL_DDR3,				// MemTFeatDef
+        .HwBasedWLTrainingPart1 = TECH_TRAIN_HW_WL_P1_DDR3,			// MemTWriteLevelizationHw3Pass1
+        .HwBasedDQSReceiverEnableTrainingPart1 = TECH_TRAIN_HW_DQS_REC_EN_P1_DDR3,		// MemTDqsTrainRcvrEnHwPass1
+        .HwBasedWLTrainingPart2 = TECH_TRAIN_HW_WL_P2_DDR3,			// MemTWriteLevelizationHw3Pass2
+        .HwBasedDQSReceiverEnableTrainingPart2 = TECH_TRAIN_HW_DQS_REC_EN_P2_DDR3,		// MemTDqsTrainRcvrEnHwPass2
+        .TrainExitHwTrn = TECH_TRAIN_EXIT_HW_TRN_DDR3,			// MemTExitPhyAssistedTraining
+        .NonOptimizedSWDQSRecEnTrainingPart1 = TECH_TRAIN_NON_OPT_SW_DQS_REC_EN_P1_DDR3,	// MemTFeatDef
+        .OptimizedSwDqsRecEnTrainingPart1 = TECH_TRAIN_OPT_SW_DQS_REC_EN_P1_DDR3,		// MemTFeatDef
+        .NonOptimizedSRdWrPosTraining = TECH_TRAIN_NON_OPT_SW_RD_WR_POS_DDR3,		// MemTFeatDef
+        .OptimizedSRdWrPosTraining = TECH_TRAIN_OPT_SW_RD_WR_POS_DDR3,		// MemTTrainDQSEdgeDetectSw
+        .MaxRdLatencyTraining = TECH_TRAIN_MAX_RD_LAT_DDR3,			// MemTTrainMaxLatency
+        .RdPosTraining = TECH_TRAIN_HW_DQS_REC_EN_SEED_DDR3,		// MemTRdPosWithRxEnDlySeeds3
+        .RdDqs__Training = TECH_TRAIN_DQS____DDR3				// MemTFeatDef
       };
       #define NB_TRAIN_FLOW_DDR3    MemNDQSTiming3Nb
       #define MEM_TECH_ENABLE_TRAINING_SEQUENCE_DDR3_OR {MEM_TECH_TRAIN_SEQUENCE_STRUCT_VERSION,memNSequenceDDR3Nb, memNEnableTrainSequenceOr, &memTechTrainingFeatSequenceDDR3OR },
@@ -3461,21 +3461,21 @@ BOOLEAN MemFS3DefConstructorRet (
     };
 
     MEM_PSC_TABLE_BLOCK memPSCTblBlockOr = {
-      (PSC_TBL_ENTRY **)&memPSCTblMaxFreqArrayOR,
-      (PSC_TBL_ENTRY **)&memPSCTblDramTermArrayOR,
-      (PSC_TBL_ENTRY **)&memPSCTblODTPatArrayOR,
-      (PSC_TBL_ENTRY **)&memPSCTblSAOArrayOR,
-      (PSC_TBL_ENTRY **)&memPSCTblMR0WRArrayOR,
-      (PSC_TBL_ENTRY **)&memPSCTblMR0CLArrayOR,
-      (PSC_TBL_ENTRY **)&memPSCTblRC2IBTArrayOR,
-      (PSC_TBL_ENTRY **)&memPSCTblRC10OPSPDArrayOR,
-      (PSC_TBL_ENTRY **)&memPSCTblLRIBTArrayOR,
-      NULL,
-      NULL,
-      (PSC_TBL_ENTRY **)&memPSCTblGenArrayOR,
-      (PSC_TBL_ENTRY **)&memPSCTblS__ArrayOR,
-      (PSC_TBL_ENTRY **)&memPSCTblWLSeedArrayOR,
-      (PSC_TBL_ENTRY **)&memPSCTblHWRxEnSeedArrayOR
+      .TblEntryOfMaxFreq = (PSC_TBL_ENTRY **)&memPSCTblMaxFreqArrayOR,
+      .TblEntryOfDramTerm = (PSC_TBL_ENTRY **)&memPSCTblDramTermArrayOR,
+      .TblEntryOfODTPattern = (PSC_TBL_ENTRY **)&memPSCTblODTPatArrayOR,
+      .TblEntryOfSAO = (PSC_TBL_ENTRY **)&memPSCTblSAOArrayOR,
+      .TblEntryOfMR0WR = (PSC_TBL_ENTRY **)&memPSCTblMR0WRArrayOR,
+      .TblEntryOfMR0CL = (PSC_TBL_ENTRY **)&memPSCTblMR0CLArrayOR,
+      .TblEntryOfRC2IBT = (PSC_TBL_ENTRY **)&memPSCTblRC2IBTArrayOR,
+      .TblEntryOfRC10OpSpeed = (PSC_TBL_ENTRY **)&memPSCTblRC10OPSPDArrayOR,
+      .TblEntryOfLRIBT = (PSC_TBL_ENTRY **)&memPSCTblLRIBTArrayOR,
+      .TblEntryOfLRNPR = NULL,
+      .TblEntryOfLRNLR = NULL,
+      .TblEntryOfGen = (PSC_TBL_ENTRY **)&memPSCTblGenArrayOR,
+      .TblEntryOfS__ = (PSC_TBL_ENTRY **)&memPSCTblS__ArrayOR,
+      .TblEntryOfWLSeed = (PSC_TBL_ENTRY **)&memPSCTblWLSeedArrayOR,
+      .TblEntryOfHWRxENSeed = (PSC_TBL_ENTRY **)&memPSCTblHWRxEnSeedArrayOR
     };
 
     extern MEM_PSC_FLOW MemPGetMaxFreqSupported;
@@ -3544,19 +3544,19 @@ BOOLEAN MemFS3DefConstructorRet (
     #endif
 
     MEM_PSC_FLOW_BLOCK memPlatSpecFlowOR = {
-      &memPSCTblBlockOr,
-      PSC_FLOW_OR_MAX_FREQ,
-      PSC_FLOW_OR_DRAM_TERM,
-      PSC_FLOW_OR_ODT_PATTERN,
-      PSC_FLOW_OR_SAO,
-      PSC_FLOW_OR_MR0_WRCL,
-      PSC_FLOW_OR_RC2_IBT,
-      PSC_FLOW_OR_RC10_OPSPD,
-      PSC_FLOW_OR_LR_IBT,
-      PSC_FLOW_OR_LR_NPR,
-      PSC_FLOW_OR_LR_NLR,
-      PSC_FLOW_OR_S__,
-      PSC_FLOW_OR_SEED
+      .EntryOfTables = &memPSCTblBlockOr,
+      .MaxFrequency = PSC_FLOW_OR_MAX_FREQ,
+      .DramTerm = PSC_FLOW_OR_DRAM_TERM,
+      .ODTPattern = PSC_FLOW_OR_ODT_PATTERN,
+      .SAO = PSC_FLOW_OR_SAO,
+      .MR0WrCL = PSC_FLOW_OR_MR0_WRCL,
+      .RC2IBT = PSC_FLOW_OR_RC2_IBT,
+      .RC10OpSpeed = PSC_FLOW_OR_RC10_OPSPD,
+      .LRIBT = PSC_FLOW_OR_LR_IBT,
+      .LRNPR = PSC_FLOW_OR_LR_NPR,
+      .LRNLR = PSC_FLOW_OR_LR_NLR,
+      .S__ = PSC_FLOW_OR_S__,
+      .TrainingSeedVal = PSC_FLOW_OR_SEED
     };
     #define MEM_PSC_FLOW_BLOCK_OR &memPlatSpecFlowOR,
   #else
@@ -3584,8 +3584,8 @@ BOOLEAN MemFS3DefConstructorRet (
     #define MEM_TECH_FEATURE_LRDIMM_INIT    MemTFeatDef
   #endif
   MEM_TECH_LRDIMM memLrdimmSupported = {
-    MEM_TECH_LRDIMM_STRUCT_VERSION,
-    MEM_TECH_FEATURE_LRDIMM_INIT
+    .OptMemTechLrdimmVersion = MEM_TECH_LRDIMM_STRUCT_VERSION,
+    .MemTInitializeLrdimm = MEM_TECH_FEATURE_LRDIMM_INIT
   };
 #else
   /*---------------------------------------------------------------------------------------------------
@@ -3629,7 +3629,7 @@ BOOLEAN MemFS3DefConstructorRet (
    *---------------------------------------------------------------------------------------------------
    */
   MEM_FEAT_BLOCK_MAIN MemFeatMain = {
-    0
+    .OptMemFeatVersion = 0
   };
 
   /*---------------------------------------------------------------------------------------------------
@@ -3674,18 +3674,18 @@ BOOLEAN MemFS3DefConstructorRet (
    */
   #if OPTION_DDR2
     MEM_TECH_FEAT_BLOCK  memTechTrainingFeatDDR2 = {
-      0
+      .OptMemTechFeatVersion = 0
     };
     MEM_FEAT_TRAIN_SEQ memTrainSequenceDDR2[] = {
-      { 0 }
+      { .OptMemTrainingSequenceListVersion = 0 }
     };
   #endif
   #if OPTION_DDR3
     MEM_TECH_FEAT_BLOCK  memTechTrainingFeatDDR3 = {
-      0
+      .OptMemTechFeatVersion = 0
     };
     MEM_FEAT_TRAIN_SEQ memTrainSequenceDDR3[] = {
-      { 0 }
+      { .OptMemTrainingSequenceListVersion = 0 }
     };
   #endif
     /*---------------------------------------------------------------------------------------------------
@@ -3753,8 +3753,8 @@ BOOLEAN MemFS3DefConstructorRet (
   };
 
   MEM_TECH_LRDIMM memLrdimmSupported = {
-    MEM_TECH_LRDIMM_STRUCT_VERSION,
-    NULL
+    .OptMemTechLrdimmVersion = MEM_TECH_LRDIMM_STRUCT_VERSION,
+    .MemTInitializeLrdimm = NULL
   };
 #endif
 

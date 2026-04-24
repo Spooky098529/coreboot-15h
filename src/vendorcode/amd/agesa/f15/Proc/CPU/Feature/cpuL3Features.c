@@ -343,8 +343,8 @@ EnableAllCaches (
 
 CONST CPU_FEATURE_DESCRIPTOR ROMDATA CpuL3Features =
 {
-  L3Features,
-  (CPU_FEAT_AFTER_POST_MTRR_SYNC | CPU_FEAT_INIT_MID_END | CPU_FEAT_S3_LATE_RESTORE_END),
-  IsL3FeatureEnabled,
-  InitializeL3Feature
+  .Feature = L3Features,
+  .EntryPoint = (CPU_FEAT_AFTER_POST_MTRR_SYNC | CPU_FEAT_INIT_MID_END | CPU_FEAT_S3_LATE_RESTORE_END),
+  .IsEnabled = IsL3FeatureEnabled,
+  .InitializeFeature = InitializeL3Feature
 };

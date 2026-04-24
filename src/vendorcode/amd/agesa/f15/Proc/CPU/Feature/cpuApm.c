@@ -198,8 +198,8 @@ EnableApmOnSocket (
 
 CONST CPU_FEATURE_DESCRIPTOR ROMDATA CpuFeatureApm =
 {
-  CpuApm,
-  (CPU_FEAT_BEFORE_RELINQUISH_AP | CPU_FEAT_AFTER_RESUME_MTRR_SYNC),
-  IsApmFeatureEnabled,
-  InitializeApmFeature
+  .Feature = CpuApm,
+  .EntryPoint = (CPU_FEAT_BEFORE_RELINQUISH_AP | CPU_FEAT_AFTER_RESUME_MTRR_SYNC),
+  .IsEnabled = IsApmFeatureEnabled,
+  .InitializeFeature = InitializeApmFeature
 };

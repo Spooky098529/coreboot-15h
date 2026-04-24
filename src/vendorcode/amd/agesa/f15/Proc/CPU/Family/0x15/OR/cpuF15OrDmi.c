@@ -88,20 +88,20 @@ CONST CHAR8 ROMDATA str_FX_AM3[] = "AMD FX(tm)-";
  *-------------------------------------------------------------------------------------*/
 CONST CPU_T4_PROC_FAMILY ROMDATA F15OrG34T4ProcFamily[] =
 {
-  {str_Opteron_62, 0x3D},
-  {str_Opteron_63, 0x4D}
+  {.Stringstart = str_Opteron_62, .T4ProcFamilySetting = 0x3D},
+  {.Stringstart = str_Opteron_63, .T4ProcFamilySetting = 0x4D}
 };
 
 CONST CPU_T4_PROC_FAMILY ROMDATA F15OrC32T4ProcFamily[] =
 {
-  {str_Opteron_42, 0x3E},
-  {str_Opteron_43, 0x4E}
+  {.Stringstart = str_Opteron_42, .T4ProcFamilySetting = 0x3E},
+  {.Stringstart = str_Opteron_43, .T4ProcFamilySetting = 0x4E}
 };
 
 CONST CPU_T4_PROC_FAMILY ROMDATA F15OrAM3T4ProcFamily[] =
 {
-  {str_FX_AM3, 0x3F},
-  {str_Opteron_3, 0xE4}
+  {.Stringstart = str_FX_AM3, .T4ProcFamilySetting = 0x3F},
+  {.Stringstart = str_Opteron_3, .T4ProcFamilySetting = 0xE4}
 };
 /*----------------------------------------------------------------------------------------
  *           P R O T O T Y P E S     O F     L O C A L     F U N C T I O N S

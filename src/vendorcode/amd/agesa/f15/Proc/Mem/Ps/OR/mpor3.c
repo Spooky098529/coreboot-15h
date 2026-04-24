@@ -93,19 +93,19 @@ RDATA_GROUP (G3_DXE)
 // D18F2x22C_dct[1:0][Twr], MR0[WR]
 //
 CONST PSCFG_MR0WR_ENTRY MR0WR[] = {
-  {0x10, 0},
-  {0x05, 1},
-  {0x06, 2},
-  {0x07, 3},
-  {0x08, 4},
-  {0x0A, 5},
-  {0x0C, 6},
-  {0x0E, 7}
+  {.Timing = 0x10, .Value = 0},
+  {.Timing = 0x05, .Value = 1},
+  {.Timing = 0x06, .Value = 2},
+  {.Timing = 0x07, .Value = 3},
+  {.Timing = 0x08, .Value = 4},
+  {.Timing = 0x0A, .Value = 5},
+  {.Timing = 0x0C, .Value = 6},
+  {.Timing = 0x0E, .Value = 7}
 };
 CONST PSC_TBL_ENTRY MR0WrTblEntry = {
-   {PSCFG_MR0WR, DT_DONT_CARE, NOD_DONT_CARE, {AMD_FAMILY_15_OR, AMD_F15_ALL}, PT_DONT_CARE, DDR3_TECHNOLOGY},
-   sizeof (MR0WR) / sizeof (PSCFG_MR0WR_ENTRY),
-   (VOID *)&MR0WR
+   .Header = {.PSCType = PSCFG_MR0WR, .DimmType = DT_DONT_CARE, .NumOfDimm = NOD_DONT_CARE, .LogicalCpuid = {.Family = AMD_FAMILY_15_OR, .Revision = AMD_F15_ALL}, .PackageType = PT_DONT_CARE, .TechType = DDR3_TECHNOLOGY},
+   .TableSize = sizeof (MR0WR) / sizeof (PSCFG_MR0WR_ENTRY),
+   .TBLPtr = (VOID *)&MR0WR
 };
 
 // MR0[CL]
@@ -113,23 +113,23 @@ CONST PSC_TBL_ENTRY MR0WrTblEntry = {
 // D18F2x200_dct[1:0][Tcl], MR0[CL][3:1], MR0[CL][0]
 //
 CONST PSCFG_MR0CL_ENTRY MR0CL[] = {
-  {0x05, 1, 0},
-  {0x06, 2, 0},
-  {0x07, 3, 0},
-  {0x08, 4, 0},
-  {0x09, 5, 0},
-  {0x0A, 6, 0},
-  {0x0B, 7, 0},
-  {0x0C, 0, 1},
-  {0x0D, 1, 1},
-  {0x0E, 2, 1},
-  {0x0F, 3, 1},
-  {0x10, 4, 1}
+  {.Timing = 0x05, .Value = 1, .Value1 = 0},
+  {.Timing = 0x06, .Value = 2, .Value1 = 0},
+  {.Timing = 0x07, .Value = 3, .Value1 = 0},
+  {.Timing = 0x08, .Value = 4, .Value1 = 0},
+  {.Timing = 0x09, .Value = 5, .Value1 = 0},
+  {.Timing = 0x0A, .Value = 6, .Value1 = 0},
+  {.Timing = 0x0B, .Value = 7, .Value1 = 0},
+  {.Timing = 0x0C, .Value = 0, .Value1 = 1},
+  {.Timing = 0x0D, .Value = 1, .Value1 = 1},
+  {.Timing = 0x0E, .Value = 2, .Value1 = 1},
+  {.Timing = 0x0F, .Value = 3, .Value1 = 1},
+  {.Timing = 0x10, .Value = 4, .Value1 = 1}
 };
 CONST PSC_TBL_ENTRY MR0CLTblEntry = {
-   {PSCFG_MR0CL, DT_DONT_CARE, NOD_DONT_CARE, {AMD_FAMILY_15_OR, AMD_F15_ALL}, PT_DONT_CARE, DDR3_TECHNOLOGY},
-   sizeof (MR0CL) / sizeof (PSCFG_MR0CL_ENTRY),
-   (VOID *)&MR0CL
+   .Header = {.PSCType = PSCFG_MR0CL, .DimmType = DT_DONT_CARE, .NumOfDimm = NOD_DONT_CARE, .LogicalCpuid = {.Family = AMD_FAMILY_15_OR, .Revision = AMD_F15_ALL}, .PackageType = PT_DONT_CARE, .TechType = DDR3_TECHNOLOGY},
+   .TableSize = sizeof (MR0CL) / sizeof (PSCFG_MR0CL_ENTRY),
+   .TBLPtr = (VOID *)&MR0CL
 };
 
 
@@ -138,9 +138,9 @@ CONST PSC_TBL_ENTRY MR0CLTblEntry = {
 //
 STATIC CONST UINT8 ROMDATA OrDdr3CKETri[] = {0x55, 0xAA};
 CONST PSC_TBL_ENTRY OrDdr3CKETriEnt = {
-   {PSCFG_CKETRI, DT_DONT_CARE, NOD_DONT_CARE, {AMD_FAMILY_15_OR, AMD_F15_ALL}, PT_DONT_CARE, DDR3_TECHNOLOGY},
-   sizeof (OrDdr3CKETri) / sizeof (UINT8),
-   (VOID *)&OrDdr3CKETri
+   .Header = {.PSCType = PSCFG_CKETRI, .DimmType = DT_DONT_CARE, .NumOfDimm = NOD_DONT_CARE, .LogicalCpuid = {.Family = AMD_FAMILY_15_OR, .Revision = AMD_F15_ALL}, .PackageType = PT_DONT_CARE, .TechType = DDR3_TECHNOLOGY},
+   .TableSize = sizeof (OrDdr3CKETri) / sizeof (UINT8),
+   .TBLPtr = (VOID *)&OrDdr3CKETri
 };
 
 
@@ -156,9 +156,9 @@ CONST PSC_TBL_ENTRY OrDdr3CKETriEnt = {
 // Dimm 1 : BP_MEMCSx[3:2], BP_MEMODTx[3, 1]
 STATIC CONST UINT8 ROMDATA OrDdr3ODTTri[] = {0x01, 0x04, 0x02, 0x08};
 CONST PSC_TBL_ENTRY OrDdr3ODTTriEnt = {
-   {PSCFG_ODTTRI, UDIMM_TYPE + RDIMM_TYPE, _1DIMM + _2DIMM, {AMD_FAMILY_15_OR, AMD_F15_ALL}, PT_DONT_CARE, DDR3_TECHNOLOGY},
-   sizeof (OrDdr3ODTTri) / sizeof (UINT8),
-   (VOID *)&OrDdr3ODTTri
+   .Header = {.PSCType = PSCFG_ODTTRI, .DimmType = UDIMM_TYPE + RDIMM_TYPE, .NumOfDimm = _1DIMM + _2DIMM, .LogicalCpuid = {.Family = AMD_FAMILY_15_OR, .Revision = AMD_F15_ALL}, .PackageType = PT_DONT_CARE, .TechType = DDR3_TECHNOLOGY},
+   .TableSize = sizeof (OrDdr3ODTTri) / sizeof (UINT8),
+   .TBLPtr = (VOID *)&OrDdr3ODTTri
 };
 //
 // ODT tri-state [UDIMM & RDIMM][3DPC]
@@ -168,9 +168,9 @@ CONST PSC_TBL_ENTRY OrDdr3ODTTriEnt = {
 // Dimm 2: BP_MEMCSx[5:4], BP_MEMODTx[2]
 STATIC CONST UINT8 ROMDATA OrDdr3ODTTri3D[] = {0x03, 0x44, 0x30, 0x88};
 CONST PSC_TBL_ENTRY OrDdr3ODTTri3DEnt = {
-   {PSCFG_ODTTRI, UDIMM_TYPE + RDIMM_TYPE, _3DIMM, {AMD_FAMILY_15_OR, AMD_F15_ALL}, PT_DONT_CARE, DDR3_TECHNOLOGY},
-   sizeof (OrDdr3ODTTri3D) / sizeof (UINT8),
-   (VOID *)&OrDdr3ODTTri3D
+   .Header = {.PSCType = PSCFG_ODTTRI, .DimmType = UDIMM_TYPE + RDIMM_TYPE, .NumOfDimm = _3DIMM, .LogicalCpuid = {.Family = AMD_FAMILY_15_OR, .Revision = AMD_F15_ALL}, .PackageType = PT_DONT_CARE, .TechType = DDR3_TECHNOLOGY},
+   .TableSize = sizeof (OrDdr3ODTTri3D) / sizeof (UINT8),
+   .TBLPtr = (VOID *)&OrDdr3ODTTri3D
 };
 
 
@@ -187,9 +187,9 @@ CONST PSC_TBL_ENTRY OrDdr3ODTTri3DEnt = {
 // LR : Assert DIMM ODT0 only
 STATIC CONST UINT8 ROMDATA OrLRDdr3ODTTri[] = {0x03, 0x0C, 0x00, 0x00};
 CONST PSC_TBL_ENTRY OrLRDdr3ODTTriEnt = {
-   {PSCFG_ODTTRI, LRDIMM_TYPE, _1DIMM + _2DIMM, {AMD_FAMILY_15_OR, AMD_F15_ALL}, PT_DONT_CARE, DDR3_TECHNOLOGY},
-   sizeof (OrLRDdr3ODTTri) / sizeof (UINT8),
-   (VOID *)&OrLRDdr3ODTTri
+   .Header = {.PSCType = PSCFG_ODTTRI, .DimmType = LRDIMM_TYPE, .NumOfDimm = _1DIMM + _2DIMM, .LogicalCpuid = {.Family = AMD_FAMILY_15_OR, .Revision = AMD_F15_ALL}, .PackageType = PT_DONT_CARE, .TechType = DDR3_TECHNOLOGY},
+   .TableSize = sizeof (OrLRDdr3ODTTri) / sizeof (UINT8),
+   .TBLPtr = (VOID *)&OrLRDdr3ODTTri
 };
 
 //
@@ -201,9 +201,9 @@ CONST PSC_TBL_ENTRY OrLRDdr3ODTTriEnt = {
 // LR : Assert DIMM ODT0 only
 STATIC CONST UINT8 ROMDATA OrLRDdr3ODTTri3D[] = {0x03, 0x0C, 0x30, 0xC0};
 CONST PSC_TBL_ENTRY OrLRDdr3ODTTri3DEnt = {
-   {PSCFG_ODTTRI, LRDIMM_TYPE, _3DIMM, {AMD_FAMILY_15_OR, AMD_F15_ALL}, PT_DONT_CARE, DDR3_TECHNOLOGY},
-   sizeof (OrLRDdr3ODTTri3D) / sizeof (UINT8),
-   (VOID *)&OrLRDdr3ODTTri3D
+   .Header = {.PSCType = PSCFG_ODTTRI, .DimmType = LRDIMM_TYPE, .NumOfDimm = _3DIMM, .LogicalCpuid = {.Family = AMD_FAMILY_15_OR, .Revision = AMD_F15_ALL}, .PackageType = PT_DONT_CARE, .TechType = DDR3_TECHNOLOGY},
+   .TableSize = sizeof (OrLRDdr3ODTTri3D) / sizeof (UINT8),
+   .TBLPtr = (VOID *)&OrLRDdr3ODTTri3D
 };
 
 //
@@ -211,9 +211,9 @@ CONST PSC_TBL_ENTRY OrLRDdr3ODTTri3DEnt = {
 //
 STATIC CONST UINT8 ROMDATA OrUDdr3CSTri[] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
 CONST PSC_TBL_ENTRY OrUDdr3CSTriEnt = {
-   {PSCFG_CSTRI, UDIMM_TYPE, NOD_DONT_CARE, {AMD_FAMILY_15_OR, AMD_F15_ALL}, PT_DONT_CARE, DDR3_TECHNOLOGY},
-   sizeof (OrUDdr3CSTri) / sizeof (UINT8),
-   (VOID *)&OrUDdr3CSTri
+   .Header = {.PSCType = PSCFG_CSTRI, .DimmType = UDIMM_TYPE, .NumOfDimm = NOD_DONT_CARE, .LogicalCpuid = {.Family = AMD_FAMILY_15_OR, .Revision = AMD_F15_ALL}, .PackageType = PT_DONT_CARE, .TechType = DDR3_TECHNOLOGY},
+   .TableSize = sizeof (OrUDdr3CSTri) / sizeof (UINT8),
+   .TBLPtr = (VOID *)&OrUDdr3CSTri
 };
 //
 // ChipSel tri-state [RDIMM & LRDIMM]
@@ -221,8 +221,8 @@ CONST PSC_TBL_ENTRY OrUDdr3CSTriEnt = {
 // select of a single rank registered dimm
 STATIC CONST UINT8 ROMDATA OrDdr3CSTri[] = {0x01, 0x03, 0x04, 0x0C, 0x10, 0x30, 0x40, 0xC0};
 CONST PSC_TBL_ENTRY OrDdr3CSTriEnt = {
-   {PSCFG_CSTRI, LRDIMM_TYPE + RDIMM_TYPE, NOD_DONT_CARE, {AMD_FAMILY_15_OR, AMD_F15_ALL}, PT_DONT_CARE, DDR3_TECHNOLOGY},
-   sizeof (OrDdr3CSTri) / sizeof (UINT8),
-   (VOID *)&OrDdr3CSTri
+   .Header = {.PSCType = PSCFG_CSTRI, .DimmType = LRDIMM_TYPE + RDIMM_TYPE, .NumOfDimm = NOD_DONT_CARE, .LogicalCpuid = {.Family = AMD_FAMILY_15_OR, .Revision = AMD_F15_ALL}, .PackageType = PT_DONT_CARE, .TechType = DDR3_TECHNOLOGY},
+   .TableSize = sizeof (OrDdr3CSTri) / sizeof (UINT8),
+   .TBLPtr = (VOID *)&OrDdr3CSTri
 };
 

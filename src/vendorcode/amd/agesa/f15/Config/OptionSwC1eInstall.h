@@ -71,8 +71,8 @@
   };
   CONST CPU_FAMILY_SUPPORT_TABLE ROMDATA SwC1eFamilyServiceTable =
   {
-    (sizeof (SwC1eFamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
-    &SwC1eFamilyServiceArray[0]
+    .Elements = (sizeof (SwC1eFamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
+    .FamilyTable = &SwC1eFamilyServiceArray[0]
   };
 #endif
 

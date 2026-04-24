@@ -81,8 +81,8 @@ CONST CPU_SPECIFIC_SERVICES_XLAT ROMDATA PstateHpcModeFamilyServiceArray[] =
 
 CONST CPU_FAMILY_SUPPORT_TABLE ROMDATA PstateHpcModeFamilyServiceTable =
 {
-  (sizeof (PstateHpcModeFamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
-  &PstateHpcModeFamilyServiceArray[0]
+  .Elements = (sizeof (PstateHpcModeFamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
+  .FamilyTable = &PstateHpcModeFamilyServiceArray[0]
 };
 
 #endif  // _OPTION_PSTATE_HPC_MODE_INSTALL_H_

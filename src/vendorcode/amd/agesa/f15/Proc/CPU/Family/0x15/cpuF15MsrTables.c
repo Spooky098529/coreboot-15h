@@ -82,55 +82,55 @@ STATIC CONST MSR_TYPE_ENTRY_INITIALIZER ROMDATA F15MsrRegisters[] =
 // MSR_HWCR (0xC0010015)
 // bit[4] = 1
   {
-    MsrRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_ALL                         // CpuRevision
+    .Type = MsrRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                            // platformFeatures
-    {{
-      MSR_HWCR,                              // MSR Address
-      0x0000000000000010,                    // OR Mask
-      0x0000000000000010,                    // NAND Mask
+    .Features = {.PlatformValue = AMD_PF_ALL},                            // platformFeatures
+    .EntryData = {.MsrInitializer = {
+      .Address = MSR_HWCR,                              // MSR Address
+      .Data = 0x0000000000000010,                    // OR Mask
+      .Mask = 0x0000000000000010,                    // NAND Mask
     }}
   },
 // MSR_NB_CFG (0xC001001F)
 // bit[23] = 1, erratum #663
 // bit[54] InitApicIdCpuIdLo = 1
   {
-    MsrRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_ALL                         // CpuRevision
+    .Type = MsrRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                            // platformFeatures
-    {{
-      MSR_NB_CFG,                            // MSR Address
-      0x0040000000800000,                    // OR Mask
-      0x0040000000800000,                    // NAND Mask
+    .Features = {.PlatformValue = AMD_PF_ALL},                            // platformFeatures
+    .EntryData = {.MsrInitializer = {
+      .Address = MSR_NB_CFG,                            // MSR Address
+      .Data = 0x0040000000800000,                    // OR Mask
+      .Mask = 0x0040000000800000,                    // NAND Mask
     }}
   },
 // This MSR should be set after the code that most errata would be applied in
 // MSR_MC0_CTL (0x00000400)
 // bits[63:0]  = 0xFFFFFFFFFFFFFFFF
   {
-    MsrRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_ALL                         // CpuRevision
+    .Type = MsrRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                            // platformFeatures
-    {{
-      MSR_MC0_CTL,                           // MSR Address
-      0xFFFFFFFFFFFFFFFF,                    // OR Mask
-      0xFFFFFFFFFFFFFFFF,                    // NAND Mask
+    .Features = {.PlatformValue = AMD_PF_ALL},                            // platformFeatures
+    .EntryData = {.MsrInitializer = {
+      .Address = MSR_MC0_CTL,                           // MSR Address
+      .Data = 0xFFFFFFFFFFFFFFFF,                    // OR Mask
+      .Mask = 0xFFFFFFFFFFFFFFFF,                    // NAND Mask
     }}
   }
 };
 
 CONST REGISTER_TABLE ROMDATA F15MsrRegisterTable = {
-  AllCores,
-  (sizeof (F15MsrRegisters) / sizeof (TABLE_ENTRY_FIELDS)),
-  (TABLE_ENTRY_FIELDS *)F15MsrRegisters,
+  .Selector = AllCores,
+  .NumberOfEntries = (sizeof (F15MsrRegisters) / sizeof (TABLE_ENTRY_FIELDS)),
+  .Table = (TABLE_ENTRY_FIELDS *)F15MsrRegisters,
 };
 

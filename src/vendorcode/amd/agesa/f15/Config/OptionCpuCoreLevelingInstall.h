@@ -113,8 +113,8 @@ CONST CPU_SPECIFIC_SERVICES_XLAT ROMDATA CoreLevelingFamilyServiceArray[] =
 };
 CONST CPU_FAMILY_SUPPORT_TABLE ROMDATA CoreLevelingFamilyServiceTable =
 {
-  (sizeof (CoreLevelingFamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
-  &CoreLevelingFamilyServiceArray[0]
+  .Elements = (sizeof (CoreLevelingFamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
+  .FamilyTable = &CoreLevelingFamilyServiceArray[0]
 };
 
 #endif  // _OPTION_CPU_CORELEVELING_INSTALL_H_

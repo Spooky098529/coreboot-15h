@@ -347,8 +347,8 @@
 
 CONST OPTIONS_CONFIG_TOPOLOGY ROMDATA TopologyConfiguration =
 {
-  ADVCFG_PLATFORM_SOCKETS,
-  ADVCFG_PLATFORM_MODULES
+  .PlatformNumberOfSockets = ADVCFG_PLATFORM_SOCKETS,
+  .PlatformNumberOfModules = ADVCFG_PLATFORM_MODULES
 };
 
 /*
@@ -364,8 +364,8 @@ CONST CPU_SPECIFIC_SERVICES_XLAT ROMDATA CpuSupportedFamiliesArray[] =
 
 CONST CPU_FAMILY_SUPPORT_TABLE ROMDATA CpuSupportedFamiliesTable =
 {
-  (sizeof (CpuSupportedFamiliesArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
-  &CpuSupportedFamiliesArray[0]
+  .Elements = (sizeof (CpuSupportedFamiliesArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
+  .FamilyTable = &CpuSupportedFamiliesArray[0]
 };
 
 
@@ -379,6 +379,6 @@ CONST CPU_LOGICAL_ID_FAMILY_XLAT ROMDATA CpuSupportedFamilyIdArray[] =
 
 CONST CPU_FAMILY_ID_XLAT_TABLE ROMDATA CpuSupportedFamilyIdTable =
 {
-  (sizeof (CpuSupportedFamilyIdArray) / sizeof (CPU_LOGICAL_ID_FAMILY_XLAT)),
-  CpuSupportedFamilyIdArray
+  .Elements = (sizeof (CpuSupportedFamilyIdArray) / sizeof (CPU_LOGICAL_ID_FAMILY_XLAT)),
+  .FamilyIdTable = CpuSupportedFamilyIdArray
 };

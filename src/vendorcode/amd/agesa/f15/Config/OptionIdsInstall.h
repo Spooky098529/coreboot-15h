@@ -74,22 +74,22 @@ CONST PF_HtIdsGetPortOverride ROMDATA pf_HtIdsGetPortOverride = M_HTIDS_PORT_OVE
   #if (AGESA_ENTRY_INIT_POST == TRUE)
     #include <mu.h>
     CONST SCRIPT_FUNCTION ROMDATA ScriptFuncList[] = {
-      { (UINTN) MemUWriteCachelines, "WriteCl(PhyAddrLo,BufferAddr,ClCnt)"},
-      { (UINTN) MemUReadCachelines,  "ReadCl(BufferAddr,PhyAddrLo,ClCnt)"},
-      { (UINTN) MemUFlushPattern,    "FlushCl(PhyAddrLo,ClCnt)"}
+      { .FuncAddr = (UINTN) MemUWriteCachelines, .FuncName = "WriteCl(PhyAddrLo,BufferAddr,ClCnt)"},
+      { .FuncAddr = (UINTN) MemUReadCachelines,  .FuncName = "ReadCl(BufferAddr,PhyAddrLo,ClCnt)"},
+      { .FuncAddr = (UINTN) MemUFlushPattern,    .FuncName = "FlushCl(PhyAddrLo,ClCnt)"}
     };
   #else
     CONST SCRIPT_FUNCTION ROMDATA ScriptFuncList[] = {
-      { (UINTN) CommonReturnFalse, "DefRet()"},
-      { (UINTN) CommonReturnFalse,  "DefRet()"},
-      { (UINTN) CommonReturnFalse,    "DefRet()"}
+      { .FuncAddr = (UINTN) CommonReturnFalse, .FuncName = "DefRet()"},
+      { .FuncAddr = (UINTN) CommonReturnFalse,  .FuncName = "DefRet()"},
+      { .FuncAddr = (UINTN) CommonReturnFalse,    .FuncName = "DefRet()"}
     };
   #endif
 #else
   CONST SCRIPT_FUNCTION ROMDATA ScriptFuncList[] = {
-    { (UINTN) CommonReturnFalse, "DefRet()"},
-    { (UINTN) CommonReturnFalse,  "DefRet()"},
-    { (UINTN) CommonReturnFalse,    "DefRet()"}
+    { .FuncAddr = (UINTN) CommonReturnFalse, .FuncName = "DefRet()"},
+    { .FuncAddr = (UINTN) CommonReturnFalse,  .FuncName = "DefRet()"},
+    { .FuncAddr = (UINTN) CommonReturnFalse,    .FuncName = "DefRet()"}
   };
 #endif
 
@@ -386,112 +386,112 @@ CONST PF_HtIdsGetPortOverride ROMDATA pf_HtIdsGetPortOverride = M_HTIDS_PORT_OVE
     #endif
     CONST IDS_FAMILY_FEAT_STRUCT ROMDATA IdsFeatUcodeBlock =
     {
-      IDS_FEAT_UCODE_UPDATE,
-      IDS_ALL_CORES,
-      IDS_UCODE,
-      IDS_FAMILY_ALL,
-      IdsSubUCode
+      .IdsFeat = IDS_FEAT_UCODE_UPDATE,
+      .IsBsp = IDS_ALL_CORES,
+      .IdsOption = IDS_UCODE,
+      .CpuFamily = IDS_FAMILY_ALL,
+      .pf_idsoption = IdsSubUCode
     };
 
     CONST IDS_FAMILY_FEAT_STRUCT ROMDATA IdsFeatPowerPolicyBlock =
     {
-      IDS_FEAT_POWER_POLICY,
-      IDS_ALL_CORES,
-      IDS_PLATFORMCFG_OVERRIDE,
-      IDS_FAMILY_ALL,
-      IdsSubPowerPolicyOverride
+      .IdsFeat = IDS_FEAT_POWER_POLICY,
+      .IsBsp = IDS_ALL_CORES,
+      .IdsOption = IDS_PLATFORMCFG_OVERRIDE,
+      .CpuFamily = IDS_FAMILY_ALL,
+      .pf_idsoption = IdsSubPowerPolicyOverride
     };
 
     CONST IDS_FAMILY_FEAT_STRUCT ROMDATA IdsFeatTargetPstateBlock =
     {
-      IDS_FEAT_TARGET_PSTATE,
-      IDS_BSP_ONLY,
-      IDS_INIT_LATE_AFTER,
-      IDS_FAMILY_ALL,
-      IdsSubTargetPstate
+      .IdsFeat = IDS_FEAT_TARGET_PSTATE,
+      .IsBsp = IDS_BSP_ONLY,
+      .IdsOption = IDS_INIT_LATE_AFTER,
+      .CpuFamily = IDS_FAMILY_ALL,
+      .pf_idsoption = IdsSubTargetPstate
     };
 
     CONST IDS_FAMILY_FEAT_STRUCT ROMDATA IdsFeatPostPstateBlock =
     {
-      IDS_FEAT_POSTPSTATE,
-      IDS_ALL_CORES,
-      IDS_CPU_Early_Override,
-      IDS_FAMILY_ALL,
-      IdsSubPostPState
+      .IdsFeat = IDS_FEAT_POSTPSTATE,
+      .IsBsp = IDS_ALL_CORES,
+      .IdsOption = IDS_CPU_Early_Override,
+      .CpuFamily = IDS_FAMILY_ALL,
+      .pf_idsoption = IdsSubPostPState
     };
 
     //Dram controller Features
     CONST IDS_FAMILY_FEAT_STRUCT ROMDATA IdsFeatDctAllMemClkBlock =
     {
-      IDS_FEAT_DCT_ALLMEMCLK,
-      IDS_BSP_ONLY,
-      IDS_ALL_MEMORY_CLOCK,
-      IDS_FAMILY_ALL,
-      IdsSubAllMemClkEn
+      .IdsFeat = IDS_FEAT_DCT_ALLMEMCLK,
+      .IsBsp = IDS_BSP_ONLY,
+      .IdsOption = IDS_ALL_MEMORY_CLOCK,
+      .CpuFamily = IDS_FAMILY_ALL,
+      .pf_idsoption = IdsSubAllMemClkEn
     };
 
     CONST IDS_FAMILY_FEAT_STRUCT ROMDATA IdsFeatDctGangModeBlock =
     {
-      IDS_FEAT_DCT_GANGMODE,
-      IDS_BSP_ONLY,
-      IDS_GANGING_MODE,
-      IDS_FAMILY_ALL,
-      IdsSubGangingMode
+      .IdsFeat = IDS_FEAT_DCT_GANGMODE,
+      .IsBsp = IDS_BSP_ONLY,
+      .IdsOption = IDS_GANGING_MODE,
+      .CpuFamily = IDS_FAMILY_ALL,
+      .pf_idsoption = IdsSubGangingMode
     };
 
     CONST IDS_FAMILY_FEAT_STRUCT ROMDATA IdsFeatDctBurstLengthBlock =
     {
-      IDS_FEAT_DCT_BURSTLENGTH,
-      IDS_BSP_ONLY,
-      IDS_BURST_LENGTH32,
-      AMD_FAMILY_10,
-      IdsSubBurstLength32
+      .IdsFeat = IDS_FEAT_DCT_BURSTLENGTH,
+      .IsBsp = IDS_BSP_ONLY,
+      .IdsOption = IDS_BURST_LENGTH32,
+      .CpuFamily = AMD_FAMILY_10,
+      .pf_idsoption = IdsSubBurstLength32
     };
 
     CONST IDS_FAMILY_FEAT_STRUCT ROMDATA IdsFeatDctPowerDownCtrlBlock =
     {
-      IDS_FEAT_DCT_POWERDOWN,
-      IDS_BSP_ONLY,
-      IDS_INIT_POST_BEFORE,
-      IDS_FAMILY_ALL,
-      IdsSubPowerDownCtrl
+      .IdsFeat = IDS_FEAT_DCT_POWERDOWN,
+      .IsBsp = IDS_BSP_ONLY,
+      .IdsOption = IDS_INIT_POST_BEFORE,
+      .CpuFamily = IDS_FAMILY_ALL,
+      .pf_idsoption = IdsSubPowerDownCtrl
     };
 
     CONST IDS_FAMILY_FEAT_STRUCT ROMDATA IdsFeatDctDllShutDownBlock =
     {
-      IDS_FEAT_DCT_DLLSHUTDOWN,
-      IDS_BSP_ONLY,
-      IDS_DLL_SHUT_DOWN,
-      IDS_FAMILY_ALL,
-      IdsSubDllShutDownSR
+      .IdsFeat = IDS_FEAT_DCT_DLLSHUTDOWN,
+      .IsBsp = IDS_BSP_ONLY,
+      .IdsOption = IDS_DLL_SHUT_DOWN,
+      .CpuFamily = IDS_FAMILY_ALL,
+      .pf_idsoption = IdsSubDllShutDownSR
     };
 
 
     CONST IDS_FAMILY_FEAT_STRUCT ROMDATA IdsFeatDctPowerDownModeBlock =
     {
-      IDS_FEAT_DCT_POWERDOWN,
-      IDS_BSP_ONLY,
-      IDS_POWERDOWN_MODE,
-      IDS_FAMILY_ALL,
-      IdsSubPowerDownMode
+      .IdsFeat = IDS_FEAT_DCT_POWERDOWN,
+      .IsBsp = IDS_BSP_ONLY,
+      .IdsOption = IDS_POWERDOWN_MODE,
+      .CpuFamily = IDS_FAMILY_ALL,
+      .pf_idsoption = IdsSubPowerDownMode
     };
 
     CONST IDS_FAMILY_FEAT_STRUCT ROMDATA IdsFeatHdtOutBlock =
     {
-      IDS_FEAT_HDTOUT,
-      IDS_BSP_ONLY,
-      IDS_INIT_EARLY_BEFORE,
-      IDS_FAMILY_ALL,
-      IdsSubHdtOut
+      .IdsFeat = IDS_FEAT_HDTOUT,
+      .IsBsp = IDS_BSP_ONLY,
+      .IdsOption = IDS_INIT_EARLY_BEFORE,
+      .CpuFamily = IDS_FAMILY_ALL,
+      .pf_idsoption = IdsSubHdtOut
     };
 
     CONST IDS_FAMILY_FEAT_STRUCT ROMDATA IdsFeatHtSettingBlock =
     {
-      IDS_FEAT_HT_SETTING,
-      IDS_BSP_ONLY,
-      IDS_HT_CONTROL,
-      IDS_FAMILY_ALL,
-      IdsSubHtLinkControl
+      .IdsFeat = IDS_FEAT_HT_SETTING,
+      .IsBsp = IDS_BSP_ONLY,
+      .IdsOption = IDS_HT_CONTROL,
+      .CpuFamily = IDS_FAMILY_ALL,
+      .pf_idsoption = IdsSubHtLinkControl
     };
 
     CONST IDS_FAMILY_FEAT_STRUCT* ROMDATA IdsContorlFeats[] =

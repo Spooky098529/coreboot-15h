@@ -105,10 +105,10 @@ RDATA_GROUP (G1_PEICC)
 DQS_POS_SWEEP_TABLE SweepTableByte[] =
 {
   //     Begin  End   Inc/Dec  Step  EndResult Edge
-  {      0x00,  0x1F, INC_DELAY,  4, 0xFFFF,   LEFT_EDGE},  /// For Left Edge, start from 0 and Increment to 0x1F by 4 until all PASS
-  { LAST_DELAY, 0x00, DEC_DELAY, -1, 0xFE00,   LEFT_EDGE},  ///  Then go back down to 0x00 by 1 until all FAIL
-  {      0x1F,  0x00, DEC_DELAY, -4, 0xFFFF,   RIGHT_EDGE}, /// For Right Edge, start from 0x1F down to 0 until all PASS.
-  { LAST_DELAY, 0x1F, INC_DELAY,  1, 0xFE00,   RIGHT_EDGE}  ///  Then go back up by 1 until all FAIL.
+  {      .BeginDelay = 0x00,  .EndDelay = 0x1F, .ScanDir = INC_DELAY,  .Step = 4, .EndResult = 0xFFFF,   .MinMax = LEFT_EDGE},  /// For Left Edge, start from 0 and Increment to 0x1F by 4 until all PASS
+  { .BeginDelay = LAST_DELAY, .EndDelay = 0x00, .ScanDir = DEC_DELAY, .Step = -1, .EndResult = 0xFE00,   .MinMax = LEFT_EDGE},  ///  Then go back down to 0x00 by 1 until all FAIL
+  {      .BeginDelay = 0x1F,  .EndDelay = 0x00, .ScanDir = DEC_DELAY, .Step = -4, .EndResult = 0xFFFF,   .MinMax = RIGHT_EDGE}, /// For Right Edge, start from 0x1F down to 0 until all PASS.
+  { .BeginDelay = LAST_DELAY, .EndDelay = 0x1F, .ScanDir = INC_DELAY,  .Step = 1, .EndResult = 0xFE00,   .MinMax = RIGHT_EDGE}  ///  Then go back up by 1 until all FAIL.
 };
 /**
  * Sweep Table For Byte Training with insertion delay
@@ -117,10 +117,10 @@ DQS_POS_SWEEP_TABLE SweepTableByte[] =
 DQS_POS_SWEEP_TABLE InsSweepTableByte[] =
 {
   //     Begin  End   Inc/Dec  Step  EndResult Edge
-  {      0x00, -0x20, DEC_DELAY, -4, 0xFE00, LEFT_EDGE},  /// For Left Edge, start from 0 and Decrement to -0x20 by -4 until all FAIL
-  { LAST_DELAY, 0x1F, INC_DELAY,  1, 0xFFFF, LEFT_EDGE},  ///  Then go back up to 0x1F by 1 until all PASS
-  {      0x1F,  0x00, DEC_DELAY, -4, 0xFFFF, RIGHT_EDGE}, /// For Right Edge, start from 0x1F down to 0 until all PASS.
-  { LAST_DELAY, 0x1F, INC_DELAY,  1, 0xFE00, RIGHT_EDGE}  ///  Then go back up by 1 until all FAIL.
+  {      .BeginDelay = 0x00, .EndDelay = -0x20, .ScanDir = DEC_DELAY, .Step = -4, .EndResult = 0xFE00, .MinMax = LEFT_EDGE},  /// For Left Edge, start from 0 and Decrement to -0x20 by -4 until all FAIL
+  { .BeginDelay = LAST_DELAY, .EndDelay = 0x1F, .ScanDir = INC_DELAY,  .Step = 1, .EndResult = 0xFFFF, .MinMax = LEFT_EDGE},  ///  Then go back up to 0x1F by 1 until all PASS
+  {      .BeginDelay = 0x1F,  .EndDelay = 0x00, .ScanDir = DEC_DELAY, .Step = -4, .EndResult = 0xFFFF, .MinMax = RIGHT_EDGE}, /// For Right Edge, start from 0x1F down to 0 until all PASS.
+  { .BeginDelay = LAST_DELAY, .EndDelay = 0x1F, .ScanDir = INC_DELAY,  .Step = 1, .EndResult = 0xFE00, .MinMax = RIGHT_EDGE}  ///  Then go back up by 1 until all FAIL.
 };
 
 BOOLEAN

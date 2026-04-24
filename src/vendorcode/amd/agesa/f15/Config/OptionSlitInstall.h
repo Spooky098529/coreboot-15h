@@ -70,9 +70,9 @@
 #endif
 /*  Declare the instance of the SLIT option configuration structure  */
 OPTION_SLIT_CONFIGURATION OptionSlitConfiguration = {
-  SLIT_STRUCT_VERSION,
-  USER_SLIT_OPTION,
-  USER_SLIT_RELEASE_BUFFER
+  .OptSlitVersion = SLIT_STRUCT_VERSION,
+  .SlitFeature = USER_SLIT_OPTION,
+  .SlitReleaseBuffer = USER_SLIT_RELEASE_BUFFER
 };
 
 #endif  // _OPTION_SLIT_INSTALL_H_

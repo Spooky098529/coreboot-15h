@@ -110,43 +110,43 @@ CONST SYS_PM_TBL_STEP ROMDATA CpuF15OrSysPmTableArray[] =
   // Step x - Disable NB Pstate, if required
   //   Execute both cold & warm
   {
-    0,                                                // ExeFlags
-    F15OrNbPstateDis                                  // Function Pointer
+    .ExeFlags = 0,                                                // ExeFlags
+    .FuncPtr = F15OrNbPstateDis                                  // Function Pointer
   },
 
   // Step 3 - Configure Northbridge COF and VID.
   //   Execute only after warm reset
   {
-    PM_EXEFLAGS_WARM_ONLY,                            // ExeFlags
-    F15OrPmNbCofVidInit                               // Function Pointer
+    .ExeFlags = PM_EXEFLAGS_WARM_ONLY,                            // ExeFlags
+    .FuncPtr = F15OrPmNbCofVidInit                               // Function Pointer
   },
 
   // Step 4 - Core Minimum P-state Transition Sequence After Warm Reset
   //   Execute only after warm reset
   {
-    PM_EXEFLAGS_WARM_ONLY,                            // ExeFlags
-    F15OrPmCoreAfterReset                             // Function Pointer
+    .ExeFlags = PM_EXEFLAGS_WARM_ONLY,                            // ExeFlags
+    .FuncPtr = F15OrPmCoreAfterReset                             // Function Pointer
   },
 
   // Step 5 - NB COF and VID Transition Sequence After Warm Reset
   //   Execute only after warm reset
   {
-    PM_EXEFLAGS_WARM_ONLY,                            // ExeFlags
-    F15OrPmNbAfterReset                               // Function Pointer
+    .ExeFlags = PM_EXEFLAGS_WARM_ONLY,                            // ExeFlags
+    .FuncPtr = F15OrPmNbAfterReset                               // Function Pointer
   },
 
   // Step 6 - Power Check
   //   Execute only after warm reset
   {
-    PM_EXEFLAGS_WARM_ONLY,                            // ExeFlags
-    F15PmPwrCheck                                     // Function Pointer
+    .ExeFlags = PM_EXEFLAGS_WARM_ONLY,                            // ExeFlags
+    .FuncPtr = F15PmPwrCheck                                     // Function Pointer
   },
 
   // Step 7 - Software Thermal Control Init
   //   Execute only after warm reset
   {
-    PM_EXEFLAGS_WARM_ONLY,                            // ExeFlags
-    F15OrPmThermalInit                                // Function Pointer
+    .ExeFlags = PM_EXEFLAGS_WARM_ONLY,                            // ExeFlags
+    .FuncPtr = F15OrPmThermalInit                                // Function Pointer
   }
 };
 

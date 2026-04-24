@@ -110,8 +110,8 @@ CONST CPU_SPECIFIC_SERVICES_XLAT ROMDATA L3FeatureFamilyServiceArray[] =
 };
 CONST CPU_FAMILY_SUPPORT_TABLE ROMDATA L3FeatureFamilyServiceTable =
 {
-  (sizeof (L3FeatureFamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
-  &L3FeatureFamilyServiceArray[0]
+  .Elements = (sizeof (L3FeatureFamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
+  .FamilyTable = &L3FeatureFamilyServiceArray[0]
 };
 
 #endif  // _OPTION_L3_FEATURES_INSTALL_H_

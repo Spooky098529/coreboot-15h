@@ -87,22 +87,22 @@
   #if OPTION_FAMILY15H == TRUE
     CONST PRESERVE_MAILBOX_FAMILY_REGISTER ROMDATA F15PreserveMailboxRegisters [] = {
       {
-        {MAKE_SBDFO (0, 0, 0, 3, 0x168)},
-        0x00000FFF
+        .Register = {.AddressValue = MAKE_SBDFO (0, 0, 0, 3, 0x168)},
+        .Mask = 0x00000FFF
       },
       {
-        {MAKE_SBDFO (0, 0, 0, 3, 0x170)},
-        0x00000FFF
+        .Register = {.AddressValue = MAKE_SBDFO (0, 0, 0, 3, 0x170)},
+        .Mask = 0x00000FFF
       },
       {
-        {ILLEGAL_SBDFO},
-        0
+        .Register = {.AddressValue = ILLEGAL_SBDFO},
+        .Mask = 0
       }
     };
     CONST PRESERVE_MAILBOX_FAMILY_SERVICES ROMDATA F15PreserveMailboxServices = {
-      0,
-      TRUE,
-      (PRESERVE_MAILBOX_FAMILY_REGISTER *)&F15PreserveMailboxRegisters
+      .Revision = 0,
+      .IsZeroOnCold = TRUE,
+      .RegisterList = (PRESERVE_MAILBOX_FAMILY_REGISTER *)&F15PreserveMailboxRegisters
     };
     #undef F15_PRESERVE_MAILBOX_SUPPORT
     #define F15_PRESERVE_MAILBOX_SUPPORT {AMD_FAMILY_15, &F15PreserveMailboxServices},
@@ -115,8 +115,8 @@
   };
   CONST CPU_FAMILY_SUPPORT_TABLE ROMDATA PreserveMailboxFamilyServiceTable =
   {
-    (sizeof (PreserveMailboxFamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
-    &PreserveMailboxFamilyServiceArray[0]
+    .Elements = (sizeof (PreserveMailboxFamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
+    .FamilyTable = &PreserveMailboxFamilyServiceArray[0]
   };
 #endif
 

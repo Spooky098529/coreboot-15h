@@ -96,10 +96,10 @@ MemPGetPORFreqLimitUC32_3 (
  *-----------------------------------------------------------------------------
  */
 STATIC CONST DRAM_TERM_ENTRY C32UDdr3DramTerm[] = {
-  {DDR800 + DDR1066 + DDR1333 + DDR1600, ONE_DIMM, NO_DIMM, 1, 0, 0},
-  {DDR800 + DDR1066, TWO_DIMM, NO_DIMM, 3, 0, 2},
-  {DDR1333, TWO_DIMM, NO_DIMM, 5, 0, 2},
-  {DDR1600, TWO_DIMM, NO_DIMM, 5, 0, 1}
+  {.Speed = DDR800 + DDR1066 + DDR1333 + DDR1600, .Dimms = ONE_DIMM, .QR_Dimms = NO_DIMM, .DramTerm = 1, .QR_DramTerm = 0, .DynamicDramTerm = 0},
+  {.Speed = DDR800 + DDR1066, .Dimms = TWO_DIMM, .QR_Dimms = NO_DIMM, .DramTerm = 3, .QR_DramTerm = 0, .DynamicDramTerm = 2},
+  {.Speed = DDR1333, .Dimms = TWO_DIMM, .QR_Dimms = NO_DIMM, .DramTerm = 5, .QR_DramTerm = 0, .DynamicDramTerm = 2},
+  {.Speed = DDR1600, .Dimms = TWO_DIMM, .QR_Dimms = NO_DIMM, .DramTerm = 5, .QR_DramTerm = 0, .DynamicDramTerm = 1}
 };
 
 /* -----------------------------------------------------------------------------*/

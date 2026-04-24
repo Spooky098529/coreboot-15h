@@ -191,8 +191,8 @@ EnableCacheFlushOnHaltOnSocket (
 
 CONST CPU_FEATURE_DESCRIPTOR ROMDATA CpuFeatureCacheFlushOnHalt =
 {
-  CacheFlushOnHalt,
-  (CPU_FEAT_AFTER_POST_MTRR_SYNC | CPU_FEAT_AFTER_RESUME_MTRR_SYNC),
-  IsCFOHEnabled,
-  InitializeCacheFlushOnHaltFeature
+  .Feature = CacheFlushOnHalt,
+  .EntryPoint = (CPU_FEAT_AFTER_POST_MTRR_SYNC | CPU_FEAT_AFTER_RESUME_MTRR_SYNC),
+  .IsEnabled = IsCFOHEnabled,
+  .InitializeFeature = InitializeCacheFlushOnHaltFeature
 };

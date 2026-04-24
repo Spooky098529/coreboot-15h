@@ -155,30 +155,30 @@ MemAGetPsCfgRC32_3 (
   // Address Timing Value(F2x[1, 0]9C_x04), RC2/RC8 Value, # Dimms to match
   //
   STATIC CONST ADV_R_PSCFG_ENTRY PSCfg2DIMMs[] = {
-     {DDR667_FREQUENCY, ANY_DIMM0 + ANY_DIMM1, \
-       0x00000000, 0x4004, 2},
-     {DDR800_FREQUENCY, SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1, \
-       0x00000000, 0x0000, 1},
-     {DDR800_FREQUENCY, QR_DIMM1, \
-       0x00000000, 0x0040, 1},
-     {DDR800_FREQUENCY, SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1, \
-       0x00000000, 0x4004, 2},
-     {DDR800_FREQUENCY, QR_DIMM0 + ANY_DIMM1, \
-       0x00000000, 0x4004, 2},
-     {DDR800_FREQUENCY, ANY_DIMM0 + QR_DIMM1, \
-       0x00000000, 0x4004, 2},
-     {DDR1066_FREQUENCY, SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1, \
-       0x003C3C3C, 0x0000,1},
-     {DDR1066_FREQUENCY, QR_DIMM0 + QR_DIMM1, \
-       0x003C3C3C, 0x0040, 1},
-     {DDR1066_FREQUENCY, ANY_DIMM0 + ANY_DIMM1, \
-       0x003A3C3A, 0x4004, 2},
-     {DDR1333_FREQUENCY, SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1, \
-       0x003A3A3A, 0x0000, 1},
-     {DDR1333_FREQUENCY, QR_DIMM0 + QR_DIMM1, \
-       0x003A3A3A, 0x0040, 1},
-     {DDR1333_FREQUENCY, SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1, \
-       0x00383A38, 0x4040, 2},
+     {.Speed = DDR667_FREQUENCY, .DIMMRankType = ANY_DIMM0 + ANY_DIMM1, .AddrTmg = \
+       0x00000000, .RC2RC8 = 0x4004, .Dimms = 2},
+     {.Speed = DDR800_FREQUENCY, .DIMMRankType = SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1, .AddrTmg = \
+       0x00000000, .RC2RC8 = 0x0000, .Dimms = 1},
+     {.Speed = DDR800_FREQUENCY, .DIMMRankType = QR_DIMM1, .AddrTmg = \
+       0x00000000, .RC2RC8 = 0x0040, .Dimms = 1},
+     {.Speed = DDR800_FREQUENCY, .DIMMRankType = SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1, .AddrTmg = \
+       0x00000000, .RC2RC8 = 0x4004, .Dimms = 2},
+     {.Speed = DDR800_FREQUENCY, .DIMMRankType = QR_DIMM0 + ANY_DIMM1, .AddrTmg = \
+       0x00000000, .RC2RC8 = 0x4004, .Dimms = 2},
+     {.Speed = DDR800_FREQUENCY, .DIMMRankType = ANY_DIMM0 + QR_DIMM1, .AddrTmg = \
+       0x00000000, .RC2RC8 = 0x4004, .Dimms = 2},
+     {.Speed = DDR1066_FREQUENCY, .DIMMRankType = SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1, .AddrTmg = \
+       0x003C3C3C, .RC2RC8 = 0x0000,.Dimms = 1},
+     {.Speed = DDR1066_FREQUENCY, .DIMMRankType = QR_DIMM0 + QR_DIMM1, .AddrTmg = \
+       0x003C3C3C, .RC2RC8 = 0x0040, .Dimms = 1},
+     {.Speed = DDR1066_FREQUENCY, .DIMMRankType = ANY_DIMM0 + ANY_DIMM1, .AddrTmg = \
+       0x003A3C3A, .RC2RC8 = 0x4004, .Dimms = 2},
+     {.Speed = DDR1333_FREQUENCY, .DIMMRankType = SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1, .AddrTmg = \
+       0x003A3A3A, .RC2RC8 = 0x0000, .Dimms = 1},
+     {.Speed = DDR1333_FREQUENCY, .DIMMRankType = QR_DIMM0 + QR_DIMM1, .AddrTmg = \
+       0x003A3A3A, .RC2RC8 = 0x0040, .Dimms = 1},
+     {.Speed = DDR1333_FREQUENCY, .DIMMRankType = SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1, .AddrTmg = \
+       0x00383A38, .RC2RC8 = 0x4040, .Dimms = 2},
   };
   //
   // Address Timings and Drive Strengths for 3 DIMMs per channel
@@ -197,34 +197,34 @@ MemAGetPsCfgRC32_3 (
   // Address Timing Value(F2x[1, 0]9C_x04), RC2/RC8 Value, # Dimms to match
   //
   STATIC CONST ADV_R_PSCFG_ENTRY PSCfg3DIMMs[] = {
-     {DDR667_FREQUENCY, SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1 + SR_DIMM2 + DR_DIMM2, \
-       0x00000000, 0x0000, 1},
-     {DDR667_FREQUENCY, SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1 + SR_DIMM2 + DR_DIMM2, \
-       0x00000000, 0x4040, 2},
-     {DDR667_FREQUENCY, QR_DIMM1 + SR_DIMM2 + DR_DIMM2, \
-       0x00000000, 0x4004, 2},
-     {DDR667_FREQUENCY, SR_DIMM0 + DR_DIMM0 + ANY_DIMM1 + SR_DIMM2 + DR_DIMM2, \
-       0x00380038, 0x4004, 3},
-     {DDR800_FREQUENCY, SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1 + SR_DIMM2 + DR_DIMM2, \
-       0x00000000, 0x0000, 1},
-     {DDR800_FREQUENCY, SR_DIMM0 + DR_DIMM0 + SR_DIMM2 + DR_DIMM2, \
-       0x00000000, 0x4040, 2},
-     {DDR800_FREQUENCY, QR_DIMM1 + SR_DIMM2 + DR_DIMM2, \
-       0x00000000, 0x4004, 2},
-     {DDR800_FREQUENCY, SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1 + SR_DIMM2 + DR_DIMM2, \
-       0x00380038, 0x4004, 3},
-     {DDR800_FREQUENCY, QR_DIMM1, \
-       0x00000000, 0x0040, 1},
-     {DDR1066_FREQUENCY, SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1 + SR_DIMM2 + DR_DIMM2, \
-       0x003C3C3C, 0x0000, 1},
-     {DDR1066_FREQUENCY, SR_DIMM0 + DR_DIMM0 + SR_DIMM2 + DR_DIMM2, \
-       0x003A3C3A, 0x4040, 2},
-     {DDR1066_FREQUENCY, SR_DIMM0 + SR_DIMM1 + SR_DIMM2, \
-       0x00373C37, 0x4040, 3},
-     {DDR1333_FREQUENCY, SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1 + SR_DIMM2 + DR_DIMM2, \
-       0x003A3A3A, 0x0000, 1},
-     {DDR1333_FREQUENCY, SR_DIMM0 + DR_DIMM0 + SR_DIMM2 + DR_DIMM2, \
-       0x00383A38, 0x4040, 2},
+     {.Speed = DDR667_FREQUENCY, .DIMMRankType = SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1 + SR_DIMM2 + DR_DIMM2, .AddrTmg = \
+       0x00000000, .RC2RC8 = 0x0000, .Dimms = 1},
+     {.Speed = DDR667_FREQUENCY, .DIMMRankType = SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1 + SR_DIMM2 + DR_DIMM2, .AddrTmg = \
+       0x00000000, .RC2RC8 = 0x4040, .Dimms = 2},
+     {.Speed = DDR667_FREQUENCY, .DIMMRankType = QR_DIMM1 + SR_DIMM2 + DR_DIMM2, .AddrTmg = \
+       0x00000000, .RC2RC8 = 0x4004, .Dimms = 2},
+     {.Speed = DDR667_FREQUENCY, .DIMMRankType = SR_DIMM0 + DR_DIMM0 + ANY_DIMM1 + SR_DIMM2 + DR_DIMM2, .AddrTmg = \
+       0x00380038, .RC2RC8 = 0x4004, .Dimms = 3},
+     {.Speed = DDR800_FREQUENCY, .DIMMRankType = SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1 + SR_DIMM2 + DR_DIMM2, .AddrTmg = \
+       0x00000000, .RC2RC8 = 0x0000, .Dimms = 1},
+     {.Speed = DDR800_FREQUENCY, .DIMMRankType = SR_DIMM0 + DR_DIMM0 + SR_DIMM2 + DR_DIMM2, .AddrTmg = \
+       0x00000000, .RC2RC8 = 0x4040, .Dimms = 2},
+     {.Speed = DDR800_FREQUENCY, .DIMMRankType = QR_DIMM1 + SR_DIMM2 + DR_DIMM2, .AddrTmg = \
+       0x00000000, .RC2RC8 = 0x4004, .Dimms = 2},
+     {.Speed = DDR800_FREQUENCY, .DIMMRankType = SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1 + SR_DIMM2 + DR_DIMM2, .AddrTmg = \
+       0x00380038, .RC2RC8 = 0x4004, .Dimms = 3},
+     {.Speed = DDR800_FREQUENCY, .DIMMRankType = QR_DIMM1, .AddrTmg = \
+       0x00000000, .RC2RC8 = 0x0040, .Dimms = 1},
+     {.Speed = DDR1066_FREQUENCY, .DIMMRankType = SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1 + SR_DIMM2 + DR_DIMM2, .AddrTmg = \
+       0x003C3C3C, .RC2RC8 = 0x0000, .Dimms = 1},
+     {.Speed = DDR1066_FREQUENCY, .DIMMRankType = SR_DIMM0 + DR_DIMM0 + SR_DIMM2 + DR_DIMM2, .AddrTmg = \
+       0x003A3C3A, .RC2RC8 = 0x4040, .Dimms = 2},
+     {.Speed = DDR1066_FREQUENCY, .DIMMRankType = SR_DIMM0 + SR_DIMM1 + SR_DIMM2, .AddrTmg = \
+       0x00373C37, .RC2RC8 = 0x4040, .Dimms = 3},
+     {.Speed = DDR1333_FREQUENCY, .DIMMRankType = SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1 + SR_DIMM2 + DR_DIMM2, .AddrTmg = \
+       0x003A3A3A, .RC2RC8 = 0x0000, .Dimms = 1},
+     {.Speed = DDR1333_FREQUENCY, .DIMMRankType = SR_DIMM0 + DR_DIMM0 + SR_DIMM2 + DR_DIMM2, .AddrTmg = \
+       0x00383A38, .RC2RC8 = 0x4040, .Dimms = 2},
   };
 
   //
@@ -234,26 +234,26 @@ MemAGetPsCfgRC32_3 (
   // Fn2_9C 180, Fn2_9C 181, Fn2_9C 182, Fn2_9C 183, # Dimms to match
   //
   STATIC CONST ADV_PSCFG_ODT_ENTRY PSCfg2DIMMsODT[] = {
-    {SR_DIMM0, \
-      0x00000000, 0x00000000, 0x00000001, 0x00000000, 1},
-    {DR_DIMM0, \
-      0x00000000, 0x00000000, 0x00000104, 0x00000000, 1},
-    {QR_DIMM0, \
-      0x00000000, 0x00000000, 0x00000505, 0x00000505, 1},
-    {SR_DIMM1, \
-      0x00000000, 0x00000000, 0x00020000, 0x00000000, 1},
-    {DR_DIMM1, \
-      0x00000000, 0x00000000, 0x02080000, 0x00000000, 1},
-    {QR_DIMM1, \
-      0x00000000, 0x00000000, 0x0A0A0000, 0x0A0A0000, 1},
-    {SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1, \
-      0x01010202, 0x00000000, 0x09030603, 0x00000000, 2},
-    {SR_DIMM0 + DR_DIMM0 + QR_DIMM1, \
-      0x01010A0A, 0x01010000, 0x01030E0B, 0x01090000, 2},
-    {QR_DIMM0 + SR_DIMM1 + DR_DIMM1, \
-      0x05050202, 0x00000202, 0x0D070203, 0x00000206, 2},
-    {QR_DIMM0 + QR_DIMM1, \
-      0x05050A0A, 0x05050A0A, 0x05070A0B, 0x050D0A0E, 2}
+    {.DIMMRankType = SR_DIMM0, .PhyRODTCSLow = \
+      0x00000000, .PhyRODTCSHigh = 0x00000000, .PhyWODTCSLow = 0x00000001, .PhyWODTCSHigh = 0x00000000, .Dimms = 1},
+    {.DIMMRankType = DR_DIMM0, .PhyRODTCSLow = \
+      0x00000000, .PhyRODTCSHigh = 0x00000000, .PhyWODTCSLow = 0x00000104, .PhyWODTCSHigh = 0x00000000, .Dimms = 1},
+    {.DIMMRankType = QR_DIMM0, .PhyRODTCSLow = \
+      0x00000000, .PhyRODTCSHigh = 0x00000000, .PhyWODTCSLow = 0x00000505, .PhyWODTCSHigh = 0x00000505, .Dimms = 1},
+    {.DIMMRankType = SR_DIMM1, .PhyRODTCSLow = \
+      0x00000000, .PhyRODTCSHigh = 0x00000000, .PhyWODTCSLow = 0x00020000, .PhyWODTCSHigh = 0x00000000, .Dimms = 1},
+    {.DIMMRankType = DR_DIMM1, .PhyRODTCSLow = \
+      0x00000000, .PhyRODTCSHigh = 0x00000000, .PhyWODTCSLow = 0x02080000, .PhyWODTCSHigh = 0x00000000, .Dimms = 1},
+    {.DIMMRankType = QR_DIMM1, .PhyRODTCSLow = \
+      0x00000000, .PhyRODTCSHigh = 0x00000000, .PhyWODTCSLow = 0x0A0A0000, .PhyWODTCSHigh = 0x0A0A0000, .Dimms = 1},
+    {.DIMMRankType = SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1, .PhyRODTCSLow = \
+      0x01010202, .PhyRODTCSHigh = 0x00000000, .PhyWODTCSLow = 0x09030603, .PhyWODTCSHigh = 0x00000000, .Dimms = 2},
+    {.DIMMRankType = SR_DIMM0 + DR_DIMM0 + QR_DIMM1, .PhyRODTCSLow = \
+      0x01010A0A, .PhyRODTCSHigh = 0x01010000, .PhyWODTCSLow = 0x01030E0B, .PhyWODTCSHigh = 0x01090000, .Dimms = 2},
+    {.DIMMRankType = QR_DIMM0 + SR_DIMM1 + DR_DIMM1, .PhyRODTCSLow = \
+      0x05050202, .PhyRODTCSHigh = 0x00000202, .PhyWODTCSLow = 0x0D070203, .PhyWODTCSHigh = 0x00000206, .Dimms = 2},
+    {.DIMMRankType = QR_DIMM0 + QR_DIMM1, .PhyRODTCSLow = \
+      0x05050A0A, .PhyRODTCSHigh = 0x05050A0A, .PhyWODTCSLow = 0x05070A0B, .PhyWODTCSHigh = 0x050D0A0E, .Dimms = 2}
   };
   // DIMM ODT Pattern (3 DIMMs per channel)
   //
@@ -261,22 +261,22 @@ MemAGetPsCfgRC32_3 (
   // Fn2_9C 180, Fn2_9C 181, Fn2_9C 182, Fn2_9C 183, # Dimms to match
   //
   STATIC CONST ADV_PSCFG_ODT_ENTRY PSCfg3DIMMsODT[] = {
-    {SR_DIMM2 + DR_DIMM2, \
-      0x00000000, 0x00000000, 0x00000000, 0x00000404, 1},
-    {SR_DIMM0 + DR_DIMM0, \
-      0x00000000, 0x00000000, 0x00000101, 0x00000000, 1},
-    {SR_DIMM0 + DR_DIMM0 + SR_DIMM2 + DR_DIMM2, \
-      0x00000404, 0x00000101, 0x00000405, 0x00000105, 2},
-    {SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1 + SR_DIMM2 + DR_DIMM2, \
-      0x05050606, 0x00000303, 0x0D070607, 0x00000307, 3},
-    {QR_DIMM1, \
-      0x00000000, 0x00000000, 0x080A0000, 0x020A0000, 1},
-    {QR_DIMM1 + SR_DIMM2 + DR_DIMM2, \
-      0x04040000, 0x04040A0A, 0x04060000, 0x040C0A0E, 2},
-    {SR_DIMM0 + DR_DIMM0 + QR_DIMM1, \
-      0x01010A0A, 0x01010000, 0x01030A0B, 0x01090000, 2},
-    {SR_DIMM0 + DR_DIMM0 + QR_DIMM1 + SR_DIMM2 + DR_DIMM2, \
-      0x05050E0E, 0x05050B0B, 0x05070E0F, 0x050D0B0F, 3}
+    {.DIMMRankType = SR_DIMM2 + DR_DIMM2, .PhyRODTCSLow = \
+      0x00000000, .PhyRODTCSHigh = 0x00000000, .PhyWODTCSLow = 0x00000000, .PhyWODTCSHigh = 0x00000404, .Dimms = 1},
+    {.DIMMRankType = SR_DIMM0 + DR_DIMM0, .PhyRODTCSLow = \
+      0x00000000, .PhyRODTCSHigh = 0x00000000, .PhyWODTCSLow = 0x00000101, .PhyWODTCSHigh = 0x00000000, .Dimms = 1},
+    {.DIMMRankType = SR_DIMM0 + DR_DIMM0 + SR_DIMM2 + DR_DIMM2, .PhyRODTCSLow = \
+      0x00000404, .PhyRODTCSHigh = 0x00000101, .PhyWODTCSLow = 0x00000405, .PhyWODTCSHigh = 0x00000105, .Dimms = 2},
+    {.DIMMRankType = SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1 + SR_DIMM2 + DR_DIMM2, .PhyRODTCSLow = \
+      0x05050606, .PhyRODTCSHigh = 0x00000303, .PhyWODTCSLow = 0x0D070607, .PhyWODTCSHigh = 0x00000307, .Dimms = 3},
+    {.DIMMRankType = QR_DIMM1, .PhyRODTCSLow = \
+      0x00000000, .PhyRODTCSHigh = 0x00000000, .PhyWODTCSLow = 0x080A0000, .PhyWODTCSHigh = 0x020A0000, .Dimms = 1},
+    {.DIMMRankType = QR_DIMM1 + SR_DIMM2 + DR_DIMM2, .PhyRODTCSLow = \
+      0x04040000, .PhyRODTCSHigh = 0x04040A0A, .PhyWODTCSLow = 0x04060000, .PhyWODTCSHigh = 0x040C0A0E, .Dimms = 2},
+    {.DIMMRankType = SR_DIMM0 + DR_DIMM0 + QR_DIMM1, .PhyRODTCSLow = \
+      0x01010A0A, .PhyRODTCSHigh = 0x01010000, .PhyWODTCSLow = 0x01030A0B, .PhyWODTCSHigh = 0x01090000, .Dimms = 2},
+    {.DIMMRankType = SR_DIMM0 + DR_DIMM0 + QR_DIMM1 + SR_DIMM2 + DR_DIMM2, .PhyRODTCSLow = \
+      0x05050E0E, .PhyRODTCSHigh = 0x05050B0B, .PhyWODTCSLow = 0x05070E0F, .PhyWODTCSHigh = 0x050D0B0F, .Dimms = 3}
   };
   //
   // DIMM ODT Pattern (4 DIMMs per channel)
@@ -285,14 +285,14 @@ MemAGetPsCfgRC32_3 (
   // Fn2_9C 180, Fn2_9C 181, Fn2_9C 182, Fn2_9C 183, # Dimms to match
   //
   STATIC CONST ADV_PSCFG_ODT_ENTRY PSCfg4DIMMsODT[] = {
-    {ANY_DIMM3, \
-      0x00000000, 0x00000000, 0x00000000, 0x08080000, 1},
-    {ANY_DIMM2 + ANY_DIMM3, \
-      0x00000000, 0x04040808, 0x00000000, 0x0C0C0C0C, 2},
-    {ANY_DIMM1 + ANY_DIMM2 + ANY_DIMM3, \
-      0x0C0C0000, 0x06060A0A, 0x0E0E0000, 0x0E0E0E0E, 3},
-    {ANY_DIMM0 + ANY_DIMM1 + ANY_DIMM2 + ANY_DIMM3, \
-      0x0D0D0E0E, 0x07070B0B, 0x0F0F0F0F, 0x0F0F0F0F, 4}
+    {.DIMMRankType = ANY_DIMM3, .PhyRODTCSLow = \
+      0x00000000, .PhyRODTCSHigh = 0x00000000, .PhyWODTCSLow = 0x00000000, .PhyWODTCSHigh = 0x08080000, .Dimms = 1},
+    {.DIMMRankType = ANY_DIMM2 + ANY_DIMM3, .PhyRODTCSLow = \
+      0x00000000, .PhyRODTCSHigh = 0x04040808, .PhyWODTCSLow = 0x00000000, .PhyWODTCSHigh = 0x0C0C0C0C, .Dimms = 2},
+    {.DIMMRankType = ANY_DIMM1 + ANY_DIMM2 + ANY_DIMM3, .PhyRODTCSLow = \
+      0x0C0C0000, .PhyRODTCSHigh = 0x06060A0A, .PhyWODTCSLow = 0x0E0E0000, .PhyWODTCSHigh = 0x0E0E0E0E, .Dimms = 3},
+    {.DIMMRankType = ANY_DIMM0 + ANY_DIMM1 + ANY_DIMM2 + ANY_DIMM3, .PhyRODTCSLow = \
+      0x0D0D0E0E, .PhyRODTCSHigh = 0x07070B0B, .PhyWODTCSLow = 0x0F0F0F0F, .PhyWODTCSHigh = 0x0F0F0F0F, .Dimms = 4}
   };
   //
   // DIMM Write Leveling ODT Pattern 1 or 2 Dimms Per Channel
@@ -300,18 +300,18 @@ MemAGetPsCfgRC32_3 (
   // Dimm Config, WrLvOdt (Fn2_9C_0x08[11:8]) Value for each Dimm, # Dimms to match
   //
   STATIC CONST ADV_R_PSCFG_WL_ODT_ENTRY PSCfg2DIMMsWlODT[] = {
-    {SR_DIMM0,            {0x01, 0x00, 0x00, 0x00}, 1},
-    {DR_DIMM0,            {0x04, 0x00, 0x00, 0x00}, 1},
-    {QR_DIMM0,            {0x05, 0x00, 0x00, 0x00}, 1},
-    {SR_DIMM1,            {0x00, 0x02, 0x00, 0x00}, 1},
-    {DR_DIMM1,            {0x00, 0x08, 0x00, 0x00}, 1},
-    {QR_DIMM1,            {0x00, 0x0A, 0x00, 0x00}, 1},
-    {SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1, {0x03, 0x03, 0x00, 0x00}, 2},
-    {SR_DIMM0 + QR_DIMM1, {0x0B, 0x03, 0x00, 0x09}, 2},
-    {DR_DIMM0 + QR_DIMM1, {0x0B, 0x03, 0x00, 0x09}, 2},
-    {QR_DIMM0 + SR_DIMM1, {0x03, 0x07, 0x06, 0x00}, 2},
-    {QR_DIMM0 + DR_DIMM1, {0x03, 0x07, 0x06, 0x00}, 2},
-    {QR_DIMM0 + QR_DIMM1, {0x0B, 0x07, 0x0E, 0x0D}, 2}
+    {.DIMMRankType = SR_DIMM0,            .PhyWrLvOdt = {0x01, 0x00, 0x00, 0x00}, .Dimms = 1},
+    {.DIMMRankType = DR_DIMM0,            .PhyWrLvOdt = {0x04, 0x00, 0x00, 0x00}, .Dimms = 1},
+    {.DIMMRankType = QR_DIMM0,            .PhyWrLvOdt = {0x05, 0x00, 0x00, 0x00}, .Dimms = 1},
+    {.DIMMRankType = SR_DIMM1,            .PhyWrLvOdt = {0x00, 0x02, 0x00, 0x00}, .Dimms = 1},
+    {.DIMMRankType = DR_DIMM1,            .PhyWrLvOdt = {0x00, 0x08, 0x00, 0x00}, .Dimms = 1},
+    {.DIMMRankType = QR_DIMM1,            .PhyWrLvOdt = {0x00, 0x0A, 0x00, 0x00}, .Dimms = 1},
+    {.DIMMRankType = SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1, .PhyWrLvOdt = {0x03, 0x03, 0x00, 0x00}, .Dimms = 2},
+    {.DIMMRankType = SR_DIMM0 + QR_DIMM1, .PhyWrLvOdt = {0x0B, 0x03, 0x00, 0x09}, .Dimms = 2},
+    {.DIMMRankType = DR_DIMM0 + QR_DIMM1, .PhyWrLvOdt = {0x0B, 0x03, 0x00, 0x09}, .Dimms = 2},
+    {.DIMMRankType = QR_DIMM0 + SR_DIMM1, .PhyWrLvOdt = {0x03, 0x07, 0x06, 0x00}, .Dimms = 2},
+    {.DIMMRankType = QR_DIMM0 + DR_DIMM1, .PhyWrLvOdt = {0x03, 0x07, 0x06, 0x00}, .Dimms = 2},
+    {.DIMMRankType = QR_DIMM0 + QR_DIMM1, .PhyWrLvOdt = {0x0B, 0x07, 0x0E, 0x0D}, .Dimms = 2}
   };
   //
   // DIMM Write Leveling ODT Pattern 3 Dimms Per Channel
@@ -319,14 +319,14 @@ MemAGetPsCfgRC32_3 (
   // Dimm Config, WrLvOdt (Fn2_9C_0x08[11:8]) Value for each Dimm, # Dimms to match
   //
   STATIC CONST ADV_R_PSCFG_WL_ODT_ENTRY PSCfg3DIMMsWlODT[] = {
-    {SR_DIMM2 + DR_DIMM2, {0x00, 0x00, 0x04, 0x00}, 1},
-    {SR_DIMM0 + DR_DIMM0, {0x01, 0x02, 0x00, 0x00}, 1},
-    {SR_DIMM0 + DR_DIMM0 + SR_DIMM2 + DR_DIMM2, {0x05, 0x00, 0x05, 0x00}, 2},
-    {SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1 + SR_DIMM2 + DR_DIMM2, {0x07, 0x07, 0x07, 0x00}, 3},
-    {QR_DIMM1, {0x00, 0x0A, 0x00, 0x0A}, 1},
-    {QR_DIMM1 + SR_DIMM2 + DR_DIMM2, {0x00, 0x06, 0x0E, 0x0C}, 2},
-    {SR_DIMM0 + DR_DIMM0 + QR_DIMM1, {0x0B, 0x03, 0x00, 0x09}, 2},
-    {SR_DIMM0 + DR_DIMM0 + QR_DIMM1 + SR_DIMM2 + DR_DIMM2, {0x0F, 0x07, 0x0F, 0x0D}, 3}
+    {.DIMMRankType = SR_DIMM2 + DR_DIMM2, .PhyWrLvOdt = {0x00, 0x00, 0x04, 0x00}, .Dimms = 1},
+    {.DIMMRankType = SR_DIMM0 + DR_DIMM0, .PhyWrLvOdt = {0x01, 0x02, 0x00, 0x00}, .Dimms = 1},
+    {.DIMMRankType = SR_DIMM0 + DR_DIMM0 + SR_DIMM2 + DR_DIMM2, .PhyWrLvOdt = {0x05, 0x00, 0x05, 0x00}, .Dimms = 2},
+    {.DIMMRankType = SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1 + SR_DIMM2 + DR_DIMM2, .PhyWrLvOdt = {0x07, 0x07, 0x07, 0x00}, .Dimms = 3},
+    {.DIMMRankType = QR_DIMM1, .PhyWrLvOdt = {0x00, 0x0A, 0x00, 0x0A}, .Dimms = 1},
+    {.DIMMRankType = QR_DIMM1 + SR_DIMM2 + DR_DIMM2, .PhyWrLvOdt = {0x00, 0x06, 0x0E, 0x0C}, .Dimms = 2},
+    {.DIMMRankType = SR_DIMM0 + DR_DIMM0 + QR_DIMM1, .PhyWrLvOdt = {0x0B, 0x03, 0x00, 0x09}, .Dimms = 2},
+    {.DIMMRankType = SR_DIMM0 + DR_DIMM0 + QR_DIMM1 + SR_DIMM2 + DR_DIMM2, .PhyWrLvOdt = {0x0F, 0x07, 0x0F, 0x0D}, .Dimms = 3}
   };
   //
   // DIMM Write Leveling ODT Pattern 4 Dimms Per Channel
@@ -334,10 +334,10 @@ MemAGetPsCfgRC32_3 (
   // Dimm Config, WrLvOdt (Fn2_9C_0x08[11:8]) Value for each Dimm, # Dimms to match
   //
   STATIC CONST ADV_R_PSCFG_WL_ODT_ENTRY PSCfg4DIMMsWlODT[] = {
-    {ANY_DIMM3, {0x00, 0x00, 0x00, 0x08}, 1},
-    {ANY_DIMM2 + ANY_DIMM3, {0x00, 0x00, 0x0C, 0x0C}, 2},
-    {ANY_DIMM1 + ANY_DIMM2 + ANY_DIMM3, {0x00, 0x0E, 0x0E, 0x0E}, 3},
-    {ANY_DIMM0 + ANY_DIMM1 + ANY_DIMM2 + ANY_DIMM3, {0x0F, 0x0F, 0x0F, 0x0F}, 4}
+    {.DIMMRankType = ANY_DIMM3, .PhyWrLvOdt = {0x00, 0x00, 0x00, 0x08}, .Dimms = 1},
+    {.DIMMRankType = ANY_DIMM2 + ANY_DIMM3, .PhyWrLvOdt = {0x00, 0x00, 0x0C, 0x0C}, .Dimms = 2},
+    {.DIMMRankType = ANY_DIMM1 + ANY_DIMM2 + ANY_DIMM3, .PhyWrLvOdt = {0x00, 0x0E, 0x0E, 0x0E}, .Dimms = 3},
+    {.DIMMRankType = ANY_DIMM0 + ANY_DIMM1 + ANY_DIMM2 + ANY_DIMM3, .PhyWrLvOdt = {0x0F, 0x0F, 0x0F, 0x0F}, .Dimms = 4}
   };
 
 

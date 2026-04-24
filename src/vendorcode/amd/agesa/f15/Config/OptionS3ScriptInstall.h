@@ -79,8 +79,8 @@
 
 /*  Declare the instance of the S3SCRIPT option configuration structure  */
 S3_SCRIPT_CONFIGURATION OptionS3ScriptConfiguration = {
-  P_S3_SCRIPT_INIT,
-  P_S3_SCRIPT_RESTORE
+  .Init = P_S3_SCRIPT_INIT,
+  .Restore = P_S3_SCRIPT_RESTORE
 };
 
 S3_DISPATCH_FUNCTION_ENTRY S3DispatchFunctionTable [] = {

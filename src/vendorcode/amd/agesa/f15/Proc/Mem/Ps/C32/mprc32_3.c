@@ -103,16 +103,16 @@ MemPGetPORFreqLimitRC32_3 (
  * Speeds Supported, # of Dimms, # of QRDimms, DramTerm, QR DramTerm, Dynamic DramTerm
  */
 STATIC CONST DRAM_TERM_ENTRY C32RDdr3DramTerm2D[] = {
-  {DDR667 + DDR800 + DDR1066 + DDR1333 + DDR1600, ONE_DIMM, NO_DIMM, 1, 0, 0},
-  {DDR667 + DDR800 + DDR1066, TWO_DIMM, NO_DIMM, 3, 0, 2},
-  {DDR1333, TWO_DIMM, NO_DIMM, 5, 0, 2},
-  {DDR1600, TWO_DIMM, NO_DIMM, 5, 0, 1},
-  {DDR667 + DDR800 + DDR1066 + DDR1333, ONE_DIMM, ONE_DIMM, 0, 1, 2},
-  {DDR1600, ONE_DIMM, ONE_DIMM, 0, 1, 1},
-  {DDR667 + DDR800, TWO_DIMM, ONE_DIMM, 5, 1, 2},
-  {DDR1066 + DDR1333 + DDR1600, TWO_DIMM, ONE_DIMM, 5, 1, 1},
-  {DDR667 + DDR800, TWO_DIMM, TWO_DIMM, 0, 1, 2},
-  {DDR1066 + DDR1333 + DDR1600, TWO_DIMM, TWO_DIMM, 0, 1, 1}
+  {.Speed = DDR667 + DDR800 + DDR1066 + DDR1333 + DDR1600, .Dimms = ONE_DIMM, .QR_Dimms = NO_DIMM, .DramTerm = 1, .QR_DramTerm = 0, .DynamicDramTerm = 0},
+  {.Speed = DDR667 + DDR800 + DDR1066, .Dimms = TWO_DIMM, .QR_Dimms = NO_DIMM, .DramTerm = 3, .QR_DramTerm = 0, .DynamicDramTerm = 2},
+  {.Speed = DDR1333, .Dimms = TWO_DIMM, .QR_Dimms = NO_DIMM, .DramTerm = 5, .QR_DramTerm = 0, .DynamicDramTerm = 2},
+  {.Speed = DDR1600, .Dimms = TWO_DIMM, .QR_Dimms = NO_DIMM, .DramTerm = 5, .QR_DramTerm = 0, .DynamicDramTerm = 1},
+  {.Speed = DDR667 + DDR800 + DDR1066 + DDR1333, .Dimms = ONE_DIMM, .QR_Dimms = ONE_DIMM, .DramTerm = 0, .QR_DramTerm = 1, .DynamicDramTerm = 2},
+  {.Speed = DDR1600, .Dimms = ONE_DIMM, .QR_Dimms = ONE_DIMM, .DramTerm = 0, .QR_DramTerm = 1, .DynamicDramTerm = 1},
+  {.Speed = DDR667 + DDR800, .Dimms = TWO_DIMM, .QR_Dimms = ONE_DIMM, .DramTerm = 5, .QR_DramTerm = 1, .DynamicDramTerm = 2},
+  {.Speed = DDR1066 + DDR1333 + DDR1600, .Dimms = TWO_DIMM, .QR_Dimms = ONE_DIMM, .DramTerm = 5, .QR_DramTerm = 1, .DynamicDramTerm = 1},
+  {.Speed = DDR667 + DDR800, .Dimms = TWO_DIMM, .QR_Dimms = TWO_DIMM, .DramTerm = 0, .QR_DramTerm = 1, .DynamicDramTerm = 2},
+  {.Speed = DDR1066 + DDR1333 + DDR1600, .Dimms = TWO_DIMM, .QR_Dimms = TWO_DIMM, .DramTerm = 0, .QR_DramTerm = 1, .DynamicDramTerm = 1}
 };
 /*
  * ODT Settings for 3 Dimms Per Channel
@@ -120,14 +120,14 @@ STATIC CONST DRAM_TERM_ENTRY C32RDdr3DramTerm2D[] = {
  * Speeds Supported, # of Dimms, # of QRDimms, DramTerm, QR DramTerm, Dynamic DramTerm
  */
 STATIC CONST DRAM_TERM_ENTRY C32RDdr3DramTerm3D[] = {
-  {DDR667 + DDR800 + DDR1066 + DDR1333 + DDR1600, ONE_DIMM, NO_DIMM, 1, 0, 0},
-  {DDR667 + DDR800 + DDR1066, TWO_DIMM, NO_DIMM, 3, 0, 2},
-  {DDR1333 + DDR1600, TWO_DIMM, NO_DIMM, 5, 0, 2},
-  {DDR667 + DDR800 + DDR1066 + DDR1333 + DDR1600, THREE_DIMM, NO_DIMM, 3, 0, 2},
-  {DDR667 + DDR800 + DDR1066 + DDR1333, ONE_DIMM, ONE_DIMM, 0, 1, 2},
-  {DDR667 + DDR800, TWO_DIMM, ONE_DIMM, 5, 1, 2},
-  {DDR1066 + DDR1333 + DDR1600, TWO_DIMM, ONE_DIMM, 5, 1, 1},
-  {DDR667 + DDR800 + DDR1066 + DDR1333 + DDR1600, THREE_DIMM, ONE_DIMM, 3, 1, 2}
+  {.Speed = DDR667 + DDR800 + DDR1066 + DDR1333 + DDR1600, .Dimms = ONE_DIMM, .QR_Dimms = NO_DIMM, .DramTerm = 1, .QR_DramTerm = 0, .DynamicDramTerm = 0},
+  {.Speed = DDR667 + DDR800 + DDR1066, .Dimms = TWO_DIMM, .QR_Dimms = NO_DIMM, .DramTerm = 3, .QR_DramTerm = 0, .DynamicDramTerm = 2},
+  {.Speed = DDR1333 + DDR1600, .Dimms = TWO_DIMM, .QR_Dimms = NO_DIMM, .DramTerm = 5, .QR_DramTerm = 0, .DynamicDramTerm = 2},
+  {.Speed = DDR667 + DDR800 + DDR1066 + DDR1333 + DDR1600, .Dimms = THREE_DIMM, .QR_Dimms = NO_DIMM, .DramTerm = 3, .QR_DramTerm = 0, .DynamicDramTerm = 2},
+  {.Speed = DDR667 + DDR800 + DDR1066 + DDR1333, .Dimms = ONE_DIMM, .QR_Dimms = ONE_DIMM, .DramTerm = 0, .QR_DramTerm = 1, .DynamicDramTerm = 2},
+  {.Speed = DDR667 + DDR800, .Dimms = TWO_DIMM, .QR_Dimms = ONE_DIMM, .DramTerm = 5, .QR_DramTerm = 1, .DynamicDramTerm = 2},
+  {.Speed = DDR1066 + DDR1333 + DDR1600, .Dimms = TWO_DIMM, .QR_Dimms = ONE_DIMM, .DramTerm = 5, .QR_DramTerm = 1, .DynamicDramTerm = 1},
+  {.Speed = DDR667 + DDR800 + DDR1066 + DDR1333 + DDR1600, .Dimms = THREE_DIMM, .QR_Dimms = ONE_DIMM, .DramTerm = 3, .QR_DramTerm = 1, .DynamicDramTerm = 2}
 };
 /*
  * POR Max Frequency supported for specific Dimm configurations for 1 Dimm Per Channel
@@ -135,8 +135,8 @@ STATIC CONST DRAM_TERM_ENTRY C32RDdr3DramTerm3D[] = {
  * Dimm Config, # of Dimms, Max Freq @ 1.5V, Max Freq @ 1.35V, Max Freq @ 1.25
  */
 STATIC CONST POR_SPEED_LIMIT C32RDdr3PSPorFreqLimit1D[] = {
-  {SR_DIMM0 + DR_DIMM0, 1, DDR1333_FREQUENCY, DDR1333_FREQUENCY, 0},
-  {QR_DIMM0, 1, DDR1333_FREQUENCY, DDR1333_FREQUENCY, 0}
+  {.DIMMRankType = SR_DIMM0 + DR_DIMM0, .Dimms = 1, .SpeedLimit_1_5V = DDR1333_FREQUENCY, .SpeedLimit_1_35V = DDR1333_FREQUENCY, .SpeedLimit_1_25V = 0},
+  {.DIMMRankType = QR_DIMM0, .Dimms = 1, .SpeedLimit_1_5V = DDR1333_FREQUENCY, .SpeedLimit_1_35V = DDR1333_FREQUENCY, .SpeedLimit_1_25V = 0}
 };
 /*
  * POR Max Frequency supported for specific Dimm configurations for 2 Dimms Per Channel
@@ -144,12 +144,12 @@ STATIC CONST POR_SPEED_LIMIT C32RDdr3PSPorFreqLimit1D[] = {
  * Dimm Config, # of Dimms, Max Freq @ 1.5V, Max Freq @ 1.35V, Max Freq @ 1.25
  */
 STATIC CONST POR_SPEED_LIMIT C32RDdr3PSPorFreqLimit2D[] = {
-  {SR_DIMM1 + DR_DIMM1, 1, DDR1333_FREQUENCY, DDR1333_FREQUENCY, 0},
-  {QR_DIMM1, 1, DDR1333_FREQUENCY, DDR1066_FREQUENCY, 0},
-  {SR_DIMM0 + SR_DIMM1, 2, DDR1333_FREQUENCY, DDR1333_FREQUENCY, 0},
-  {SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1, 2, DDR1066_FREQUENCY, DDR1066_FREQUENCY, 0},
-  {QR_DIMM0 + ANY_DIMM1, 2, DDR800_FREQUENCY, DDR667_FREQUENCY, 0},
-  {ANY_DIMM0 + QR_DIMM1, 2, DDR800_FREQUENCY, DDR667_FREQUENCY, 0}
+  {.DIMMRankType = SR_DIMM1 + DR_DIMM1, .Dimms = 1, .SpeedLimit_1_5V = DDR1333_FREQUENCY, .SpeedLimit_1_35V = DDR1333_FREQUENCY, .SpeedLimit_1_25V = 0},
+  {.DIMMRankType = QR_DIMM1, .Dimms = 1, .SpeedLimit_1_5V = DDR1333_FREQUENCY, .SpeedLimit_1_35V = DDR1066_FREQUENCY, .SpeedLimit_1_25V = 0},
+  {.DIMMRankType = SR_DIMM0 + SR_DIMM1, .Dimms = 2, .SpeedLimit_1_5V = DDR1333_FREQUENCY, .SpeedLimit_1_35V = DDR1333_FREQUENCY, .SpeedLimit_1_25V = 0},
+  {.DIMMRankType = SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1, .Dimms = 2, .SpeedLimit_1_5V = DDR1066_FREQUENCY, .SpeedLimit_1_35V = DDR1066_FREQUENCY, .SpeedLimit_1_25V = 0},
+  {.DIMMRankType = QR_DIMM0 + ANY_DIMM1, .Dimms = 2, .SpeedLimit_1_5V = DDR800_FREQUENCY, .SpeedLimit_1_35V = DDR667_FREQUENCY, .SpeedLimit_1_25V = 0},
+  {.DIMMRankType = ANY_DIMM0 + QR_DIMM1, .Dimms = 2, .SpeedLimit_1_5V = DDR800_FREQUENCY, .SpeedLimit_1_35V = DDR667_FREQUENCY, .SpeedLimit_1_25V = 0}
 };
 /*
  * POR Max Frequency supported for specific Dimm configurations for 3 Dimms Per Channel
@@ -157,14 +157,14 @@ STATIC CONST POR_SPEED_LIMIT C32RDdr3PSPorFreqLimit2D[] = {
  * Dimm Config, # of Dimms, Max Freq @ 1.5V, Max Freq @ 1.35V, Max Freq @ 1.25
  */
 STATIC CONST POR_SPEED_LIMIT C32RDdr3PSPorFreqLimit3D[] = {
-  {SR_DIMM2 + DR_DIMM2, 1, DDR1333_FREQUENCY, DDR1333_FREQUENCY, 0},
-  {SR_DIMM0 + SR_DIMM2, 2, DDR1333_FREQUENCY, DDR1333_FREQUENCY, 0},
-  {SR_DIMM0 + DR_DIMM0 + SR_DIMM2 + DR_DIMM2, 2, DDR1066_FREQUENCY, DDR1066_FREQUENCY, 0},
-  {QR_DIMM1, 1, DDR800_FREQUENCY, DDR800_FREQUENCY, 0},
-  {QR_DIMM1 + SR_DIMM2 + DR_DIMM2, 2, DDR800_FREQUENCY, DDR667_FREQUENCY, 0},
-  {SR_DIMM0 + SR_DIMM1 + SR_DIMM2, 3, DDR1066_FREQUENCY, DDR800_FREQUENCY, 0},
-  {SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1 + SR_DIMM2 + DR_DIMM2, 3, DDR800_FREQUENCY, DDR800_FREQUENCY, 0},
-  {SR_DIMM0 + DR_DIMM0 + QR_DIMM1 + SR_DIMM2 + DR_DIMM2, 3, DDR667_FREQUENCY, DDR667_FREQUENCY, 0}
+  {.DIMMRankType = SR_DIMM2 + DR_DIMM2, .Dimms = 1, .SpeedLimit_1_5V = DDR1333_FREQUENCY, .SpeedLimit_1_35V = DDR1333_FREQUENCY, .SpeedLimit_1_25V = 0},
+  {.DIMMRankType = SR_DIMM0 + SR_DIMM2, .Dimms = 2, .SpeedLimit_1_5V = DDR1333_FREQUENCY, .SpeedLimit_1_35V = DDR1333_FREQUENCY, .SpeedLimit_1_25V = 0},
+  {.DIMMRankType = SR_DIMM0 + DR_DIMM0 + SR_DIMM2 + DR_DIMM2, .Dimms = 2, .SpeedLimit_1_5V = DDR1066_FREQUENCY, .SpeedLimit_1_35V = DDR1066_FREQUENCY, .SpeedLimit_1_25V = 0},
+  {.DIMMRankType = QR_DIMM1, .Dimms = 1, .SpeedLimit_1_5V = DDR800_FREQUENCY, .SpeedLimit_1_35V = DDR800_FREQUENCY, .SpeedLimit_1_25V = 0},
+  {.DIMMRankType = QR_DIMM1 + SR_DIMM2 + DR_DIMM2, .Dimms = 2, .SpeedLimit_1_5V = DDR800_FREQUENCY, .SpeedLimit_1_35V = DDR667_FREQUENCY, .SpeedLimit_1_25V = 0},
+  {.DIMMRankType = SR_DIMM0 + SR_DIMM1 + SR_DIMM2, .Dimms = 3, .SpeedLimit_1_5V = DDR1066_FREQUENCY, .SpeedLimit_1_35V = DDR800_FREQUENCY, .SpeedLimit_1_25V = 0},
+  {.DIMMRankType = SR_DIMM0 + DR_DIMM0 + SR_DIMM1 + DR_DIMM1 + SR_DIMM2 + DR_DIMM2, .Dimms = 3, .SpeedLimit_1_5V = DDR800_FREQUENCY, .SpeedLimit_1_35V = DDR800_FREQUENCY, .SpeedLimit_1_25V = 0},
+  {.DIMMRankType = SR_DIMM0 + DR_DIMM0 + QR_DIMM1 + SR_DIMM2 + DR_DIMM2, .Dimms = 3, .SpeedLimit_1_5V = DDR667_FREQUENCY, .SpeedLimit_1_35V = DDR667_FREQUENCY, .SpeedLimit_1_25V = 0}
 
 };
 /* -----------------------------------------------------------------------------*/

@@ -214,8 +214,8 @@ EnablePstateHpcModeOnAps (
 
 CONST CPU_FEATURE_DESCRIPTOR ROMDATA CpuFeaturePstateHpcMode =
 {
-  PstateHpcMode,
-  (CPU_FEAT_BEFORE_RELINQUISH_AP | CPU_FEAT_AFTER_RESUME_MTRR_SYNC),
-  IsPstateHpcModeFeatureSupported,
-  InitializePstateHpcModeFeature
+  .Feature = PstateHpcMode,
+  .EntryPoint = (CPU_FEAT_BEFORE_RELINQUISH_AP | CPU_FEAT_AFTER_RESUME_MTRR_SYNC),
+  .IsEnabled = IsPstateHpcModeFeatureSupported,
+  .InitializeFeature = InitializePstateHpcModeFeature
 };

@@ -104,12 +104,12 @@ extern F15_OR_ES_MCU_PATCH F15OrEarlySampleLoadMcuPatch;
  */
 CONST S_PERFORM_EARLY_INIT_ON_CORE ROMDATA F15OrEarlyInitOnCoreTable[] =
 {
-  {McaInitializationAtEarly, PERFORM_EARLY_ANY_CONDITION},
-  {SetRegistersFromTablesAtEarly, PERFORM_EARLY_ANY_CONDITION},
-  {F15SetBrandIdRegistersAtEarly, PERFORM_EARLY_ANY_CONDITION},
-  {LocalApicInitializationAtEarly, PERFORM_EARLY_ANY_CONDITION},
-  {F15OrLoadMicrocodePatchAtEarly, PERFORM_EARLY_WARM_RESET},
-  {NULL, 0}
+  {.PerformEarlyInitOnCore = McaInitializationAtEarly, .PerformEarlyInitFlag = PERFORM_EARLY_ANY_CONDITION},
+  {.PerformEarlyInitOnCore = SetRegistersFromTablesAtEarly, .PerformEarlyInitFlag = PERFORM_EARLY_ANY_CONDITION},
+  {.PerformEarlyInitOnCore = F15SetBrandIdRegistersAtEarly, .PerformEarlyInitFlag = PERFORM_EARLY_ANY_CONDITION},
+  {.PerformEarlyInitOnCore = LocalApicInitializationAtEarly, .PerformEarlyInitFlag = PERFORM_EARLY_ANY_CONDITION},
+  {.PerformEarlyInitOnCore = F15OrLoadMicrocodePatchAtEarly, .PerformEarlyInitFlag = PERFORM_EARLY_WARM_RESET},
+  {.PerformEarlyInitOnCore = NULL, .PerformEarlyInitFlag = 0}
 };
 
 /*------------------------------------------------------------------------------------*/

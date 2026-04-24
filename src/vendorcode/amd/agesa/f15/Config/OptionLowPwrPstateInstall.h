@@ -80,8 +80,8 @@ CONST CPU_SPECIFIC_SERVICES_XLAT ROMDATA LowPwrPstateFamilyServiceArray[] =
 
 CONST CPU_FAMILY_SUPPORT_TABLE ROMDATA LowPwrPstateFamilyServiceTable =
 {
-  (sizeof (LowPwrPstateFamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
-  &LowPwrPstateFamilyServiceArray[0]
+  .Elements = (sizeof (LowPwrPstateFamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
+  .FamilyTable = &LowPwrPstateFamilyServiceArray[0]
 };
 
 #endif  // _OPTION_LOW_PWR_PSTATE_INSTALL_H_

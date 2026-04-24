@@ -912,16 +912,16 @@ MemNProgramCycTimingsNb (
 {
   CONST CTENTRY TmgAdjTab[] = {
     // BitField, Min, Max, Bias, Ratio_x2
-    {BFTcl, 4, 12, 4, 2},
-    {BFTrcd, 5, 12, 5, 2},
-    {BFTrp, 5, 12, 5, 2},
-    {BFTrtp, 4, 7, 4, 2},
-    {BFTras, 15, 30, 15, 2},
-    {BFTrc, 11, 42, 11, 2},
-    {BFTwrDDR3, 5, 12, 4, 2},
-    {BFTrrd, 4, 7, 4, 2},
-    {BFTwtr, 4, 7, 4, 2},
-    {BFFourActWindow, 16, 32, 14, 1}
+    {.BitField = BFTcl, .Min = 4, .Max = 12, .Bias = 4, .Ratio_x2 = 2},
+    {.BitField = BFTrcd, .Min = 5, .Max = 12, .Bias = 5, .Ratio_x2 = 2},
+    {.BitField = BFTrp, .Min = 5, .Max = 12, .Bias = 5, .Ratio_x2 = 2},
+    {.BitField = BFTrtp, .Min = 4, .Max = 7, .Bias = 4, .Ratio_x2 = 2},
+    {.BitField = BFTras, .Min = 15, .Max = 30, .Bias = 15, .Ratio_x2 = 2},
+    {.BitField = BFTrc, .Min = 11, .Max = 42, .Bias = 11, .Ratio_x2 = 2},
+    {.BitField = BFTwrDDR3, .Min = 5, .Max = 12, .Bias = 4, .Ratio_x2 = 2},
+    {.BitField = BFTrrd, .Min = 4, .Max = 7, .Bias = 4, .Ratio_x2 = 2},
+    {.BitField = BFTwtr, .Min = 4, .Max = 7, .Bias = 4, .Ratio_x2 = 2},
+    {.BitField = BFFourActWindow, .Min = 16, .Max = 32, .Bias = 14, .Ratio_x2 = 1}
   };
 
   DCT_STRUCT *DCTPtr;
@@ -1025,16 +1025,16 @@ MemNProgramCycTimingsClientNb (
 {
   CONST CTENTRY TmgAdjTab[] = {
     // BitField, Min, Max, Bias, Ratio_x2
-    {BFTcl, 5, 14, 4, 2},
-    {BFTrcd, 5, 14, 5, 2},
-    {BFTrp, 5, 14, 5, 2},
-    {BFTrtp, 4, 8, 4, 2},
-    {BFTras, 15, 36, 15, 2},
-    {BFTrc, 20, 49, 11, 2},
-    {BFTwrDDR3, 5, 16, 4, 2},
-    {BFTrrd, 4, 8, 4, 2},
-    {BFTwtr, 4, 8, 4, 2},
-    {BFFourActWindow, 16, 40, 14, 1}
+    {.BitField = BFTcl, .Min = 5, .Max = 14, .Bias = 4, .Ratio_x2 = 2},
+    {.BitField = BFTrcd, .Min = 5, .Max = 14, .Bias = 5, .Ratio_x2 = 2},
+    {.BitField = BFTrp, .Min = 5, .Max = 14, .Bias = 5, .Ratio_x2 = 2},
+    {.BitField = BFTrtp, .Min = 4, .Max = 8, .Bias = 4, .Ratio_x2 = 2},
+    {.BitField = BFTras, .Min = 15, .Max = 36, .Bias = 15, .Ratio_x2 = 2},
+    {.BitField = BFTrc, .Min = 20, .Max = 49, .Bias = 11, .Ratio_x2 = 2},
+    {.BitField = BFTwrDDR3, .Min = 5, .Max = 16, .Bias = 4, .Ratio_x2 = 2},
+    {.BitField = BFTrrd, .Min = 4, .Max = 8, .Bias = 4, .Ratio_x2 = 2},
+    {.BitField = BFTwtr, .Min = 4, .Max = 8, .Bias = 4, .Ratio_x2 = 2},
+    {.BitField = BFFourActWindow, .Min = 16, .Max = 40, .Bias = 14, .Ratio_x2 = 1}
   };
 
   DCT_STRUCT *DCTPtr;
@@ -1133,16 +1133,16 @@ MemNProgramCycTimingsUnb (
 {
   CONST CTENTRY TmgAdjTab[] = {
     // BitField, Min, Max, Bias, Ratio_x2
-    {BFTcl, 5, 14, 0, 2},
-    {BFTrcd, 2, 19, 0, 2},
-    {BFTrp, 2, 19, 0, 2},
-    {BFTrtp, 4, 10, 0, 2},
-    {BFTras, 8, 40, 0, 2},
-    {BFTrc, 10, 56, 0, 2},
-    {BFTwrDDR3, 5, 16, 0, 2},
-    {BFTrrd, 4, 9, 0, 2},
-    {BFTwtr, 4, 9, 0, 2},
-    {BFFourActWindow, 6, 42, 0, 2}
+    {.BitField = BFTcl, .Min = 5, .Max = 14, .Bias = 0, .Ratio_x2 = 2},
+    {.BitField = BFTrcd, .Min = 2, .Max = 19, .Bias = 0, .Ratio_x2 = 2},
+    {.BitField = BFTrp, .Min = 2, .Max = 19, .Bias = 0, .Ratio_x2 = 2},
+    {.BitField = BFTrtp, .Min = 4, .Max = 10, .Bias = 0, .Ratio_x2 = 2},
+    {.BitField = BFTras, .Min = 8, .Max = 40, .Bias = 0, .Ratio_x2 = 2},
+    {.BitField = BFTrc, .Min = 10, .Max = 56, .Bias = 0, .Ratio_x2 = 2},
+    {.BitField = BFTwrDDR3, .Min = 5, .Max = 16, .Bias = 0, .Ratio_x2 = 2},
+    {.BitField = BFTrrd, .Min = 4, .Max = 9, .Bias = 0, .Ratio_x2 = 2},
+    {.BitField = BFTwtr, .Min = 4, .Max = 9, .Bias = 0, .Ratio_x2 = 2},
+    {.BitField = BFFourActWindow, .Min = 6, .Max = 42, .Bias = 0, .Ratio_x2 = 2}
   };
 
   DCT_STRUCT *DCTPtr;

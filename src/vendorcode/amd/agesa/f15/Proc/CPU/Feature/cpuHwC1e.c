@@ -174,8 +174,8 @@ InitializeHwC1eFeature (
 
 CONST CPU_FEATURE_DESCRIPTOR ROMDATA CpuFeatureHwC1e =
 {
-  HardwareC1e,
-  CPU_FEAT_AFTER_PM_INIT,
-  IsHwC1eFeatureEnabled,
-  InitializeHwC1eFeature
+  .Feature = HardwareC1e,
+  .EntryPoint = CPU_FEAT_AFTER_PM_INIT,
+  .IsEnabled = IsHwC1eFeatureEnabled,
+  .InitializeFeature = InitializeHwC1eFeature
 };

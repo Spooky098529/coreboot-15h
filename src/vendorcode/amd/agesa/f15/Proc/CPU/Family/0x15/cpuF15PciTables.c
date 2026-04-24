@@ -83,13 +83,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15PciRegisters[] =
 // F2x1B0 - Extended Memory Controller Configuration Low
 // bits[10:8], CohPrefPrbLmt = 1
   {
-    PciRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_ALL                         // CpuRevision
+    .EntryType = PciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       MAKE_SBDFO (0, 0, 24, FUNC_2, 0x1B0),  // Address
       0x00000100,                           // regData
       0x00000700,                           // regMask
@@ -105,13 +105,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15PciRegisters[] =
 // bits[5:4]   DnReqDBC = 1
 // bits[2:0]   UpReqDBC = 2
   {
-    PciRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_ALL                         // CpuRevision
+    .EntryType = PciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       MAKE_SBDFO (0, 0, 24, FUNC_3, 0x6C),  // Address
       0x10010052,                           // regData
       0x700700F7,                           // regMask
@@ -120,13 +120,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15PciRegisters[] =
 // F3xA0 - Power Control Miscellaneous
 // bits[13:11] PllLockTime = 1
   {
-    PciRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_ALL                         // CpuRevision
+    .EntryType = PciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       MAKE_SBDFO (0, 0, 24, FUNC_3, 0xA0),  // Address
       0x00000800,                           // regData
       0x00003800,                           // regMask
@@ -138,13 +138,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15PciRegisters[] =
 // bits[6:5] TmpMaxDiffUp = 3
 // bits[4:0] PerStepTimeUp = 0x0F
   {
-    PciRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_ALL                         // CpuRevision
+    .EntryType = PciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       MAKE_SBDFO (0, 0, 24, FUNC_3, 0xA4),  // Address
       0x00000FEF,                           // regData
       0x00001FFF,                           // regMask
@@ -154,13 +154,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15PciRegisters[] =
 // bit [26]    IgnCpuPrbEn = 1
 // bits[14:12] NbsynPtrAdj = 5
   {
-    PciRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_ALL                         // CpuRevision
+    .EntryType = PciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       MAKE_SBDFO (0, 0, 24, FUNC_3, 0xDC),  // Address
       0x04005000,                           // regData
       0x04007000,                           // regMask
@@ -170,13 +170,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15PciRegisters[] =
 // bits[8] LvtOffsetVal = 1
 // bits[3:0] LvtOffset = 0
   {
-    PciRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_ALL                         // CpuRevision
+    .EntryType = PciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       MAKE_SBDFO (0, 0, 24, FUNC_3, 0x1CC), // Address
       0x00000100,                           // regData
       0x0000010F,                           // regMask
@@ -185,13 +185,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15PciRegisters[] =
 // F4x15C - Core Performance Boost Control
 // bits[1:0] BoostSrc = 0
   {
-    PciRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_ALL                         // CpuRevision
+    .EntryType = PciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       MAKE_SBDFO (0, 0, 24, FUNC_4, 0x15C), // Address
       0x00000000,                           // regData
       0x00000003,                           // regMask
@@ -200,7 +200,7 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15PciRegisters[] =
 };
 
 CONST REGISTER_TABLE ROMDATA F15PciRegisterTable = {
-  PrimaryCores,
-  (sizeof (F15PciRegisters) / sizeof (TABLE_ENTRY_FIELDS)),
-  F15PciRegisters,
+  .Selector = PrimaryCores,
+  .NumberOfEntries = (sizeof (F15PciRegisters) / sizeof (TABLE_ENTRY_FIELDS)),
+  .Table = F15PciRegisters,
 };

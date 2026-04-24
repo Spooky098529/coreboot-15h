@@ -137,12 +137,12 @@
 
             CONST F15_OR_ES_CPB_SUPPORT ROMDATA F15OrEarlySampleCpbSupport =
             {
-              F15OrIsCpbDisabledEarlySample
+              .F15OrIsCpbSupportedHook = F15OrIsCpbDisabledEarlySample
             };
           #else
             CONST F15_OR_ES_CPB_SUPPORT ROMDATA F15OrEarlySampleCpbSupport =
             {
-              (PF_F15_OR_ES_IS_CPB_SUPPORTED) CommonVoid
+              .F15OrIsCpbSupportedHook = (PF_F15_OR_ES_IS_CPB_SUPPORTED) CommonVoid
             };
           #endif
         #endif
@@ -163,8 +163,8 @@ CONST CPU_SPECIFIC_SERVICES_XLAT ROMDATA CpbFamilyServiceArray[] =
 
 CONST CPU_FAMILY_SUPPORT_TABLE ROMDATA CpbFamilyServiceTable =
 {
-  (sizeof (CpbFamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
-  &CpbFamilyServiceArray[0]
+  .Elements = (sizeof (CpbFamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
+  .FamilyTable = &CpbFamilyServiceArray[0]
 };
 
 #endif  // _OPTION_CPB_INSTALL_H_

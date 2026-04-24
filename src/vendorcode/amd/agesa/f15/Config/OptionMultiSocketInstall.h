@@ -89,15 +89,15 @@
 
 /*  Declare the instance of the multisocket option configuration structure  */
 OPTION_MULTISOCKET_CONFIGURATION  OptionMultiSocketConfiguration = {
-  MULTISOCKET_STRUCT_VERSION,
-  GET_NUM_PM_STEPS,
-  CORE0_PM_TASK,
-  GET_SYS_NB_COF,
-  GET_SYS_NB_COF_UPDATE,
-  GET_EARLY_PM_ERRORS,
-  GET_MIN_NB_COF,
-  GET_PCI_ADDRESS,
-  MODIFY_CURR_SOCKET_PCI
+  .OptMultiSocketVersion = MULTISOCKET_STRUCT_VERSION,
+  .GetNumberOfSystemPmSteps = GET_NUM_PM_STEPS,
+  .BscRunCodeOnAllSystemCore0s = CORE0_PM_TASK,
+  .GetSystemNbPstateSettings = GET_SYS_NB_COF,
+  .GetSystemNbCofVidUpdate = GET_SYS_NB_COF_UPDATE,
+  .BscRetrievePmEarlyInitErrors = GET_EARLY_PM_ERRORS,
+  .GetMinNbCof = GET_MIN_NB_COF,
+  .GetCurrPciAddr = GET_PCI_ADDRESS,
+  .ModifyCurrSocketPci = MODIFY_CURR_SOCKET_PCI
 };
 
 #endif  // _OPTION_MULTISOCKET_INSTALL_H_

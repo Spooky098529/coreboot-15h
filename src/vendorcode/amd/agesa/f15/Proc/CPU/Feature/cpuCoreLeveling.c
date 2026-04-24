@@ -350,10 +350,10 @@ CoreLevelingAtEarly (
 
 CONST CPU_FEATURE_DESCRIPTOR ROMDATA CpuFeatureCoreLeveling =
 {
-  CoreLeveling,
-  (CPU_FEAT_AFTER_PM_INIT),
-  IsCoreLevelingEnabled,
-  CoreLevelingAtEarly
+  .Feature = CoreLeveling,
+  .EntryPoint = (CPU_FEAT_AFTER_PM_INIT),
+  .IsEnabled = IsCoreLevelingEnabled,
+  .InitializeFeature = CoreLevelingAtEarly
 };
 
 /*----------------------------------------------------------------------------------------

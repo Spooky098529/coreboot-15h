@@ -80,8 +80,8 @@ CONST CPU_SPECIFIC_SERVICES_XLAT ROMDATA ApmFamilyServiceArray[] =
 
 CONST CPU_FAMILY_SUPPORT_TABLE ROMDATA ApmFamilyServiceTable =
 {
-  (sizeof (ApmFamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
-  &ApmFamilyServiceArray[0]
+  .Elements = (sizeof (ApmFamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
+  .FamilyTable = &ApmFamilyServiceArray[0]
 };
 
 #endif  // _OPTION_APM_INSTALL_H_

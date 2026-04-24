@@ -94,28 +94,28 @@ GetF15CacheInfo (
 
 CONST CACHE_INFO ROMDATA CpuF15CacheInfo =
 {
-  BSP_STACK_SIZE_64K,
-  CORE0_STACK_SIZE,
-  CORE1_STACK_SIZE,
-  MEM_TRAINING_BUFFER_SIZE,
-  SHARED_MEM_SIZE,
-  VAR_MTRR_MASK,
-  VAR_MTRR_MASK,
-  HEAP_BASE_MASK,
-  InfiniteExe
+  .BspStackSize = BSP_STACK_SIZE_64K,
+  .Core0StackSize = CORE0_STACK_SIZE,
+  .Core1StackSize = CORE1_STACK_SIZE,
+  .MemTrainingBufferSize = MEM_TRAINING_BUFFER_SIZE,
+  .SharedMemSize = SHARED_MEM_SIZE,
+  .VariableMtrrMask = VAR_MTRR_MASK,
+  .VariableMtrrHeapMask = VAR_MTRR_MASK,
+  .HeapBaseMask = HEAP_BASE_MASK,
+  .CarExeType = InfiniteExe
 };
 
 CONST CACHE_INFO ROMDATA CpuF15CacheInfoCP =
 {
-  BSP_STACK_SIZE_64K,
-  CORE0_STACK_SIZE,
-  CORE1_STACK_SIZE,
-  MEM_TRAINING_BUFFER_SIZE,
-  SHARED_MEM_SIZE,
-  VAR_MTRR_MASK,
-  VAR_MTRR_MASK_CP,
-  HEAP_BASE_MASK_CP,
-  InfiniteExe
+  .BspStackSize = BSP_STACK_SIZE_64K,
+  .Core0StackSize = CORE0_STACK_SIZE,
+  .Core1StackSize = CORE1_STACK_SIZE,
+  .MemTrainingBufferSize = MEM_TRAINING_BUFFER_SIZE,
+  .SharedMemSize = SHARED_MEM_SIZE,
+  .VariableMtrrMask = VAR_MTRR_MASK,
+  .VariableMtrrHeapMask = VAR_MTRR_MASK_CP,
+  .HeapBaseMask = HEAP_BASE_MASK_CP,
+  .CarExeType = InfiniteExe
 };
 
 

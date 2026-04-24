@@ -132,12 +132,12 @@
 
             CONST F15_OR_ES_C6_SUPPORT ROMDATA F15OrEarlySampleC6Support =
             {
-              F15OrIsC6DisabledEarlySample
+              .F15OrIsC6SupportedHook = F15OrIsC6DisabledEarlySample
             };
           #else
             CONST F15_OR_ES_C6_SUPPORT ROMDATA F15OrEarlySampleC6Support =
             {
-              (PF_F15_OR_ES_IS_C6_SUPPORTED) CommonVoid
+              .F15OrIsC6SupportedHook = (PF_F15_OR_ES_IS_C6_SUPPORTED) CommonVoid
             };
           #endif
         #endif
@@ -157,8 +157,8 @@ CONST CPU_SPECIFIC_SERVICES_XLAT ROMDATA C6FamilyServiceArray[] =
 
 CONST CPU_FAMILY_SUPPORT_TABLE ROMDATA C6FamilyServiceTable =
 {
-  (sizeof (C6FamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
-  &C6FamilyServiceArray[0]
+  .Elements = (sizeof (C6FamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
+  .FamilyTable = &C6FamilyServiceArray[0]
 };
 
 #endif  // _OPTION_C6_STATE_INSTALL_H_

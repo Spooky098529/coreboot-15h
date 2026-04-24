@@ -138,19 +138,19 @@ typedef union {
  * because real compensation values are 0 .. 15).
  */
 CONST STATIC HT_PHY_DLL_COMP_LOOKUP_TABLE ROMDATA HtPhyDllCompLookupTable[] = {
-  {0xAul, 0, 3},               //   HT_FREQUENCY_1200M
-  {0xAul, 0, 3},               //   HT_FREQUENCY_1400M
-  {0x7ul, 4, 7},               //   HT_FREQUENCY_1600M
-  {0x7ul, 4, 7},               //   HT_FREQUENCY_1800M
-  {0x5ul, 8, 11},              //   HT_FREQUENCY_2000M
-  {0x5ul, 8, 11},              //   HT_FREQUENCY_2200M
-  {0x4ul, 12, 15},             //   HT_FREQUENCY_2400M
-  {0x3ul, 16, 19},             //   HT_FREQUENCY_2600M
-  {0xFFFFFFFFul, 0, 0},        //   Invalid
-  {0xFFFFFFFFul, 0, 0},        //   Invalid
-  {0x3ul, 20, 23},             //   HT_FREQUENCY_2800M
-  {0x2ul, 24, 27},             //   HT_FREQUENCY_3000M
-  {0x2ul, 28, 31}              //   HT_FREQUENCY_3200M
+  {.DefaultComp = 0xAul, .CtlIndexLoBit = 0, .CtlIndexHiBit = 3},               //   HT_FREQUENCY_1200M
+  {.DefaultComp = 0xAul, .CtlIndexLoBit = 0, .CtlIndexHiBit = 3},               //   HT_FREQUENCY_1400M
+  {.DefaultComp = 0x7ul, .CtlIndexLoBit = 4, .CtlIndexHiBit = 7},               //   HT_FREQUENCY_1600M
+  {.DefaultComp = 0x7ul, .CtlIndexLoBit = 4, .CtlIndexHiBit = 7},               //   HT_FREQUENCY_1800M
+  {.DefaultComp = 0x5ul, .CtlIndexLoBit = 8, .CtlIndexHiBit = 11},              //   HT_FREQUENCY_2000M
+  {.DefaultComp = 0x5ul, .CtlIndexLoBit = 8, .CtlIndexHiBit = 11},              //   HT_FREQUENCY_2200M
+  {.DefaultComp = 0x4ul, .CtlIndexLoBit = 12, .CtlIndexHiBit = 15},             //   HT_FREQUENCY_2400M
+  {.DefaultComp = 0x3ul, .CtlIndexLoBit = 16, .CtlIndexHiBit = 19},             //   HT_FREQUENCY_2600M
+  {.DefaultComp = 0xFFFFFFFFul, .CtlIndexLoBit = 0, .CtlIndexHiBit = 0},        //   Invalid
+  {.DefaultComp = 0xFFFFFFFFul, .CtlIndexLoBit = 0, .CtlIndexHiBit = 0},        //   Invalid
+  {.DefaultComp = 0x3ul, .CtlIndexLoBit = 20, .CtlIndexHiBit = 23},             //   HT_FREQUENCY_2800M
+  {.DefaultComp = 0x2ul, .CtlIndexLoBit = 24, .CtlIndexHiBit = 27},             //   HT_FREQUENCY_3000M
+  {.DefaultComp = 0x2ul, .CtlIndexLoBit = 28, .CtlIndexHiBit = 31}              //   HT_FREQUENCY_3200M
 };
 
 /*----------------------------------------------------------------------------------------

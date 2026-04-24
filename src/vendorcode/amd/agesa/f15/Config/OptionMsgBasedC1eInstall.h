@@ -108,8 +108,8 @@
     };
     CONST CPU_FAMILY_SUPPORT_TABLE ROMDATA MsgBasedC1eFamilyServiceTable =
     {
-      (sizeof (MsgBasedC1eFamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
-      &MsgBasedC1eFamilyServiceArray[0]
+      .Elements = (sizeof (MsgBasedC1eFamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
+      .FamilyTable = &MsgBasedC1eFamilyServiceArray[0]
     };
   #endif
 #endif

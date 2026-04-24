@@ -217,8 +217,8 @@ EnableLowPwrPstateOnCore (
 
 CONST CPU_FEATURE_DESCRIPTOR ROMDATA CpuFeatureLowPwrPstate =
 {
-  LowPwrPstate,
-  (CPU_FEAT_BEFORE_RELINQUISH_AP | CPU_FEAT_AFTER_RESUME_MTRR_SYNC),
-  IsLowPwrPstateFeatureSupported,
-  InitializeLowPwrPstateFeature
+  .Feature = LowPwrPstate,
+  .EntryPoint = (CPU_FEAT_BEFORE_RELINQUISH_AP | CPU_FEAT_AFTER_RESUME_MTRR_SYNC),
+  .IsEnabled = IsLowPwrPstateFeatureSupported,
+  .InitializeFeature = InitializeLowPwrPstateFeature
 };

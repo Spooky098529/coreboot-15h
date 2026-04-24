@@ -201,8 +201,8 @@ EnableIoCstateOnSocket (
 
 CONST CPU_FEATURE_DESCRIPTOR ROMDATA CpuFeatureIoCstate =
 {
-  IoCstate,
-  (CPU_FEAT_AFTER_PM_INIT),
-  IsIoCstateFeatureSupported,
-  InitializeIoCstateFeature
+  .Feature = IoCstate,
+  .EntryPoint = (CPU_FEAT_AFTER_PM_INIT),
+  .IsEnabled = IsIoCstateFeatureSupported,
+  .InitializeFeature = InitializeIoCstateFeature
 };

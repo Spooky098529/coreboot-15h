@@ -211,16 +211,16 @@
 
     STATIC CONST AMD_HT_INTERFACE ROMDATA HtOptionsPlatform =
     {
-      CFG_STARTING_BUSNUM, CFG_MAXIMUM_BUSNUM, CFG_ALLOCATED_BUSNUM,
-      (MANUAL_BUID_SWAP_LIST *)CFG_BUID_SWAP_LIST,
-      (DEVICE_CAP_OVERRIDE *)CFG_HTDEVICE_CAPABILITIES_OVERRIDE_LIST,
-      (CPU_TO_CPU_PCB_LIMITS *)CFG_HTFABRIC_LIMITS_LIST,
-      (IO_PCB_LIMITS *)CFG_HTCHAIN_LIMITS_LIST,
-      (OVERRIDE_BUS_NUMBERS *)CFG_BUS_NUMBERS_LIST,
-      (IGNORE_LINK *)CFG_IGNORE_LINK_LIST,
-      (SKIP_REGANG *)CFG_LINK_SKIP_REGANG_LIST,
-      (UINT8 **)CFG_ADDITIONAL_TOPOLOGIES_LIST,
-      (SYSTEM_PHYSICAL_SOCKET_MAP *)CFG_SYSTEM_PHYSICAL_SOCKET_MAP
+      .AutoBusStart = CFG_STARTING_BUSNUM, .AutoBusMax = CFG_MAXIMUM_BUSNUM, .AutoBusIncrement = CFG_ALLOCATED_BUSNUM,
+      .ManualBuidSwapList = (MANUAL_BUID_SWAP_LIST *)CFG_BUID_SWAP_LIST,
+      .DeviceCapOverrideList = (DEVICE_CAP_OVERRIDE *)CFG_HTDEVICE_CAPABILITIES_OVERRIDE_LIST,
+      .CpuToCpuPcbLimitsList = (CPU_TO_CPU_PCB_LIMITS *)CFG_HTFABRIC_LIMITS_LIST,
+      .IoPcbLimitsList = (IO_PCB_LIMITS *)CFG_HTCHAIN_LIMITS_LIST,
+      .OverrideBusNumbersList = (OVERRIDE_BUS_NUMBERS *)CFG_BUS_NUMBERS_LIST,
+      .IgnoreLinkList = (IGNORE_LINK *)CFG_IGNORE_LINK_LIST,
+      .SkipRegangList = (SKIP_REGANG *)CFG_LINK_SKIP_REGANG_LIST,
+      .Topolist = (UINT8 **)CFG_ADDITIONAL_TOPOLOGIES_LIST,
+      .SystemPhysicalSocketMap = (SYSTEM_PHYSICAL_SOCKET_MAP *)CFG_SYSTEM_PHYSICAL_SOCKET_MAP
     };
     #ifndef HT_OPTIONS_PLATFORM
       #define HT_OPTIONS_PLATFORM &HtOptionsPlatform
@@ -266,14 +266,14 @@
      * Declare the instance of the Ht option configuration structure
      */
     CONST OPTION_HT_CONFIGURATION ROMDATA OptionHtConfiguration = {
-      OPTION_IS_RECOVERY_HT,
-      CFG_SET_HTCRC_SYNC_FLOOD,
-      CFG_USE_UNIT_ID_CLUMPING,
-      HT_OPTIONS_PLATFORM,
-      INTERNAL_HT_OPTION_INTERFACE,
-      INTERNAL_HT_OPTION_FEATURES,
-      &HtInstalledFamilyNorthbridgeList,
-      INTERNAL_HT_OPTION_BUILTIN_TOPOLOGIES
+      .IsUsingRecoveryHt = OPTION_IS_RECOVERY_HT,
+      .IsSetHtCrcFlood = CFG_SET_HTCRC_SYNC_FLOOD,
+      .IsUsingUnitIdClumping = CFG_USE_UNIT_ID_CLUMPING,
+      .HtOptionPlatformDefaults = HT_OPTIONS_PLATFORM,
+      .HtOptionInternalInterface = INTERNAL_HT_OPTION_INTERFACE,
+      .HtOptionInternalFeatures = INTERNAL_HT_OPTION_FEATURES,
+      .HtOptionFamilyNorthbridgeList = &HtInstalledFamilyNorthbridgeList,
+      .HtOptionBuiltinTopologies = INTERNAL_HT_OPTION_BUILTIN_TOPOLOGIES
     };
 
   #endif
@@ -304,13 +304,13 @@
   #if AGESA_ENTRY_INIT_RESET == TRUE
 
     CONST AMD_HT_RESET_INTERFACE ROMDATA HtOptionResetDefaults = {
-      (MANUAL_BUID_SWAP_LIST *)CFG_BUID_SWAP_LIST,
-      0                                            // Unused by options
+      .ManualBuidSwapList = (MANUAL_BUID_SWAP_LIST *)CFG_BUID_SWAP_LIST,
+      .Depth = 0                                            // Unused by options
     };
 
     CONST OPTION_HT_INIT_RESET ROMDATA HtOptionInitReset = {
-      OPTION_HT_INIIT_RESET_ENTRY,
-      OPTION_HT_INIIT_RESET_CONSTRUCTOR_ENTRY
+      .HtInitReset = OPTION_HT_INIIT_RESET_ENTRY,
+      .HtResetConstructor = OPTION_HT_INIIT_RESET_CONSTRUCTOR_ENTRY
     };
   #endif
 

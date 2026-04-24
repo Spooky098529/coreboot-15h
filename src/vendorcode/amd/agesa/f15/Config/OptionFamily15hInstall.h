@@ -118,15 +118,15 @@ extern F_IS_NB_PSTATE_ENABLED F15IsNbPstateEnabled;
      */
     CONST CORE_PAIR_MAP ROMDATA HtFam15CorePairMapping[] =
     {
-      {1, 1, EvenCoresMapping},                                     ///< 1 Compute Unit with 2 cores
-      {3, 3, EvenCoresMapping},                                     ///< 2 Compute Units both with 2 Cores
-      {7, 7, EvenCoresMapping},                                     ///< 3 Compute Units all with 2 Cores
-      {0xF, 0xF, EvenCoresMapping},                                 ///< 4 Compute Units all with 2 Cores
-      {1, 0, AllCoresMapping},                                      ///< 1 Compute Unit with 1 core
-      {3, 0, AllCoresMapping},                                      ///< 2 Compute Units both with 1 Core
-      {7, 0, AllCoresMapping},                                      ///< 3 Compute Units all with 1 Core
-      {0xF, 0, AllCoresMapping},                                    ///< 4 Compute Units all with 1 Core
-      {HT_LIST_TERMINAL, HT_LIST_TERMINAL, MaxComputeUnitMapping}   ///< End
+      {.Enabled = 1, .DualCore = 1, .Mapping = EvenCoresMapping},                                     ///< 1 Compute Unit with 2 cores
+      {.Enabled = 3, .DualCore = 3, .Mapping = EvenCoresMapping},                                     ///< 2 Compute Units both with 2 Cores
+      {.Enabled = 7, .DualCore = 7, .Mapping = EvenCoresMapping},                                     ///< 3 Compute Units all with 2 Cores
+      {.Enabled = 0xF, .DualCore = 0xF, .Mapping = EvenCoresMapping},                                 ///< 4 Compute Units all with 2 Cores
+      {.Enabled = 1, .DualCore = 0, .Mapping = AllCoresMapping},                                      ///< 1 Compute Unit with 1 core
+      {.Enabled = 3, .DualCore = 0, .Mapping = AllCoresMapping},                                      ///< 2 Compute Units both with 1 Core
+      {.Enabled = 7, .DualCore = 0, .Mapping = AllCoresMapping},                                      ///< 3 Compute Units all with 1 Core
+      {.Enabled = 0xF, .DualCore = 0, .Mapping = AllCoresMapping},                                    ///< 4 Compute Units all with 1 Core
+      {.Enabled = HT_LIST_TERMINAL, .DualCore = HT_LIST_TERMINAL, .Mapping = MaxComputeUnitMapping}   ///< End
     };
 
 
@@ -184,26 +184,26 @@ extern F_IS_NB_PSTATE_ENABLED F15IsNbPstateEnabled;
     #if USES_REGISTER_TABLES == TRUE
       CONST TABLE_ENTRY_TYPE_DESCRIPTOR ROMDATA F15OrTableEntryTypeDescriptors[] =
       {
-        {MsrRegister, SetRegisterForMsrEntry},
-        {PciRegister, SetRegisterForPciEntry},
-        {FamSpecificWorkaround, SetRegisterForFamSpecificWorkaroundEntry},
-        {HtPhyRegister, SetRegisterForHtPhyEntry},
-        {HtPhyRangeRegister, SetRegisterForHtPhyRangeEntry},
-        {DeemphasisRegister, SetRegisterForDeemphasisEntry},
-        {HtPhyFreqRegister, SetRegisterForHtPhyFreqEntry},
-        {ProfileFixup, SetRegisterForPerformanceProfileEntry},
-        {HtHostPciRegister, SetRegisterForHtHostEntry},
-        {HtHostPerfPciRegister, SetRegisterForHtHostPerfEntry},
-        {HtTokenPciRegister, SetRegisterForHtLinkTokenEntry},
-        {CoreCountsPciRegister, SetRegisterForCoreCountsPerformanceEntry},
-        {ProcCountsPciRegister, SetRegisterForProcessorCountsEntry},
-        {CompUnitCountsPciRegister, SetRegisterForComputeUnitCountsEntry},
-        {TokenPciRegister, SetRegisterForTokenPciEntry},
-        {HtFeatPciRegister, SetRegisterForHtFeaturePciEntry},
-        {HtLinkPciRegister, SetRegisterForHtLinkPciEntry},
-        {CompUnitCountsMsr, SetMsrForComputeUnitCountsEntry},
+        {.EntryType = MsrRegister, .DoTableEntry = SetRegisterForMsrEntry},
+        {.EntryType = PciRegister, .DoTableEntry = SetRegisterForPciEntry},
+        {.EntryType = FamSpecificWorkaround, .DoTableEntry = SetRegisterForFamSpecificWorkaroundEntry},
+        {.EntryType = HtPhyRegister, .DoTableEntry = SetRegisterForHtPhyEntry},
+        {.EntryType = HtPhyRangeRegister, .DoTableEntry = SetRegisterForHtPhyRangeEntry},
+        {.EntryType = DeemphasisRegister, .DoTableEntry = SetRegisterForDeemphasisEntry},
+        {.EntryType = HtPhyFreqRegister, .DoTableEntry = SetRegisterForHtPhyFreqEntry},
+        {.EntryType = ProfileFixup, .DoTableEntry = SetRegisterForPerformanceProfileEntry},
+        {.EntryType = HtHostPciRegister, .DoTableEntry = SetRegisterForHtHostEntry},
+        {.EntryType = HtHostPerfPciRegister, .DoTableEntry = SetRegisterForHtHostPerfEntry},
+        {.EntryType = HtTokenPciRegister, .DoTableEntry = SetRegisterForHtLinkTokenEntry},
+        {.EntryType = CoreCountsPciRegister, .DoTableEntry = SetRegisterForCoreCountsPerformanceEntry},
+        {.EntryType = ProcCountsPciRegister, .DoTableEntry = SetRegisterForProcessorCountsEntry},
+        {.EntryType = CompUnitCountsPciRegister, .DoTableEntry = SetRegisterForComputeUnitCountsEntry},
+        {.EntryType = TokenPciRegister, .DoTableEntry = SetRegisterForTokenPciEntry},
+        {.EntryType = HtFeatPciRegister, .DoTableEntry = SetRegisterForHtFeaturePciEntry},
+        {.EntryType = HtLinkPciRegister, .DoTableEntry = SetRegisterForHtLinkPciEntry},
+        {.EntryType = CompUnitCountsMsr, .DoTableEntry = SetMsrForComputeUnitCountsEntry},
         // End
-        {TableEntryTypeMax, (PF_DO_TABLE_ENTRY)CommonVoid}
+        {.EntryType = TableEntryTypeMax, .DoTableEntry = (PF_DO_TABLE_ENTRY)CommonVoid}
       };
     #endif
 
@@ -482,18 +482,18 @@ extern F_IS_NB_PSTATE_ENABLED F15IsNbPstateEnabled;
 
       CONST F15_OR_ES_MCU_PATCH ROMDATA F15OrEarlySampleLoadMcuPatch =
       {
-        F15OrEarlySamplesAvoidNbCyclesStart,
-        F15OrEarlySamplesAvoidNbCyclesEnd,
-        F15OrEarlySamplesLoadMicrocodePatch,
-        F15OrEarlySamplesAfterPatchLoaded
+        .F15OrESAvoidNbCyclesStart = F15OrEarlySamplesAvoidNbCyclesStart,
+        .F15OrESAvoidNbCyclesEnd = F15OrEarlySamplesAvoidNbCyclesEnd,
+        .F15OrUpdateMcuPatchHook = F15OrEarlySamplesLoadMicrocodePatch,
+        .F15OrESAfterPatchLoaded = F15OrEarlySamplesAfterPatchLoaded
       };
     #else
       CONST F15_OR_ES_MCU_PATCH ROMDATA F15OrEarlySampleLoadMcuPatch =
       {
-        (PF_F15_OR_ES_AVOID_NB_CYCLES_START)  CommonVoid,
-        (PF_F15_OR_ES_AVOID_NB_CYCLES_END)    CommonVoid,
-        (PF_F15_OR_ES_LOAD_MCU_PATCH)         LoadMicrocodePatch,
-        (PF_F15_OR_ES_AFTER_PATCH_LOADED)     CommonVoid
+        .F15OrESAvoidNbCyclesStart = (PF_F15_OR_ES_AVOID_NB_CYCLES_START)  CommonVoid,
+        .F15OrESAvoidNbCyclesEnd = (PF_F15_OR_ES_AVOID_NB_CYCLES_END)    CommonVoid,
+        .F15OrUpdateMcuPatchHook = (PF_F15_OR_ES_LOAD_MCU_PATCH)         LoadMicrocodePatch,
+        .F15OrESAfterPatchLoaded = (PF_F15_OR_ES_AFTER_PATCH_LOADED)     CommonVoid
       };
     #endif
 
@@ -581,11 +581,11 @@ extern F_IS_NB_PSTATE_ENABLED F15IsNbPstateEnabled;
      */
     CONST CORE_PAIR_MAP ROMDATA HtFam15TnCorePairMapping[] =
     {
-      {1, 1, EvenCoresMapping},                                     ///< 1 Compute Unit with 2 cores
-      {3, 3, EvenCoresMapping},                                     ///< 2 Compute Units both with 2 Cores
-      {1, 0, AllCoresMapping},                                      ///< 1 Compute Unit with 1 core
-      {3, 0, AllCoresMapping},                                      ///< 2 Compute Units both with 1 Core
-      {HT_LIST_TERMINAL, HT_LIST_TERMINAL, MaxComputeUnitMapping}   ///< End
+      {.Enabled = 1, .DualCore = 1, .Mapping = EvenCoresMapping},                                     ///< 1 Compute Unit with 2 cores
+      {.Enabled = 3, .DualCore = 3, .Mapping = EvenCoresMapping},                                     ///< 2 Compute Units both with 2 Cores
+      {.Enabled = 1, .DualCore = 0, .Mapping = AllCoresMapping},                                      ///< 1 Compute Unit with 1 core
+      {.Enabled = 3, .DualCore = 0, .Mapping = AllCoresMapping},                                      ///< 2 Compute Units both with 1 Core
+      {.Enabled = HT_LIST_TERMINAL, .DualCore = HT_LIST_TERMINAL, .Mapping = MaxComputeUnitMapping}   ///< End
     };
 
 
@@ -616,26 +616,26 @@ extern F_IS_NB_PSTATE_ENABLED F15IsNbPstateEnabled;
     #if USES_REGISTER_TABLES == TRUE
       CONST TABLE_ENTRY_TYPE_DESCRIPTOR ROMDATA F15TnTableEntryTypeDescriptors[] =
       {
-        {MsrRegister, SetRegisterForMsrEntry},
-        {PciRegister, SetRegisterForPciEntry},
-        {FamSpecificWorkaround, SetRegisterForFamSpecificWorkaroundEntry},
-        {ProfileFixup, SetRegisterForPerformanceProfileEntry},
-        {CompUnitCountsMsr, SetMsrForComputeUnitCountsEntry},
-        {HtPhyRegister, SetRegisterForHtPhyEntry},
-        {HtPhyRangeRegister, SetRegisterForHtPhyRangeEntry},
-        {DeemphasisRegister, SetRegisterForDeemphasisEntry},
-        {HtPhyFreqRegister, SetRegisterForHtPhyFreqEntry},
-        {HtHostPciRegister, SetRegisterForHtHostEntry},
-        {HtHostPerfPciRegister, SetRegisterForHtHostPerfEntry},
-        {HtTokenPciRegister, SetRegisterForHtLinkTokenEntry},
-        {CoreCountsPciRegister, SetRegisterForCoreCountsPerformanceEntry},
-        {ProcCountsPciRegister, SetRegisterForProcessorCountsEntry},
-        {CompUnitCountsPciRegister, SetRegisterForComputeUnitCountsEntry},
-        {TokenPciRegister, SetRegisterForTokenPciEntry},
-        {HtFeatPciRegister, SetRegisterForHtFeaturePciEntry},
-        {HtLinkPciRegister, SetRegisterForHtLinkPciEntry},
+        {.EntryType = MsrRegister, .DoTableEntry = SetRegisterForMsrEntry},
+        {.EntryType = PciRegister, .DoTableEntry = SetRegisterForPciEntry},
+        {.EntryType = FamSpecificWorkaround, .DoTableEntry = SetRegisterForFamSpecificWorkaroundEntry},
+        {.EntryType = ProfileFixup, .DoTableEntry = SetRegisterForPerformanceProfileEntry},
+        {.EntryType = CompUnitCountsMsr, .DoTableEntry = SetMsrForComputeUnitCountsEntry},
+        {.EntryType = HtPhyRegister, .DoTableEntry = SetRegisterForHtPhyEntry},
+        {.EntryType = HtPhyRangeRegister, .DoTableEntry = SetRegisterForHtPhyRangeEntry},
+        {.EntryType = DeemphasisRegister, .DoTableEntry = SetRegisterForDeemphasisEntry},
+        {.EntryType = HtPhyFreqRegister, .DoTableEntry = SetRegisterForHtPhyFreqEntry},
+        {.EntryType = HtHostPciRegister, .DoTableEntry = SetRegisterForHtHostEntry},
+        {.EntryType = HtHostPerfPciRegister, .DoTableEntry = SetRegisterForHtHostPerfEntry},
+        {.EntryType = HtTokenPciRegister, .DoTableEntry = SetRegisterForHtLinkTokenEntry},
+        {.EntryType = CoreCountsPciRegister, .DoTableEntry = SetRegisterForCoreCountsPerformanceEntry},
+        {.EntryType = ProcCountsPciRegister, .DoTableEntry = SetRegisterForProcessorCountsEntry},
+        {.EntryType = CompUnitCountsPciRegister, .DoTableEntry = SetRegisterForComputeUnitCountsEntry},
+        {.EntryType = TokenPciRegister, .DoTableEntry = SetRegisterForTokenPciEntry},
+        {.EntryType = HtFeatPciRegister, .DoTableEntry = SetRegisterForHtFeaturePciEntry},
+        {.EntryType = HtLinkPciRegister, .DoTableEntry = SetRegisterForHtLinkPciEntry},
         // End
-        {TableEntryTypeMax, (PF_DO_TABLE_ENTRY)CommonVoid}
+        {.EntryType = TableEntryTypeMax, .DoTableEntry = (PF_DO_TABLE_ENTRY)CommonVoid}
       };
     #endif
 
@@ -880,12 +880,12 @@ extern F_IS_NB_PSTATE_ENABLED F15IsNbPstateEnabled;
 
       CONST F15_TN_ES_MCU_PATCH ROMDATA F15TnEarlySampleLoadMcuPatch =
       {
-        F15TnEarlySamplesLoadMicrocodePatch
+        .F15TnUpdateMcuPatchHook = F15TnEarlySamplesLoadMicrocodePatch
       };
     #else
       CONST F15_TN_ES_MCU_PATCH ROMDATA F15TnEarlySampleLoadMcuPatch =
       {
-        (PF_F15_TN_ES_LOAD_MCU_PATCH) LoadMicrocodePatch
+        .F15TnUpdateMcuPatchHook = (PF_F15_TN_ES_LOAD_MCU_PATCH) LoadMicrocodePatch
       };
     #endif
 
@@ -949,17 +949,17 @@ extern F_IS_NB_PSTATE_ENABLED F15IsNbPstateEnabled;
      */
     CONST CORE_PAIR_MAP ROMDATA HtFam15KmCorePairMapping[] =
     {
-      {1, 1, EvenCoresMapping},                                     ///< 1 Compute Unit with 2 cores
-      {3, 3, EvenCoresMapping},                                     ///< 2 Compute Units both with 2 Cores
-      {7, 7, EvenCoresMapping},                                     ///< 3 Compute Units all with 2 Cores
-      {0xF, 0xF, EvenCoresMapping},                                 ///< 4 Compute Units all with 2 Cores
-      {0x1F, 0x1F, EvenCoresMapping},                               ///< 5 Compute Units all with 2 Cores
-      {1, 0, AllCoresMapping},                                      ///< 1 Compute Unit with 1 core
-      {3, 0, AllCoresMapping},                                      ///< 2 Compute Units both with 1 Core
-      {7, 0, AllCoresMapping},                                      ///< 3 Compute Units all with 1 Core
-      {0xF, 0, AllCoresMapping},                                    ///< 4 Compute Units all with 1 Core
-      {0x1F, 0, AllCoresMapping},                                   ///< 5 Compute Units all with 1 Core
-      {HT_LIST_TERMINAL, HT_LIST_TERMINAL, MaxComputeUnitMapping}   ///< End
+      {.Enabled = 1, .DualCore = 1, .Mapping = EvenCoresMapping},                                     ///< 1 Compute Unit with 2 cores
+      {.Enabled = 3, .DualCore = 3, .Mapping = EvenCoresMapping},                                     ///< 2 Compute Units both with 2 Cores
+      {.Enabled = 7, .DualCore = 7, .Mapping = EvenCoresMapping},                                     ///< 3 Compute Units all with 2 Cores
+      {.Enabled = 0xF, .DualCore = 0xF, .Mapping = EvenCoresMapping},                                 ///< 4 Compute Units all with 2 Cores
+      {.Enabled = 0x1F, .DualCore = 0x1F, .Mapping = EvenCoresMapping},                               ///< 5 Compute Units all with 2 Cores
+      {.Enabled = 1, .DualCore = 0, .Mapping = AllCoresMapping},                                      ///< 1 Compute Unit with 1 core
+      {.Enabled = 3, .DualCore = 0, .Mapping = AllCoresMapping},                                      ///< 2 Compute Units both with 1 Core
+      {.Enabled = 7, .DualCore = 0, .Mapping = AllCoresMapping},                                      ///< 3 Compute Units all with 1 Core
+      {.Enabled = 0xF, .DualCore = 0, .Mapping = AllCoresMapping},                                    ///< 4 Compute Units all with 1 Core
+      {.Enabled = 0x1F, .DualCore = 0, .Mapping = AllCoresMapping},                                   ///< 5 Compute Units all with 1 Core
+      {.Enabled = HT_LIST_TERMINAL, .DualCore = HT_LIST_TERMINAL, .Mapping = MaxComputeUnitMapping}   ///< End
     };
 
 
@@ -990,26 +990,26 @@ extern F_IS_NB_PSTATE_ENABLED F15IsNbPstateEnabled;
     #if USES_REGISTER_TABLES == TRUE
       CONST TABLE_ENTRY_TYPE_DESCRIPTOR ROMDATA F15KmTableEntryTypeDescriptors[] =
       {
-        {MsrRegister, SetRegisterForMsrEntry},
-        {PciRegister, SetRegisterForPciEntry},
-        {FamSpecificWorkaround, SetRegisterForFamSpecificWorkaroundEntry},
-        {HtPhyRegister, SetRegisterForHtPhyEntry},
-        {HtPhyRangeRegister, SetRegisterForHtPhyRangeEntry},
-        {DeemphasisRegister, SetRegisterForDeemphasisEntry},
-        {HtPhyFreqRegister, SetRegisterForHtPhyFreqEntry},
-        {ProfileFixup, SetRegisterForPerformanceProfileEntry},
-        {HtHostPciRegister, SetRegisterForHtHostEntry},
-        {HtHostPerfPciRegister, SetRegisterForHtHostPerfEntry},
-        {HtTokenPciRegister, SetRegisterForHtLinkTokenEntry},
-        {CoreCountsPciRegister, SetRegisterForCoreCountsPerformanceEntry},
-        {ProcCountsPciRegister, SetRegisterForProcessorCountsEntry},
-        {CompUnitCountsPciRegister, SetRegisterForComputeUnitCountsEntry},
-        {TokenPciRegister, SetRegisterForTokenPciEntry},
-        {HtFeatPciRegister, SetRegisterForHtFeaturePciEntry},
-        {HtLinkPciRegister, SetRegisterForHtLinkPciEntry},
-        {CompUnitCountsMsr, SetMsrForComputeUnitCountsEntry},
+        {.EntryType = MsrRegister, .DoTableEntry = SetRegisterForMsrEntry},
+        {.EntryType = PciRegister, .DoTableEntry = SetRegisterForPciEntry},
+        {.EntryType = FamSpecificWorkaround, .DoTableEntry = SetRegisterForFamSpecificWorkaroundEntry},
+        {.EntryType = HtPhyRegister, .DoTableEntry = SetRegisterForHtPhyEntry},
+        {.EntryType = HtPhyRangeRegister, .DoTableEntry = SetRegisterForHtPhyRangeEntry},
+        {.EntryType = DeemphasisRegister, .DoTableEntry = SetRegisterForDeemphasisEntry},
+        {.EntryType = HtPhyFreqRegister, .DoTableEntry = SetRegisterForHtPhyFreqEntry},
+        {.EntryType = ProfileFixup, .DoTableEntry = SetRegisterForPerformanceProfileEntry},
+        {.EntryType = HtHostPciRegister, .DoTableEntry = SetRegisterForHtHostEntry},
+        {.EntryType = HtHostPerfPciRegister, .DoTableEntry = SetRegisterForHtHostPerfEntry},
+        {.EntryType = HtTokenPciRegister, .DoTableEntry = SetRegisterForHtLinkTokenEntry},
+        {.EntryType = CoreCountsPciRegister, .DoTableEntry = SetRegisterForCoreCountsPerformanceEntry},
+        {.EntryType = ProcCountsPciRegister, .DoTableEntry = SetRegisterForProcessorCountsEntry},
+        {.EntryType = CompUnitCountsPciRegister, .DoTableEntry = SetRegisterForComputeUnitCountsEntry},
+        {.EntryType = TokenPciRegister, .DoTableEntry = SetRegisterForTokenPciEntry},
+        {.EntryType = HtFeatPciRegister, .DoTableEntry = SetRegisterForHtFeaturePciEntry},
+        {.EntryType = HtLinkPciRegister, .DoTableEntry = SetRegisterForHtLinkPciEntry},
+        {.EntryType = CompUnitCountsMsr, .DoTableEntry = SetMsrForComputeUnitCountsEntry},
         // End
-        {TableEntryTypeMax, (PF_DO_TABLE_ENTRY)CommonVoid}
+        {.EntryType = TableEntryTypeMax, .DoTableEntry = (PF_DO_TABLE_ENTRY)CommonVoid}
       };
     #endif
 
@@ -1271,23 +1271,23 @@ extern F_IS_NB_PSTATE_ENABLED F15IsNbPstateEnabled;
 #if USES_REGISTER_TABLES == TRUE
   CONST TABLE_ENTRY_TYPE_DESCRIPTOR ROMDATA F15UnknownTableEntryTypeDescriptors[] =
   {
-    {MsrRegister, SetRegisterForMsrEntry},
-    {PciRegister, SetRegisterForPciEntry},
-    {FamSpecificWorkaround, SetRegisterForFamSpecificWorkaroundEntry},
-    {HtPhyRegister, SetRegisterForHtPhyEntry},
-    {HtPhyRangeRegister, SetRegisterForHtPhyRangeEntry},
-    {DeemphasisRegister, SetRegisterForDeemphasisEntry},
-    {ProfileFixup, SetRegisterForPerformanceProfileEntry},
-    {HtHostPciRegister, SetRegisterForHtHostEntry},
-    {HtHostPerfPciRegister, SetRegisterForHtHostPerfEntry},
-    {HtTokenPciRegister, (PF_DO_TABLE_ENTRY)CommonVoid},
-    {CoreCountsPciRegister, SetRegisterForCoreCountsPerformanceEntry},
-    {ProcCountsPciRegister, SetRegisterForProcessorCountsEntry},
-    {CompUnitCountsPciRegister, SetRegisterForComputeUnitCountsEntry},
-    {HtFeatPciRegister, SetRegisterForHtFeaturePciEntry},
-    {CompUnitCountsMsr, SetMsrForComputeUnitCountsEntry},
+    {.EntryType = MsrRegister, .DoTableEntry = SetRegisterForMsrEntry},
+    {.EntryType = PciRegister, .DoTableEntry = SetRegisterForPciEntry},
+    {.EntryType = FamSpecificWorkaround, .DoTableEntry = SetRegisterForFamSpecificWorkaroundEntry},
+    {.EntryType = HtPhyRegister, .DoTableEntry = SetRegisterForHtPhyEntry},
+    {.EntryType = HtPhyRangeRegister, .DoTableEntry = SetRegisterForHtPhyRangeEntry},
+    {.EntryType = DeemphasisRegister, .DoTableEntry = SetRegisterForDeemphasisEntry},
+    {.EntryType = ProfileFixup, .DoTableEntry = SetRegisterForPerformanceProfileEntry},
+    {.EntryType = HtHostPciRegister, .DoTableEntry = SetRegisterForHtHostEntry},
+    {.EntryType = HtHostPerfPciRegister, .DoTableEntry = SetRegisterForHtHostPerfEntry},
+    {.EntryType = HtTokenPciRegister, .DoTableEntry = (PF_DO_TABLE_ENTRY)CommonVoid},
+    {.EntryType = CoreCountsPciRegister, .DoTableEntry = SetRegisterForCoreCountsPerformanceEntry},
+    {.EntryType = ProcCountsPciRegister, .DoTableEntry = SetRegisterForProcessorCountsEntry},
+    {.EntryType = CompUnitCountsPciRegister, .DoTableEntry = SetRegisterForComputeUnitCountsEntry},
+    {.EntryType = HtFeatPciRegister, .DoTableEntry = SetRegisterForHtFeaturePciEntry},
+    {.EntryType = CompUnitCountsMsr, .DoTableEntry = SetMsrForComputeUnitCountsEntry},
     // End
-    {TableEntryTypeMax, (PF_DO_TABLE_ENTRY)CommonVoid}
+    {.EntryType = TableEntryTypeMax, .DoTableEntry = (PF_DO_TABLE_ENTRY)CommonVoid}
   };
 #endif
 

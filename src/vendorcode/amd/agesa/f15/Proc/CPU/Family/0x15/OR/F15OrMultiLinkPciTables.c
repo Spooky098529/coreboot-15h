@@ -87,13 +87,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
 // F0x68 - Link Transaction Control
 // bit[14:13], BufRelPri = 01h
   {
-    PciRegister,
-    {
-      AMD_FAMILY_15,                        // CpuFamily
-      AMD_F15_OR_ALL,                          // CpuRevision  rev C or less.
+    .EntryType = PciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                        // CpuFamily
+      .Revision = AMD_F15_OR_ALL,                          // CpuRevision  rev C or less.
     },
-    {AMD_PF_MULTI_LINK},                      // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_MULTI_LINK},                      // platformFeatures
+    .Entry = {.InitialValues = {
       MAKE_SBDFO (0, 0, 24, FUNC_0, 0x68),  // Address
       0x00002000,                           // regData
       0x00006000,                           // regMask
@@ -109,13 +109,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
   // 7:5 PReq: 2
   // 4:0 NpReqCmd: 4
 {
-    HtHostPciRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = HtHostPciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_MULTI_LINK},  // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_MULTI_LINK},  // platformFeatures
+    .Entry = {.InitialValues = {
       HT_HOST_FEAT_COHERENT, // link features
       0x10,                               // address
       0x008F8944,                         // data
@@ -132,13 +132,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
   // 7:5 PReq: 7
   // 4:0 NpReqCmd: 14
   {
-    HtHostPciRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = HtHostPciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_MULTI_LINK},  // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_MULTI_LINK},  // platformFeatures
+    .Entry = {.InitialValues = {
       (HT_HOST_AND | HT_HOST_FEAT_NONCOHERENT | HT_HOST_FEAT_GANGED), // link features
       0x10,                               // address
       0x008402EE,                         // data
@@ -155,13 +155,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
   // 7:5 PReq: 2
   // 4:0 NpReqCmd: 8
   {
-    HtHostPerfPciRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = HtHostPerfPciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_MULTI_LINK},                    // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_MULTI_LINK},                    // platformFeatures
+    .Entry = {.InitialValues = {
       PERFORMANCE_PROBEFILTER,
       HT_HOST_FEAT_COHERENT,              // link features
       0x10,                               // address
@@ -176,13 +176,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
   // 21:19 IsocPReq: 0
   // 18:16 IsocNpReqCmd: 1
   {
-    HtHostPciRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = HtHostPciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_MULTI_LINK},  // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_MULTI_LINK},  // platformFeatures
+    .Entry = {.InitialValues = {
       HT_HOST_FEAT_COHERENT,              // link features
       0x14,                               // address
       0x00010000,                         // data
@@ -196,13 +196,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
   // 21:19 IsocPReq: 0
   // 18:16 IsocNpReqCmd: 1
   {
-    HtHostPciRegister,
-    {
-      AMD_FAMILY_15,                        // CpuFamily
-      AMD_F15_OR_ALL                           // CpuRevision
+    .EntryType = HtHostPciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                        // CpuFamily
+      .Revision = AMD_F15_OR_ALL                           // CpuRevision
     },
-    {AMD_PF_MULTI_LINK},
-    {{
+    .Features = {.PlatformValue = AMD_PF_MULTI_LINK},
+    .Entry = {.InitialValues = {
       (HT_HOST_AND | HT_HOST_FEAT_NONCOHERENT | HT_HOST_FEAT_GANGED), // Link Features
       0x14,                                 // Address
       0x00010000,                           // Data
@@ -219,13 +219,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
 // bits[9:8] UpRspTok = 3
 // bits[23:20] FreeTok = 10
   {
-    TokenPciRegister,
-    {
-      AMD_FAMILY_15,                        // CpuFamily
-      AMD_F15_OR_ALL                           // CpuRevision
+    .EntryType = TokenPciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                        // CpuFamily
+      .Revision = AMD_F15_OR_ALL                           // CpuRevision
     },
-    {AMD_PF_MULTI_LINK},                      // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_MULTI_LINK},                      // platformFeatures
+    .Entry = {.InitialValues = {
       PERFORMANCE_PROFILE_ALL,
       (DEGREE_RANGE_0 (COUNT_RANGE_LOW, 1) | COUNT_RANGE_NONE),     // SCM
       PACKAGE_TYPE_SCM,
@@ -238,13 +238,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
 // bits[9:8] UpRspTok = 3
 // bits[23:20] FreeTok = 10
   {
-    TokenPciRegister,
-    {
-      AMD_FAMILY_15,                        // CpuFamily
-      AMD_F15_OR_ALL                           // CpuRevision
+    .EntryType = TokenPciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                        // CpuFamily
+      .Revision = AMD_F15_OR_ALL                           // CpuRevision
     },
-    {AMD_PF_MULTI_LINK},                      // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_MULTI_LINK},                      // platformFeatures
+    .Entry = {.InitialValues = {
       PERFORMANCE_PROFILE_ALL,
       (DEGREE_RANGE_0 (COUNT_RANGE_LOW, 1) | COUNT_RANGE_NONE),     // MCM1 or MCM2h
       PACKAGE_TYPE_MCM,
@@ -257,13 +257,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
 // bits[9:8] UpRspTok = 3
 // bits[23:20] FreeTok = 9
   {
-    TokenPciRegister,
-    {
-      AMD_FAMILY_15,                        // CpuFamily
-      AMD_F15_OR_ALL                           // CpuRevision
+    .EntryType = TokenPciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                        // CpuFamily
+      .Revision = AMD_F15_OR_ALL                           // CpuRevision
     },
-    {AMD_PF_MULTI_LINK},                      // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_MULTI_LINK},                      // platformFeatures
+    .Entry = {.InitialValues = {
       PERFORMANCE_PROBEFILTER,
       (DEGREE_RANGE_0 (COUNT_RANGE_LOW, 1) | COUNT_RANGE_NONE),     // MCM1 or MCM2h
       PACKAGE_TYPE_MCM,
@@ -276,13 +276,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
 // bits[9:8] UpRspTok = 1
 // bits[23:20] FreeTok = 11
   {
-    TokenPciRegister,
-    {
-      AMD_FAMILY_15,                        // CpuFamily
-      AMD_F15_OR_ALL                           // CpuRevision
+    .EntryType = TokenPciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                        // CpuFamily
+      .Revision = AMD_F15_OR_ALL                           // CpuRevision
     },
-    {AMD_PF_MULTI_LINK},  // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_MULTI_LINK},  // platformFeatures
+    .Entry = {.InitialValues = {
       PERFORMANCE_PROFILE_ALL,
       (DEGREE_RANGE_0 (3, 3) | COUNT_RANGE_NONE),     // MCM2
       PACKAGE_TYPE_MCM,
@@ -295,13 +295,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
 // bits[9:8] UpRspTok = 3
 // bits[23:20] FreeTok = 10
   {
-    TokenPciRegister,
-    {
-      AMD_FAMILY_15,                        // CpuFamily
-      AMD_F15_OR_ALL                           // CpuRevision
+    .EntryType = TokenPciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                        // CpuFamily
+      .Revision = AMD_F15_OR_ALL                           // CpuRevision
     },
-    {AMD_PF_MULTI_LINK},                      // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_MULTI_LINK},                      // platformFeatures
+    .Entry = {.InitialValues = {
       PERFORMANCE_PROFILE_ALL,
       (DEGREE_RANGE_0 (2, 2) | COUNT_RANGE_NONE),     // MCM4h
       PACKAGE_TYPE_MCM,
@@ -314,13 +314,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
 // bits[9:8] UpRspTok = 1
 // bits[23:20] FreeTok = 9
   {
-    TokenPciRegister,
-    {
-      AMD_FAMILY_15,                        // CpuFamily
-      AMD_F15_OR_ALL                           // CpuRevision
+    .EntryType = TokenPciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                        // CpuFamily
+      .Revision = AMD_F15_OR_ALL                           // CpuRevision
     },
-    {AMD_PF_MULTI_LINK},  // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_MULTI_LINK},  // platformFeatures
+    .Entry = {.InitialValues = {
       PERFORMANCE_PROFILE_ALL,
       (DEGREE_RANGE_0 (4, COUNT_RANGE_HIGH) | COUNT_RANGE_NONE),     // MCM4
       PACKAGE_TYPE_MCM,
@@ -347,13 +347,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
 // bits[28] IsocRspTok1 = 0
 // bits[31:30] FreeTok[3:2] = 0
   {
-    HtTokenPciRegister,
-    {
-      AMD_FAMILY_15,                        // CpuFamily
-      AMD_F15_OR_ALL                           // CpuRevision
+    .EntryType = HtTokenPciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                        // CpuFamily
+      .Revision = AMD_F15_OR_ALL                           // CpuRevision
     },
-    {AMD_PF_MULTI_LINK},  // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_MULTI_LINK},  // platformFeatures
+    .Entry = {.InitialValues = {
       (COUNT_RANGE_ALL | COUNT_RANGE_NONE), // SCM
       PERFORMANCE_PROFILE_ALL,
       (HT_HOST_AND | HT_HOST_FEAT_COHERENT | HT_HOST_FEAT_GANGED),
@@ -380,13 +380,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
 // bits[28] IsocRspTok1 = 0
 // bits[31:30] FreeTok[3:2] = 0
   {
-    HtTokenPciRegister,
-    {
-      AMD_FAMILY_15,                        // CpuFamily
-      AMD_F15_OR_ALL                           // CpuRevision
+    .EntryType = HtTokenPciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                        // CpuFamily
+      .Revision = AMD_F15_OR_ALL                           // CpuRevision
     },
-    {AMD_PF_MULTI_LINK},  // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_MULTI_LINK},  // platformFeatures
+    .Entry = {.InitialValues = {
       (PROCESSOR_RANGE_0 (COUNT_RANGE_LOW, 1) | COUNT_RANGE_NONE), // MCM1 or MCM2h.
       PERFORMANCE_PROFILE_ALL,
       (HT_HOST_AND | HT_HOST_FEAT_COHERENT | HT_HOST_FEAT_GANGED),
@@ -413,13 +413,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
 // bits[28] IsocRspTok1 = 0
 // bits[31:30] FreeTok[3:2] = 0
   {
-    HtTokenPciRegister,
-    {
-      AMD_FAMILY_15,                        // CpuFamily
-      AMD_F15_OR_ALL                           // CpuRevision
+    .EntryType = HtTokenPciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                        // CpuFamily
+      .Revision = AMD_F15_OR_ALL                           // CpuRevision
     },
-    {AMD_PF_MULTI_LINK},  // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_MULTI_LINK},  // platformFeatures
+    .Entry = {.InitialValues = {
       (IGNORE_PROCESSOR_0 | DEGREE_RANGE_1 (2, 3)),  // MCM2 or MCM4h
       PERFORMANCE_PROFILE_ALL,
       (HT_HOST_AND | HT_HOST_FEAT_COHERENT | HT_HOST_FEAT_GANGED),
@@ -446,13 +446,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
 // bits[28] IsocRspTok1 = 0
 // bits[31:30] FreeTok[3:2] = 0
   {
-    HtTokenPciRegister,
-    {
-      AMD_FAMILY_15,                        // CpuFamily
-      AMD_F15_OR_ALL                           // CpuRevision
+    .EntryType = HtTokenPciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                        // CpuFamily
+      .Revision = AMD_F15_OR_ALL                           // CpuRevision
     },
-    {AMD_PF_MULTI_LINK},  // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_MULTI_LINK},  // platformFeatures
+    .Entry = {.InitialValues = {
       (PROCESSOR_RANGE_0 (3, COUNT_RANGE_HIGH) | COUNT_RANGE_NONE),  // MCM4
       PERFORMANCE_PROFILE_ALL,
       (HT_HOST_AND | HT_HOST_FEAT_COHERENT | HT_HOST_FEAT_GANGED),
@@ -479,13 +479,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
 // bits[28] IsocRspTok1 = 0
 // bits[31:30] FreeTok[3:2] = 0
   {
-    HtTokenPciRegister,
-    {
-      AMD_FAMILY_15,                        // CpuFamily
-      AMD_F15_OR_ALL                           // CpuRevision
+    .EntryType = HtTokenPciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                        // CpuFamily
+      .Revision = AMD_F15_OR_ALL                           // CpuRevision
     },
-    {AMD_PF_MULTI_LINK},  // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_MULTI_LINK},  // platformFeatures
+    .Entry = {.InitialValues = {
       (PROCESSOR_RANGE_0 (COUNT_RANGE_LOW, 1) | COUNT_RANGE_NONE), // MCM1 or MCM2h.
       PERFORMANCE_PROFILE_ALL,
       (HT_HOST_AND | HT_HOST_FEAT_COHERENT | HT_HOST_FEAT_UNGANGED),
@@ -512,13 +512,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
 // bits[28] IsocRspTok1 = 0
 // bits[31:30] FreeTok[3:2] = 0
   {
-    HtTokenPciRegister,
-    {
-      AMD_FAMILY_15,                        // CpuFamily
-      AMD_F15_OR_ALL                           // CpuRevision
+    .EntryType = HtTokenPciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                        // CpuFamily
+      .Revision = AMD_F15_OR_ALL                           // CpuRevision
     },
-    {AMD_PF_MULTI_LINK},  // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_MULTI_LINK},  // platformFeatures
+    .Entry = {.InitialValues = {
       (PROCESSOR_RANGE_0 (COUNT_RANGE_LOW, 1) | COUNT_RANGE_NONE), // MCM1 or MCM2h.
       PERFORMANCE_PROBEFILTER,
       (HT_HOST_AND | HT_HOST_FEAT_COHERENT | HT_HOST_FEAT_UNGANGED),
@@ -545,13 +545,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
 // bits[28] IsocRspTok1 = 0
 // bits[31:30] FreeTok[3:2] = 0
   {
-    HtTokenPciRegister,
-    {
-      AMD_FAMILY_15,                        // CpuFamily
-      AMD_F15_OR_ALL                           // CpuRevision
+    .EntryType = HtTokenPciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                        // CpuFamily
+      .Revision = AMD_F15_OR_ALL                           // CpuRevision
     },
-    {AMD_PF_MULTI_LINK},  // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_MULTI_LINK},  // platformFeatures
+    .Entry = {.InitialValues = {
       (IGNORE_PROCESSOR_0 | DEGREE_RANGE_1 (3, 3)),     // MCM2
       PERFORMANCE_PROFILE_ALL,
       (HT_HOST_AND | HT_HOST_FEAT_COHERENT | HT_HOST_FEAT_UNGANGED),
@@ -578,13 +578,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
 // bits[28] IsocRspTok1 = 0
 // bits[31:30] FreeTok[3:2] = 1
   {
-    HtTokenPciRegister,
-    {
-      AMD_FAMILY_15,                        // CpuFamily
-      AMD_F15_OR_ALL                           // CpuRevision
+    .EntryType = HtTokenPciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                        // CpuFamily
+      .Revision = AMD_F15_OR_ALL                           // CpuRevision
     },
-    {AMD_PF_MULTI_LINK},  // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_MULTI_LINK},  // platformFeatures
+    .Entry = {.InitialValues = {
       (IGNORE_PROCESSOR_0 | DEGREE_RANGE_1 (2, 2)),     // MCM4h
       PERFORMANCE_PROFILE_ALL,
       (HT_HOST_AND | HT_HOST_FEAT_COHERENT | HT_HOST_FEAT_UNGANGED),
@@ -611,13 +611,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
 // bits[28] IsocRspTok1 = 0
 // bits[31:30] FreeTok[3:2] = 0
   {
-    HtTokenPciRegister,
-    {
-      AMD_FAMILY_15,                        // CpuFamily
-      AMD_F15_OR_ALL                           // CpuRevision
+    .EntryType = HtTokenPciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                        // CpuFamily
+      .Revision = AMD_F15_OR_ALL                           // CpuRevision
     },
-    {AMD_PF_MULTI_LINK},  // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_MULTI_LINK},  // platformFeatures
+    .Entry = {.InitialValues = {
       (PROCESSOR_RANGE_0 (3, COUNT_RANGE_HIGH) | COUNT_RANGE_NONE),     // MCM4
       PERFORMANCE_PROFILE_ALL,
       (HT_HOST_AND | HT_HOST_FEAT_COHERENT | HT_HOST_FEAT_UNGANGED),
@@ -644,13 +644,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
 // bits[28] IsocRspTok1 = 0
 // bits[31:30] FreeTok[3:2] = 0
   {
-    HtTokenPciRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = HtTokenPciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_MULTI_LINK},  // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_MULTI_LINK},  // platformFeatures
+    .Entry = {.InitialValues = {
       (COUNT_RANGE_ALL | COUNT_RANGE_NONE),    //SCM
       PERFORMANCE_PROFILE_ALL,
       (HT_HOST_AND | HT_HOST_FEAT_NONCOHERENT  | HT_HOST_FEAT_GANGED),
@@ -677,13 +677,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
 // bits[28] IsocRspTok1 = 0
 // bits[31:30] FreeTok[3:2] = 0
   {
-    HtTokenPciRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = HtTokenPciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_MULTI_LINK},  // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_MULTI_LINK},  // platformFeatures
+    .Entry = {.InitialValues = {
       (PROCESSOR_RANGE_0 (COUNT_RANGE_LOW, 2) | COUNT_RANGE_NONE), // MCM1 or MCM2h or MCM2 or MCM4h
       PERFORMANCE_PROFILE_ALL,
       (HT_HOST_AND | HT_HOST_FEAT_NONCOHERENT  | HT_HOST_FEAT_GANGED),
@@ -710,13 +710,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
 // bits[28] IsocRspTok1 = 0
 // bits[31:30] FreeTok[3:2] = 0
   {
-    HtTokenPciRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = HtTokenPciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_MULTI_LINK},  // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_MULTI_LINK},  // platformFeatures
+    .Entry = {.InitialValues = {
       (PROCESSOR_RANGE_0 (3, COUNT_RANGE_HIGH) | COUNT_RANGE_NONE),     // MCM4
       PERFORMANCE_PROFILE_ALL,
       (HT_HOST_AND | HT_HOST_FEAT_NONCOHERENT  | HT_HOST_FEAT_GANGED),
@@ -728,13 +728,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
   // F3x158 - Link to XCS Token Count Registers
   // bits [3:0]LnkToXcsDRToken = 0
   {
-    PciRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = PciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_MULTI_LINK},
-    {{
+    .Features = {.PlatformValue = AMD_PF_MULTI_LINK},
+    .Entry = {.InitialValues = {
       MAKE_SBDFO (0, 0, 24, FUNC_3, 0x158), // Address
       0x00000000,
       0x0000000F
@@ -743,7 +743,7 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrMultiLinkPciRegisters[] =
 };
 
 CONST REGISTER_TABLE ROMDATA F15OrMultiLinkPciRegisterTable = {
-  PrimaryCores,
-  (sizeof (F15OrMultiLinkPciRegisters) / sizeof (TABLE_ENTRY_FIELDS)),
-  F15OrMultiLinkPciRegisters,
+  .Selector = PrimaryCores,
+  .NumberOfEntries = (sizeof (F15OrMultiLinkPciRegisters) / sizeof (TABLE_ENTRY_FIELDS)),
+  .Table = F15OrMultiLinkPciRegisters,
 };

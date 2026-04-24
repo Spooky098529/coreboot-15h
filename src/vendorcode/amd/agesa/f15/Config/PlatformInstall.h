@@ -52,15 +52,15 @@
 VOLATILE  AMD_MODULE_HEADER mCpuModuleID = {
   //ModuleHeaderSignature
   // Remove 'DOM$' as temp solution before update BinUtil.exe ,
-  Int32FromChar ('0', '0', '0', '0'),
+  .ModuleHeaderSignature = Int32FromChar ('0', '0', '0', '0'),
   //ModuleIdentifier[8]
-  AGESA_ID,
+  .ModuleIdentifier = AGESA_ID,
   //ModuleVersion[12]
-  AGESA_VERSION_STRING,
+  .ModuleVersion = AGESA_VERSION_STRING,
   //ModuleDispatcher
-  NULL,//(VOID *)(UINT64)((MODULE_ENTRY)AmdAgesaDispatcher),
+  .ModuleDispatcher = NULL,//(VOID *)(UINT64)((MODULE_ENTRY)AmdAgesaDispatcher),
   //NextBlock
-  NULL
+  .NextBlock = NULL
 };
 
 
@@ -2241,50 +2241,50 @@ CONST UINT32 ROMDATA AmdPlatformTypeCgf = CFG_AMD_PLATFORM_TYPE;
  ****************************************************************************/
 
 FCH_PLATFORM_POLICY  FchUserOptions = {
-  CFG_SMBUS0_BASE_ADDRESS,              // CfgSmbus0BaseAddress
-  CFG_SMBUS1_BASE_ADDRESS,              // CfgSmbus1BaseAddress
-  CFG_SIO_PME_BASE_ADDRESS,             // CfgSioPmeBaseAddress
-  CFG_ACPI_PM1_EVT_BLOCK_ADDRESS,       // CfgAcpiPm1EvtBlkAddr
-  CFG_ACPI_PM1_CNT_BLOCK_ADDRESS,       // CfgAcpiPm1CntBlkAddr
-  CFG_ACPI_PM_TMR_BLOCK_ADDRESS,        // CfgAcpiPmTmrBlkAddr
-  CFG_ACPI_CPU_CNT_BLOCK_ADDRESS,       // CfgCpuControlBlkAddr
-  CFG_ACPI_GPE0_BLOCK_ADDRESS,          // CfgAcpiGpe0BlkAddr
-  CFG_SMI_CMD_PORT_ADDRESS,             // CfgSmiCmdPortAddr
-  CFG_ACPI_PMA_CNTBLK_ADDRESS,          // CfgAcpiPmaCntBlkAddr
-  CFG_GEC_SHADOW_ROM_BASE,              // CfgGecShadowRomBase
-  CFG_WATCHDOG_TIMER_BASE,              // CfgWatchDogTimerBase
-  CFG_SPI_ROM_BASE_ADDRESS,             // CfgSpiRomBaseAddress
-  CFG_HPET_BASE_ADDRESS,                // CfgHpetBaseAddress
-  CFG_AZALIA_SSID,                      // CfgAzaliaSsid
-  CFG_SMBUS_SSID,                       // CfgSmbusSsid
-  CFG_IDE_SSID,                         // CfgIdeSsid
-  CFG_SATA_AHCI_SSID,                   // CfgSataAhciSsid
-  CFG_SATA_IDE_SSID,                    // CfgSataIdeSsid
-  CFG_SATA_RAID5_SSID,                  // CfgSataRaid5Ssid
-  CFG_SATA_RAID_SSID,                   // CfgSataRaidSsid
-  CFG_EHCI_SSID,                        // CfgEhcidSsid
-  CFG_OHCI_SSID,                        // CfgOhcidSsid
-  CFG_LPC_SSID,                         // CfgLpcSsid
-  CFG_SD_SSID,                          // CfgSdSsid
-  CFG_XHCI_SSID,                        // CfgXhciSsid
-  CFG_FCH_PORT80_BEHIND_PCIB,           // CfgFchPort80BehindPcib
-  CFG_FCH_ENABLE_ACPI_SLEEP_TRAP,       // CfgFchEnableAcpiSleepTrap
-  CFG_FCH_GPP_LINK_CONFIG,              // CfgFchGppLinkConfig
-  CFG_FCH_GPP_PORT0_PRESENT,            // CfgFchGppPort0Present
-  CFG_FCH_GPP_PORT1_PRESENT,            // CfgFchGppPort1Present
-  CFG_FCH_GPP_PORT2_PRESENT,            // CfgFchGppPort2Present
-  CFG_FCH_GPP_PORT3_PRESENT,            // CfgFchGppPort3Present
-  CFG_FCH_GPP_PORT0_HOTPLUG,            // CfgFchGppPort0HotPlug
-  CFG_FCH_GPP_PORT1_HOTPLUG,            // CfgFchGppPort1HotPlug
-  CFG_FCH_GPP_PORT2_HOTPLUG,            // CfgFchGppPort2HotPlug
-  CFG_FCH_GPP_PORT3_HOTPLUG,            // CfgFchGppPort3HotPlug
+  .CfgSmbus0BaseAddress = CFG_SMBUS0_BASE_ADDRESS,              // CfgSmbus0BaseAddress
+  .CfgSmbus1BaseAddress = CFG_SMBUS1_BASE_ADDRESS,              // CfgSmbus1BaseAddress
+  .CfgSioPmeBaseAddress = CFG_SIO_PME_BASE_ADDRESS,             // CfgSioPmeBaseAddress
+  .CfgAcpiPm1EvtBlkAddr = CFG_ACPI_PM1_EVT_BLOCK_ADDRESS,       // CfgAcpiPm1EvtBlkAddr
+  .CfgAcpiPm1CntBlkAddr = CFG_ACPI_PM1_CNT_BLOCK_ADDRESS,       // CfgAcpiPm1CntBlkAddr
+  .CfgAcpiPmTmrBlkAddr = CFG_ACPI_PM_TMR_BLOCK_ADDRESS,        // CfgAcpiPmTmrBlkAddr
+  .CfgCpuControlBlkAddr = CFG_ACPI_CPU_CNT_BLOCK_ADDRESS,       // CfgCpuControlBlkAddr
+  .CfgAcpiGpe0BlkAddr = CFG_ACPI_GPE0_BLOCK_ADDRESS,          // CfgAcpiGpe0BlkAddr
+  .CfgSmiCmdPortAddr = CFG_SMI_CMD_PORT_ADDRESS,             // CfgSmiCmdPortAddr
+  .CfgAcpiPmaCntBlkAddr = CFG_ACPI_PMA_CNTBLK_ADDRESS,          // CfgAcpiPmaCntBlkAddr
+  .CfgGecShadowRomBase = CFG_GEC_SHADOW_ROM_BASE,              // CfgGecShadowRomBase
+  .CfgWatchDogTimerBase = CFG_WATCHDOG_TIMER_BASE,              // CfgWatchDogTimerBase
+  .CfgSpiRomBaseAddress = CFG_SPI_ROM_BASE_ADDRESS,             // CfgSpiRomBaseAddress
+  .CfgHpetBaseAddress = CFG_HPET_BASE_ADDRESS,                // CfgHpetBaseAddress
+  .CfgAzaliaSsid = CFG_AZALIA_SSID,                      // CfgAzaliaSsid
+  .CfgSmbusSsid = CFG_SMBUS_SSID,                       // CfgSmbusSsid
+  .CfgIdeSsid = CFG_IDE_SSID,                         // CfgIdeSsid
+  .CfgSataAhciSsid = CFG_SATA_AHCI_SSID,                   // CfgSataAhciSsid
+  .CfgSataIdeSsid = CFG_SATA_IDE_SSID,                    // CfgSataIdeSsid
+  .CfgSataRaid5Ssid = CFG_SATA_RAID5_SSID,                  // CfgSataRaid5Ssid
+  .CfgSataRaidSsid = CFG_SATA_RAID_SSID,                   // CfgSataRaidSsid
+  .CfgEhciSsid = CFG_EHCI_SSID,                        // CfgEhcidSsid
+  .CfgOhciSsid = CFG_OHCI_SSID,                        // CfgOhcidSsid
+  .CfgLpcSsid = CFG_LPC_SSID,                         // CfgLpcSsid
+  .CfgSdSsid = CFG_SD_SSID,                          // CfgSdSsid
+  .CfgXhciSsid = CFG_XHCI_SSID,                        // CfgXhciSsid
+  .CfgFchPort80BehindPcib = CFG_FCH_PORT80_BEHIND_PCIB,           // CfgFchPort80BehindPcib
+  .CfgFchEnableAcpiSleepTrap = CFG_FCH_ENABLE_ACPI_SLEEP_TRAP,       // CfgFchEnableAcpiSleepTrap
+  .CfgFchGppLinkConfig = CFG_FCH_GPP_LINK_CONFIG,              // CfgFchGppLinkConfig
+  .CfgFchGppPort0Present = CFG_FCH_GPP_PORT0_PRESENT,            // CfgFchGppPort0Present
+  .CfgFchGppPort1Present = CFG_FCH_GPP_PORT1_PRESENT,            // CfgFchGppPort1Present
+  .CfgFchGppPort2Present = CFG_FCH_GPP_PORT2_PRESENT,            // CfgFchGppPort2Present
+  .CfgFchGppPort3Present = CFG_FCH_GPP_PORT3_PRESENT,            // CfgFchGppPort3Present
+  .CfgFchGppPort0HotPlug = CFG_FCH_GPP_PORT0_HOTPLUG,            // CfgFchGppPort0HotPlug
+  .CfgFchGppPort1HotPlug = CFG_FCH_GPP_PORT1_HOTPLUG,            // CfgFchGppPort1HotPlug
+  .CfgFchGppPort2HotPlug = CFG_FCH_GPP_PORT2_HOTPLUG,            // CfgFchGppPort2HotPlug
+  .CfgFchGppPort3HotPlug = CFG_FCH_GPP_PORT3_HOTPLUG,            // CfgFchGppPort3HotPlug
 
-  CFG_FCH_ESATA_PORT_BITMAP,            // CfgFchEsataPortBitMap
-  CFG_FCH_IR_PIN_CONTROL,               // CfgFchIrPinControl
-  CFG_FCH_SD_CLOCK_CONTROL,             // CfgFchSdClockControl
-  CFG_FCH_SCI_MAP_LIST,                 // *CfgFchSciMapControl
-  CFG_FCH_SATA_PHY_LIST,                // *CfgFchSataPhyControl
-  CFG_FCH_GPIO_CONTROL_LIST             // *CfgFchGpioControl
+  .CfgFchEsataPortBitMap = CFG_FCH_ESATA_PORT_BITMAP,            // CfgFchEsataPortBitMap
+  .CfgFchIrPinControl = CFG_FCH_IR_PIN_CONTROL,               // CfgFchIrPinControl
+  .CfgFchSdClockControl = CFG_FCH_SD_CLOCK_CONTROL,             // CfgFchSdClockControl
+  .CfgFchSciMapControl = CFG_FCH_SCI_MAP_LIST,                 // *CfgFchSciMapControl
+  .CfgFchSataPhyControl = CFG_FCH_SATA_PHY_LIST,                // *CfgFchSataPhyControl
+  .CfgFchGpioControl = CFG_FCH_GPIO_CONTROL_LIST             // *CfgFchGpioControl
 };
 
 BUILD_OPT_CFG UserOptions = {

@@ -111,7 +111,7 @@ typedef struct {
  */
 STATIC CONST NEW_NODE_SAVED_INFO_ITEM ROMDATA NoInfoSavedYet =
 {
-  LOGICAL_PROCESSOR_NONE, 0, 0, 0, 0, 0, 0, 0
+  .LogicalProcessor = LOGICAL_PROCESSOR_NONE, .CurrentNode = 0, .CurrentLink = 0, .PackageLink = 0, .CurrentModuleType = 0, .CurrentModule = 0, .HardwareSocket = 0, .NewModuleType = 0
 };
 
 /**

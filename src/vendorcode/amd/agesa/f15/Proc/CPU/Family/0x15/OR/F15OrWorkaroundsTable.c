@@ -88,47 +88,47 @@ STATIC CONST FAM_SPECIFIC_WORKAROUND_TYPE_ENTRY_INITIALIZER ROMDATA F15OrWorkaro
 // Request for warm reset in AmdInitEarly
 // [5, BiosRstDet] = 1b
   {
-    FamSpecificWorkaround,
-    {
-      AMD_FAMILY_15,                        // CpuFamily
-      AMD_F15_ALL                           // CpuRevision
+    .Type = FamSpecificWorkaround,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                        // CpuFamily
+      .Revision = AMD_F15_ALL                           // CpuRevision
     },
-	{AMD_PF_ALL},                             // platformFeatures
-    {{
-      SetWarmResetAtEarly,                  // function call
-      0x00000000,                           // data
+	.Features = {.PlatformValue = AMD_PF_ALL},                             // platformFeatures
+    .EntryData = {.FamSpecificInitializer = {
+      .DoAction = SetWarmResetAtEarly,                  // function call
+      .Data = 0x00000000,                           // data
     }}
   },
   // HT PHY DLL Compensation setting for rev B and later
   {
-    FamSpecificWorkaround,
-    {
-      AMD_FAMILY_15,
-      AMD_F15_OR_GT_Ax
+    .Type = FamSpecificWorkaround,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,
+      .Revision = AMD_F15_OR_GT_Ax
     },
-    {AMD_PF_ALL},
-    {{
-      F15HtPhyOverrideDllCompensation,
-      0x00000001
+    .Features = {.PlatformValue = AMD_PF_ALL},
+    .EntryData = {.FamSpecificInitializer = {
+      .DoAction = F15HtPhyOverrideDllCompensation,
+      .Data = 0x00000001
     }}
   },
   // Internal Node 1 SbiAddr sync for OR
   {
-    FamSpecificWorkaround,
-    {
-      AMD_FAMILY_15_OR,
-      AMD_F15_OR_ALL
+    .Type = FamSpecificWorkaround,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15_OR,
+      .Revision = AMD_F15_OR_ALL
     },
-    {AMD_PF_ALL},
-    {{
-      F15OrSyncInternalNode1SbiAddr,
-      0x00000000
+    .Features = {.PlatformValue = AMD_PF_ALL},
+    .EntryData = {.FamSpecificInitializer = {
+      .DoAction = F15OrSyncInternalNode1SbiAddr,
+      .Data = 0x00000000
     }}
   },
 };
 
 CONST REGISTER_TABLE ROMDATA F15OrWorkaroundsTable = {
-  PrimaryCores,
-  (sizeof (F15OrWorkarounds) / sizeof (TABLE_ENTRY_FIELDS)),
-  (TABLE_ENTRY_FIELDS *)F15OrWorkarounds,
+  .Selector = PrimaryCores,
+  .NumberOfEntries = (sizeof (F15OrWorkarounds) / sizeof (TABLE_ENTRY_FIELDS)),
+  .Table = (TABLE_ENTRY_FIELDS *)F15OrWorkarounds,
 };

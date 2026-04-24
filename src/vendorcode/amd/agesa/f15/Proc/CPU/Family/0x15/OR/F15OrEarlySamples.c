@@ -160,13 +160,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrEarlySamplePciRegisters[] =
 // F3x188 - NB Configuration 2 Register
 // bit[30] Reserved = 1 Erratum #620, only on OR A0, A1 and B0
   {
-    PciRegister,
-    {
-      AMD_FAMILY_15,                        // CpuFamily
-      AMD_F15_OR_LT_B1                      // CpuRevision
+    .EntryType = PciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                        // CpuFamily
+      .Revision = AMD_F15_OR_LT_B1                      // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       MAKE_SBDFO (0, 0, 24, FUNC_3, 0x188), // Address
       0x40000000,                           // regData
       0x40000000,                           // regMask
@@ -175,13 +175,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrEarlySamplePciRegisters[] =
 // F3x18C - Reserved
 // bit[31] Reserved = 1 Erratum #603, only on OR A0, A1 and B0
   {
-    PciRegister,
-    {
-      AMD_FAMILY_15,                        // CpuFamily
-      AMD_F15_OR_LT_B1                      // CpuRevision
+    .EntryType = PciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                        // CpuFamily
+      .Revision = AMD_F15_OR_LT_B1                      // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       MAKE_SBDFO (0, 0, 24, FUNC_3, 0x18C), // Address
       0x80000000,                           // regData
       0x80000000,                           // regMask
@@ -192,13 +192,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrEarlySamplePciRegisters[] =
 // bit[7]  Reserved = 1, Erratum #574
 // bit[29] Reserved = 1, Erratum #574
   {
-    ProfileFixup,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_Ax                       // CpuRevision
+    .EntryType = ProfileFixup,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_Ax                       // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       PERFORMANCE_L3_CACHE,                 // Features
       MAKE_SBDFO (0, 0, 24, FUNC_3, 0x1B8), // Address
       0x20000080,                           // regData
@@ -208,13 +208,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrEarlySamplePciRegisters[] =
 // F4x110 - Sample and Residency Timers
 // bits[20:13] MinResTmr = 0x64
   {
-    PciRegister,
-    {
-      AMD_FAMILY_15_OR,                   // CpuFamily
-      AMD_F15_OR_Ax                       // CpuRevision
+    .EntryType = PciRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15_OR,                   // CpuFamily
+      .Revision = AMD_F15_OR_Ax                       // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       MAKE_SBDFO (0, 0, 24, FUNC_4, 0x110), // Address
       0x000C8000,                           // regData
       0x001FE000,                           // regMask
@@ -223,13 +223,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrEarlySamplePciRegisters[] =
 // F4x1A0 - Reserved
 // bits[31:0]  Reserved = 4
   {
-    ProfileFixup,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_A0                       // CpuRevision
+    .EntryType = ProfileFixup,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_A0                       // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       PERFORMANCE_L3_CACHE,                 // Features
       MAKE_SBDFO (0, 0, 24, FUNC_4, 0x1A0),  // Address
       0x00000004,                           // regData
@@ -239,13 +239,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrEarlySamplePciRegisters[] =
 // F4x1A4 - Reserved
 // bits[31:0]  Reserved = 0x24 Erratum #553
   {
-    ProfileFixup,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_A0                       // CpuRevision
+    .EntryType = ProfileFixup,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_A0                       // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       PERFORMANCE_L3_CACHE,                 // Features
       MAKE_SBDFO (0, 0, 24, FUNC_4, 0x1A4),  // Address
       0x00000024,                           // regData
@@ -255,9 +255,9 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrEarlySamplePciRegisters[] =
 };
 
 CONST REGISTER_TABLE ROMDATA F15OrEarlySamplePciRegisterTable = {
-  PrimaryCores,
-  (sizeof (F15OrEarlySamplePciRegisters) / sizeof (TABLE_ENTRY_FIELDS)),
-  F15OrEarlySamplePciRegisters,
+  .Selector = PrimaryCores,
+  .NumberOfEntries = (sizeof (F15OrEarlySamplePciRegisters) / sizeof (TABLE_ENTRY_FIELDS)),
+  .Table = F15OrEarlySamplePciRegisters,
 };
 
 /*-----------------------------
@@ -274,55 +274,55 @@ STATIC CONST MSR_TYPE_ENTRY_INITIALIZER ROMDATA F15OrEarlySampleMsrRegisters[] =
 // bit[30] = 1, Erratum #544 for OR-A0 only
 // bit[62] = 1, Erratum #494 for OR-A0 only
   {
-    MsrRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_A0                       // CpuRevision
+    .Type = MsrRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_A0                       // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
-      MSR_LS_CFG,                           // MSR Address
-      0x4000000050000011,                   // OR Mask
-      0x4000000050000011,                   // NAND Mask
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .EntryData = {.MsrInitializer = {
+      .Address = MSR_LS_CFG,                           // MSR Address
+      .Data = 0x4000000050000011,                   // OR Mask
+      .Mask = 0x4000000050000011,                   // NAND Mask
     }}
   },
 // MSR_DC_CFG (0xC0011022)
 // bit[13] DisHwPf = 1, Erratum #498, OR-A0 only
 // bit[10] = 1, Erratum #575, OR-A0 only
   {
-    MsrRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_A0                       // CpuRevision
+    .Type = MsrRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_A0                       // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
-      MSR_DC_CFG,                           // MSR Address
-      0x0000000000002400,                   // OR Mask
-      0x0000000000002400,                   // NAND Mask
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .EntryData = {.MsrInitializer = {
+      .Address = MSR_DC_CFG,                           // MSR Address
+      .Data = 0x0000000000002400,                   // OR Mask
+      .Mask = 0x0000000000002400,                   // NAND Mask
     }}
   },
 // MSR_DE_CFG (0xC0011029)
 // bit[7:2] = 111111b, Erratum #497, OR-A0 only
   {
-    MsrRegister,
-    {
-      AMD_FAMILY_15,                    // CpuFamily
-      AMD_F15_OR_A0                     // CpuRevision
+    .Type = MsrRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                    // CpuFamily
+      .Revision = AMD_F15_OR_A0                     // CpuRevision
     },
-    {AMD_PF_ALL},                       // platformFeatures
-    {{
-      MSR_DE_CFG,                       // MSR Address - Shared
-      0x00000000000000FC,               // OR Mask
-      0x00000000000000FC,               // NAND Mask
+    .Features = {.PlatformValue = AMD_PF_ALL},                       // platformFeatures
+    .EntryData = {.MsrInitializer = {
+      .Address = MSR_DE_CFG,                       // MSR Address - Shared
+      .Data = 0x00000000000000FC,               // OR Mask
+      .Mask = 0x00000000000000FC,               // NAND Mask
     }}
   },
 };
 
 CONST REGISTER_TABLE ROMDATA F15OrEarlySampleMsrRegisterTable = {
-  AllCores,
-  (sizeof (F15OrEarlySampleMsrRegisters) / sizeof (TABLE_ENTRY_FIELDS)),
-  (TABLE_ENTRY_FIELDS *) &F15OrEarlySampleMsrRegisters,
+  .Selector = AllCores,
+  .NumberOfEntries = (sizeof (F15OrEarlySampleMsrRegisters) / sizeof (TABLE_ENTRY_FIELDS)),
+  .Table = (TABLE_ENTRY_FIELDS *) &F15OrEarlySampleMsrRegisters,
 };
 
 /*-----------------------------
@@ -335,55 +335,55 @@ STATIC CONST MSR_TYPE_ENTRY_INITIALIZER ROMDATA F15OrEarlySampleSharedMsrRegiste
 // MSR_CU_CFG2 (0xC001102A)
 // bit[27] = 1, Erratum #572, OR-Ax only
   {
-    MsrRegister,
-    {
-      AMD_FAMILY_15,                    // CpuFamily
-      AMD_F15_OR_Ax                     // CpuRevision
+    .Type = MsrRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                    // CpuFamily
+      .Revision = AMD_F15_OR_Ax                     // CpuRevision
     },
-    {AMD_PF_ALL},                       // platformFeatures
-    {{
-      MSR_CU_CFG2,                      // MSR Address - Shared
-      0x0000000008000000,               // OR Mask
-      0x0000000008000000,               // NAND Mask
+    .Features = {.PlatformValue = AMD_PF_ALL},                       // platformFeatures
+    .EntryData = {.MsrInitializer = {
+      .Address = MSR_CU_CFG2,                      // MSR Address - Shared
+      .Data = 0x0000000008000000,               // OR Mask
+      .Mask = 0x0000000008000000,               // NAND Mask
     }}
   },
 
 // MSR_CU_CFG3 (0xC001102B)
 // bit[34] Reserved = 1, Erratum #568, OR-Ax only
   {
-    MsrRegister,
-    {
-      AMD_FAMILY_15,                    // CpuFamily
-      AMD_F15_OR_Ax                     // CpuRevision
+    .Type = MsrRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                    // CpuFamily
+      .Revision = AMD_F15_OR_Ax                     // CpuRevision
     },
-    {AMD_PF_ALL},                       // platformFeatures
-    {{
-      MSR_CU_CFG3,                      // MSR Address
-      0x0000000400000000,               // OR Mask
-      0x0000000400000000,               // NAND Mask
+    .Features = {.PlatformValue = AMD_PF_ALL},                       // platformFeatures
+    .EntryData = {.MsrInitializer = {
+      .Address = MSR_CU_CFG3,                      // MSR Address
+      .Data = 0x0000000400000000,               // OR Mask
+      .Mask = 0x0000000400000000,               // NAND Mask
     }}
   },
 // MSR_C001_1070
 // bit[41] = 0, Erratum #597, OR-Ax only
   {
-    MsrRegister,
-    {
-      AMD_FAMILY_15,                    // CpuFamily
-      AMD_F15_OR_Ax                     // CpuRevision
+    .Type = MsrRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                    // CpuFamily
+      .Revision = AMD_F15_OR_Ax                     // CpuRevision
     },
-    {AMD_PF_ALL},                       // platformFeatures
-    {{
-      MSR_C001_1070,                    // MSR Address - Shared
-      0x0000000000000000,               // OR Mask
-      0x0000020000000000,               // NAND Mask
+    .Features = {.PlatformValue = AMD_PF_ALL},                       // platformFeatures
+    .EntryData = {.MsrInitializer = {
+      .Address = MSR_C001_1070,                    // MSR Address - Shared
+      .Data = 0x0000000000000000,               // OR Mask
+      .Mask = 0x0000020000000000,               // NAND Mask
     }}
   },
 };
 
 CONST REGISTER_TABLE ROMDATA F15OrEarlySampleSharedMsrRegisterTable = {
-  CorePairPrimary,
-  (sizeof (F15OrEarlySampleSharedMsrRegisters) / sizeof (TABLE_ENTRY_FIELDS)),
-  (TABLE_ENTRY_FIELDS *) &F15OrEarlySampleSharedMsrRegisters,
+  .Selector = CorePairPrimary,
+  .NumberOfEntries = (sizeof (F15OrEarlySampleSharedMsrRegisters) / sizeof (TABLE_ENTRY_FIELDS)),
+  .Table = (TABLE_ENTRY_FIELDS *) &F15OrEarlySampleSharedMsrRegisters,
 };
 
 /*-----------------------------
@@ -395,49 +395,49 @@ STATIC CONST FAM_SPECIFIC_WORKAROUND_TYPE_ENTRY_INITIALIZER ROMDATA F15OrEarlySa
 {
   // HT PHY DLL Compensation setting for Ax
   {
-    FamSpecificWorkaround,
-    {
-      AMD_FAMILY_15,
-      AMD_F15_OR_Ax
+    .Type = FamSpecificWorkaround,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,
+      .Revision = AMD_F15_OR_Ax
     },
-    {AMD_PF_ALL},
-    {{
-      F15HtPhyOverrideDllCompensation,
-      0x00000000
+    .Features = {.PlatformValue = AMD_PF_ALL},
+    .EntryData = {.FamSpecificInitializer = {
+      .DoAction = F15HtPhyOverrideDllCompensation,
+      .Data = 0x00000000
     }}
   },
   // CPU TDP Limit 2 setting for Ax
   {
-    FamSpecificWorkaround,
-    {
-      AMD_FAMILY_15,
-      AMD_F15_OR_Ax
+    .Type = FamSpecificWorkaround,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,
+      .Revision = AMD_F15_OR_Ax
     },
-    {AMD_PF_ALL},
-    {{
-      F15OrOverrideNodeTdpLimit,
-      0x00000000
+    .Features = {.PlatformValue = AMD_PF_ALL},
+    .EntryData = {.FamSpecificInitializer = {
+      .DoAction = F15OrOverrideNodeTdpLimit,
+      .Data = 0x00000000
     }}
   },
   // CPU Node TDP Accumulator Throttle Threshold setting for Ax
   {
-    FamSpecificWorkaround,
-    {
-      AMD_FAMILY_15_OR,
-      AMD_F15_OR_Ax
+    .Type = FamSpecificWorkaround,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15_OR,
+      .Revision = AMD_F15_OR_Ax
     },
-    {AMD_PF_ALL},
-    {{
-      F15OrOverrideNodeTdpAccumulatorThrottleThreshold,
-      0x00000000
+    .Features = {.PlatformValue = AMD_PF_ALL},
+    .EntryData = {.FamSpecificInitializer = {
+      .DoAction = F15OrOverrideNodeTdpAccumulatorThrottleThreshold,
+      .Data = 0x00000000
     }}
   },
 };
 
 CONST REGISTER_TABLE ROMDATA F15OrEarlySampleWorkaroundsTable = {
-  PrimaryCores,
-  (sizeof (F15OrEarlySampleWorkarounds) / sizeof (TABLE_ENTRY_FIELDS)),
-  (TABLE_ENTRY_FIELDS *)F15OrEarlySampleWorkarounds,
+  .Selector = PrimaryCores,
+  .NumberOfEntries = (sizeof (F15OrEarlySampleWorkarounds) / sizeof (TABLE_ENTRY_FIELDS)),
+  .Table = (TABLE_ENTRY_FIELDS *)F15OrEarlySampleWorkarounds,
 };
 
 /*-----------------------------
@@ -449,23 +449,23 @@ STATIC CONST FAM_SPECIFIC_WORKAROUND_TYPE_ENTRY_INITIALIZER ROMDATA F15OrEarlySa
 {
   // MSRC001_1072
   {
-    FamSpecificWorkaround,
-    {
-      AMD_FAMILY_15_OR,
-      AMD_F15_OR_B0
+    .Type = FamSpecificWorkaround,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15_OR,
+      .Revision = AMD_F15_OR_B0
     },
-    {AMD_PF_ALL},
-    {{
-      F15OrB0WeightsInit,
-      0x00000000
+    .Features = {.PlatformValue = AMD_PF_ALL},
+    .EntryData = {.FamSpecificInitializer = {
+      .DoAction = F15OrB0WeightsInit,
+      .Data = 0x00000000
     }}
   }
 };
 
 CONST REGISTER_TABLE ROMDATA F15OrEarlySampleSharedMsrWorkaroundTable = {
-  CorePairPrimary,
-  (sizeof (F15OrEarlySampleSharedMsrWorkarounds) / sizeof (TABLE_ENTRY_FIELDS)),
-  (TABLE_ENTRY_FIELDS *) &F15OrEarlySampleSharedMsrWorkarounds,
+  .Selector = CorePairPrimary,
+  .NumberOfEntries = (sizeof (F15OrEarlySampleSharedMsrWorkarounds) / sizeof (TABLE_ENTRY_FIELDS)),
+  .Table = (TABLE_ENTRY_FIELDS *) &F15OrEarlySampleSharedMsrWorkarounds,
 };
 
 

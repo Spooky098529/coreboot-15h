@@ -66,8 +66,8 @@
 
 /*  Declare the instance of the WHEA option configuration structure  */
 OPTION_WHEA_CONFIGURATION OptionWheaConfiguration = {
-  WHEA_STRUCT_VERSION,
-  USER_WHEA_OPTION
+  .OptWheaVersion = WHEA_STRUCT_VERSION,
+  .WheaFeature = USER_WHEA_OPTION
 };
 
 #endif  // _OPTION_WHEA_INSTALL_H_

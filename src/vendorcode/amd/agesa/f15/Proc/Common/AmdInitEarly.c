@@ -77,9 +77,9 @@ RDATA_GROUP (G2_PEI)
  */
 EXECUTION_CACHE_REGION InitExeCacheMap[] =
 {
-  {0x00000000, 0x00000000},
-  {0x00000000, 0x00000000},
-  {0x00000000, 0x00000000}
+  {.ExeCacheStartAddr = 0x00000000, .ExeCacheSize = 0x00000000},
+  {.ExeCacheStartAddr = 0x00000000, .ExeCacheSize = 0x00000000},
+  {.ExeCacheStartAddr = 0x00000000, .ExeCacheSize = 0x00000000}
 };
 
 /*----------------------------------------------------------------------------------------

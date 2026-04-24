@@ -80,24 +80,24 @@ GetF15WheaInitData (
  *----------------------------------------------------------------------------------------
  */
 AMD_HEST_BANK_INIT_DATA F15HestBankInitData[] = {
-  {0xFFFFFFFF,0xFFFFFFFF,0x400,0x401,0x402,0x403},
-  {0xFFFFFFFF,0xFFFFFFFF,0x404,0x405,0x406,0x407},
-  {0xFFFFFFFF,0xFFFFFFFF,0x408,0x409,0x40A,0x40B},
-  {0xFFFFFFFF,0xFFFFFFFF,0x410,0x411,0x412,0x413},
-  {0xFFFFFFFF,0xFFFFFFFF,0x414,0x415,0x416,0x417},
-  {0xFFFFFFFF,0xFFFFFFFF,0x418,0x419,0x41A,0x41B},
+  {.CtrlInitDataLSD = 0xFFFFFFFF,.CtrlInitDataMSD = 0xFFFFFFFF,.CtrlRegMSRAddr = 0x400,.StatRegMSRAddr = 0x401,.AddrRegMSRAddr = 0x402,.MiscRegMSRAddr = 0x403},
+  {.CtrlInitDataLSD = 0xFFFFFFFF,.CtrlInitDataMSD = 0xFFFFFFFF,.CtrlRegMSRAddr = 0x404,.StatRegMSRAddr = 0x405,.AddrRegMSRAddr = 0x406,.MiscRegMSRAddr = 0x407},
+  {.CtrlInitDataLSD = 0xFFFFFFFF,.CtrlInitDataMSD = 0xFFFFFFFF,.CtrlRegMSRAddr = 0x408,.StatRegMSRAddr = 0x409,.AddrRegMSRAddr = 0x40A,.MiscRegMSRAddr = 0x40B},
+  {.CtrlInitDataLSD = 0xFFFFFFFF,.CtrlInitDataMSD = 0xFFFFFFFF,.CtrlRegMSRAddr = 0x410,.StatRegMSRAddr = 0x411,.AddrRegMSRAddr = 0x412,.MiscRegMSRAddr = 0x413},
+  {.CtrlInitDataLSD = 0xFFFFFFFF,.CtrlInitDataMSD = 0xFFFFFFFF,.CtrlRegMSRAddr = 0x414,.StatRegMSRAddr = 0x415,.AddrRegMSRAddr = 0x416,.MiscRegMSRAddr = 0x417},
+  {.CtrlInitDataLSD = 0xFFFFFFFF,.CtrlInitDataMSD = 0xFFFFFFFF,.CtrlRegMSRAddr = 0x418,.StatRegMSRAddr = 0x419,.AddrRegMSRAddr = 0x41A,.MiscRegMSRAddr = 0x41B},
 };
 
 AMD_WHEA_INIT_DATA F15WheaInitData = {
-  0x000000000,              // AmdGlobCapInitDataLsd
-  0x000000000,              // AmdGlobCapInitDataMsd
-  0x000000077,              // AmdGlobCtrlInitDataLsd
-  0x000000000,              // AmdGlobCtrlInitDataMsd
-  0x00,                     // AmdMcbClrStatusOnInit
-  0x02,                     // AmdMcbStatusDataFormat
-  0x00,                     // AmdMcbConfWriteEn
-  (sizeof (F15HestBankInitData) / sizeof (F15HestBankInitData[0])), // HestBankNum
-  &F15HestBankInitData[0]   // Pointer to Initial data of HEST Bank
+  .GlobCapInitDataLSD = 0x000000000,              // AmdGlobCapInitDataLsd
+  .GlobCapInitDataMSD = 0x000000000,              // AmdGlobCapInitDataMsd
+  .GlobCtrlInitDataLSD = 0x000000077,              // AmdGlobCtrlInitDataLsd
+  .GlobCtrlInitDataMSD = 0x000000000,              // AmdGlobCtrlInitDataMsd
+  .ClrStatusOnInit = 0x00,                     // AmdMcbClrStatusOnInit
+  .StatusDataFormat = 0x02,                     // AmdMcbStatusDataFormat
+  .ConfWriteEn = 0x00,                     // AmdMcbConfWriteEn
+  .HestBankNum = (sizeof (F15HestBankInitData) / sizeof (F15HestBankInitData[0])), // HestBankNum
+  .HestBankInitData = &F15HestBankInitData[0]   // Pointer to Initial data of HEST Bank
 };
 
 

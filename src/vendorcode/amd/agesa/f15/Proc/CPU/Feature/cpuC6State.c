@@ -254,8 +254,8 @@ ReloadMicrocodePatchAfterMemInit (
 
 CONST CPU_FEATURE_DESCRIPTOR ROMDATA CpuFeatureC6State =
 {
-  C6Cstate,
-  (CPU_FEAT_AFTER_PM_INIT | CPU_FEAT_AFTER_POST_MTRR_SYNC | CPU_FEAT_AFTER_RESUME_MTRR_SYNC),
-  IsC6FeatureEnabled,
-  InitializeC6Feature
+  .Feature = C6Cstate,
+  .EntryPoint = (CPU_FEAT_AFTER_PM_INIT | CPU_FEAT_AFTER_POST_MTRR_SYNC | CPU_FEAT_AFTER_RESUME_MTRR_SYNC),
+  .IsEnabled = IsC6FeatureEnabled,
+  .InitializeFeature = InitializeC6Feature
 };

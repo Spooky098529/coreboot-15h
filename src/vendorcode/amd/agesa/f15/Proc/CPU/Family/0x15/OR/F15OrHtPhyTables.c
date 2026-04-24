@@ -85,13 +85,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
 // 0xCF
 // HT_PHY_HT1_FIFO_PTR_OPT_VALUE
   {
-    HtPhyRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = HtPhyRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       HTPHY_LINKTYPE_SL0_HT1,               //
       0xCF,                                 // Address
       0x00000D4D,                           // regData
@@ -101,13 +101,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
 // 0xDF
 // HT_PHY_HT1_FIFO_PTR_OPT_VALUE
   {
-    HtPhyRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = HtPhyRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       HTPHY_LINKTYPE_SL1_HT1,               //
       0xDF,                                 // Address
       0x00000D4D,                           // regData
@@ -117,13 +117,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
 // 0xCF
 // Default for HT3, unless overridden below.
   {
-    HtPhyRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = HtPhyRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       HTPHY_LINKTYPE_SL0_HT3,               //
       0xCF,                                 // Address
       0x00000A2A,                           // regData
@@ -133,13 +133,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
 // 0xDF
 // Default for HT3, unless overridden below.
   {
-    HtPhyRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = HtPhyRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       HTPHY_LINKTYPE_SL1_HT3,               //
       0xDF,                                 // Address
       0x00000A2A,                           // regData
@@ -149,13 +149,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
 // 0xC1
 // [29:22] LfcMax = 20h, [21:14] LfcMin = 10h
   {
-    HtPhyRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = HtPhyRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       HTPHY_LINKTYPE_SL0_HT3,               //
       0xC1,                                 // Address
       0x08040000,                           // regData
@@ -165,13 +165,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
 // 0xD1
 // [29:22] LfcMax = 20h, [21:14] LfcMin = 10h
   {
-    HtPhyRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = HtPhyRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       HTPHY_LINKTYPE_SL1_HT3,               //
       0xD1,                                 // Address
       0x08040000,                           // regData
@@ -181,13 +181,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
 // 0xC1
 // [29:22] LfcMax = 10h, [21:14] LfcMin = 08h
   {
-    HtPhyRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = HtPhyRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       HTPHY_LINKTYPE_SL0_HT1,               //
       0xC1,                                 // Address
       0x04020000,                           // regData
@@ -197,13 +197,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
 // 0xD1
 // [29:22] LfcMax = 10h, [21:14] LfcMin = 08h
   {
-    HtPhyRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = HtPhyRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       HTPHY_LINKTYPE_SL1_HT1,               //
       0xD1,                                 // Address
       0x04020000,                           // regData
@@ -213,13 +213,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
 // 0xC5
 // [7] TxLs23ClkGateEn = 1
   {
-    HtPhyRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = HtPhyRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       HTPHY_LINKTYPE_ALL,               //
       0xC5,                                 // Address
       0x00000080,                           // regData
@@ -229,13 +229,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
 // 0xD5
 // [7] TxLs23ClkGateEn = 1
   {
-    HtPhyRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = HtPhyRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       HTPHY_LINKTYPE_ALL,               //
       0xD5,                                 // Address
       0x00000080,                           // regData
@@ -249,13 +249,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
 // HT1: clear any warm reset deemphasis settings.
 
   {
-    HtPhyRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = HtPhyRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       HTPHY_LINKTYPE_SL0_HT1,               //
       0xC4,                                 // Address
       0x00000000,                           // regData
@@ -263,13 +263,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    HtPhyRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = HtPhyRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       HTPHY_LINKTYPE_SL1_HT1,               //
       0xD4,                                 // Address
       0x00000000,                           // regData
@@ -277,13 +277,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    HtPhyRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = HtPhyRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       HTPHY_LINKTYPE_SL0_HT1,               //
       0x720C,                                 // Address
       0x00000000,                           // regData
@@ -291,13 +291,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    HtPhyRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = HtPhyRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       HTPHY_LINKTYPE_SL1_HT1,               //
       0x730C,                                 // Address
       0x00000000,                           // regData
@@ -315,13 +315,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
 // -11dB postcursor with -8dB precursor
 
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DEEMPHASIS_LEVEL_NONE,
       HTPHY_LINKTYPE_SL0_HT3,               //
       0x720C,                                 // Address
@@ -330,13 +330,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DEEMPHASIS_LEVEL_NONE,
       HTPHY_LINKTYPE_SL1_HT3,               //
       0x730C,                                 // Address
@@ -345,13 +345,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DEEMPHASIS_LEVEL__3,
       HTPHY_LINKTYPE_SL0_HT3,               //
       0x720C,                                 // Address
@@ -360,13 +360,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DEEMPHASIS_LEVEL__3,
       HTPHY_LINKTYPE_SL1_HT3,               //
       0x730C,                                 // Address
@@ -375,13 +375,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DEEMPHASIS_LEVEL__6,
       HTPHY_LINKTYPE_SL0_HT3,               //
       0x720C,                                 // Address
@@ -390,13 +390,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DEEMPHASIS_LEVEL__6,
       HTPHY_LINKTYPE_SL1_HT3,               //
       0x730C,                                 // Address
@@ -405,13 +405,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DEEMPHASIS_LEVEL__8,
       HTPHY_LINKTYPE_SL0_HT3,               //
       0x720C,                                 // Address
@@ -420,13 +420,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DEEMPHASIS_LEVEL__8,
       HTPHY_LINKTYPE_SL1_HT3,               //
       0x730C,                                 // Address
@@ -435,13 +435,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DEEMPHASIS_LEVEL__11,
       HTPHY_LINKTYPE_SL0_HT3,               //
       0x720C,                                 // Address
@@ -450,13 +450,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DEEMPHASIS_LEVEL__11,
       HTPHY_LINKTYPE_SL1_HT3,               //
       0x730C,                                 // Address
@@ -465,13 +465,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DEEMPHASIS_LEVEL__11_8,
       HTPHY_LINKTYPE_SL0_HT3,               //
       0x720C,                                 // Address
@@ -480,13 +480,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DEEMPHASIS_LEVEL__11_8,
       HTPHY_LINKTYPE_SL1_HT3,               //
       0x730C,                                 // Address
@@ -507,13 +507,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
 // -11dB postcursor              16h
 
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DCV_LEVEL_NONE,
       HTPHY_LINKTYPE_SL0_HT3,               //
       0xC4,                                 // Address
@@ -522,13 +522,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DCV_LEVEL_NONE,
       HTPHY_LINKTYPE_SL1_HT3,               //
       0xD4,                                 // Address
@@ -537,13 +537,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DCV_LEVEL__2,
       HTPHY_LINKTYPE_SL0_HT3,               //
       0xC4,                                 // Address
@@ -552,13 +552,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DCV_LEVEL__2,
       HTPHY_LINKTYPE_SL1_HT3,               //
       0xD4,                                 // Address
@@ -567,13 +567,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DCV_LEVEL__3,
       HTPHY_LINKTYPE_SL0_HT3,               //
       0xC4,                                 // Address
@@ -582,13 +582,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DCV_LEVEL__3,
       HTPHY_LINKTYPE_SL1_HT3,               //
       0xD4,                                 // Address
@@ -597,13 +597,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DCV_LEVEL__5,
       HTPHY_LINKTYPE_SL0_HT3,               //
       0xC4,                                 // Address
@@ -612,13 +612,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DCV_LEVEL__5,
       HTPHY_LINKTYPE_SL1_HT3,               //
       0xD4,                                 // Address
@@ -627,13 +627,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DCV_LEVEL__6,
       HTPHY_LINKTYPE_SL0_HT3,               //
       0xC4,                                 // Address
@@ -642,13 +642,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DCV_LEVEL__6,
       HTPHY_LINKTYPE_SL1_HT3,               //
       0xD4,                                 // Address
@@ -657,13 +657,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DCV_LEVEL__7,
       HTPHY_LINKTYPE_SL0_HT3,               //
       0xC4,                                 // Address
@@ -672,13 +672,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DCV_LEVEL__7,
       HTPHY_LINKTYPE_SL1_HT3,               //
       0xD4,                                 // Address
@@ -687,13 +687,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DCV_LEVEL__8,
       HTPHY_LINKTYPE_SL0_HT3,               //
       0xC4,                                 // Address
@@ -702,13 +702,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DCV_LEVEL__8,
       HTPHY_LINKTYPE_SL1_HT3,               //
       0xD4,                                 // Address
@@ -717,13 +717,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DCV_LEVEL__9,
       HTPHY_LINKTYPE_SL0_HT3,               //
       0xC4,                                 // Address
@@ -732,13 +732,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DCV_LEVEL__9,
       HTPHY_LINKTYPE_SL1_HT3,               //
       0xD4,                                 // Address
@@ -747,13 +747,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DCV_LEVEL__11,
       HTPHY_LINKTYPE_SL0_HT3,               //
       0xC4,                                 // Address
@@ -762,13 +762,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
     }}
   },
   {
-    DeemphasisRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                         // CpuRevision
+    .EntryType = DeemphasisRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                         // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       DCV_LEVEL__11,
       HTPHY_LINKTYPE_SL1_HT3,               //
       0xD4,                                 // Address
@@ -779,13 +779,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
 // 0x520A
 // [14:13] AnalogWaitTime = 10b
   {
-    HtPhyRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                       // CpuRevision
+    .EntryType = HtPhyRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                       // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       HTPHY_LINKTYPE_SL0_ALL,                   //
       0x520A,                               // Address
       0x00004000,                           // regData
@@ -795,13 +795,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
 // 0x530A
 // [14:13] AnalogWaitTime = 10b
   {
-    HtPhyRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                       // CpuRevision
+    .EntryType = HtPhyRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                       // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       HTPHY_LINKTYPE_SL1_ALL,                   //
       0x530A,                               // Address
       0x00004000,                           // regData
@@ -811,13 +811,13 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
 // 0xE3
 // [7] RoCalEn = 1b
   {
-    HtPhyRegister,
-    {
-      AMD_FAMILY_15,                      // CpuFamily
-      AMD_F15_OR_ALL                       // CpuRevision
+    .EntryType = HtPhyRegister,
+    .CpuRevision = {
+      .Family = AMD_FAMILY_15,                      // CpuFamily
+      .Revision = AMD_F15_OR_ALL                       // CpuRevision
     },
-    {AMD_PF_ALL},                           // platformFeatures
-    {{
+    .Features = {.PlatformValue = AMD_PF_ALL},                           // platformFeatures
+    .Entry = {.InitialValues = {
       HTPHY_LINKTYPE_ALL,                   //
       0xE3,                               // Address
       0x00000080,                           // regData
@@ -827,7 +827,7 @@ STATIC CONST TABLE_ENTRY_FIELDS ROMDATA F15OrHtPhyRegisters[] =
 };
 
 CONST REGISTER_TABLE ROMDATA F15OrHtPhyRegisterTable = {
-  PrimaryCores,
-  (sizeof (F15OrHtPhyRegisters) / sizeof (TABLE_ENTRY_FIELDS)),
-  F15OrHtPhyRegisters,
+  .Selector = PrimaryCores,
+  .NumberOfEntries = (sizeof (F15OrHtPhyRegisters) / sizeof (TABLE_ENTRY_FIELDS)),
+  .Table = F15OrHtPhyRegisters,
 };

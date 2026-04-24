@@ -104,29 +104,29 @@ extern OPTION_HT_CONFIGURATION OptionHtConfiguration;
  */
 CONST PACKAGE_HTLINK_MAP_ITEM ROMDATA HtFam15PackageLinkMap[] =
 {
-  {3, 0, 0},        ///< Module zero, link 3: package link 0
-  {7, 0, 4},        ///< Module zero, link 7: package link 4
-  {0, 1, 1},        ///< Module one,  link 0: package link 1
-  {4, 1, 5},        ///< Module one,  link 4: package link 5
-  {1, 0, 2},        ///< Module zero, link 1: package link 2
-  {5, 0, 6},        ///< Module zero, link 5: package link 6
-  {0, 0, 3},        ///< Module zero, link 0: package link 3
-  {3, 1, 7},        ///< Module one,  link 3: package link 7
-  {2, 0, HT_LIST_MATCH_INTERNAL_LINK_0},        ///< Internal Link
-  {6, 0, HT_LIST_MATCH_INTERNAL_LINK_1},        ///< Internal Link
-  {4, 0, HT_LIST_MATCH_INTERNAL_LINK_2},        ///< Internal Link
-  {1, 1, HT_LIST_MATCH_INTERNAL_LINK_0},        ///< Internal Link
-  {5, 1, HT_LIST_MATCH_INTERNAL_LINK_1},        ///< Internal Link
-  {7, 1, HT_LIST_MATCH_INTERNAL_LINK_2},        ///< Internal Link
-  {HT_LIST_TERMINAL, HT_LIST_TERMINAL, HT_LIST_TERMINAL}, ///< End
+  {.Link = 3, .Module = 0, .PackageLink = 0},        ///< Module zero, link 3: package link 0
+  {.Link = 7, .Module = 0, .PackageLink = 4},        ///< Module zero, link 7: package link 4
+  {.Link = 0, .Module = 1, .PackageLink = 1},        ///< Module one,  link 0: package link 1
+  {.Link = 4, .Module = 1, .PackageLink = 5},        ///< Module one,  link 4: package link 5
+  {.Link = 1, .Module = 0, .PackageLink = 2},        ///< Module zero, link 1: package link 2
+  {.Link = 5, .Module = 0, .PackageLink = 6},        ///< Module zero, link 5: package link 6
+  {.Link = 0, .Module = 0, .PackageLink = 3},        ///< Module zero, link 0: package link 3
+  {.Link = 3, .Module = 1, .PackageLink = 7},        ///< Module one,  link 3: package link 7
+  {.Link = 2, .Module = 0, .PackageLink = HT_LIST_MATCH_INTERNAL_LINK_0},        ///< Internal Link
+  {.Link = 6, .Module = 0, .PackageLink = HT_LIST_MATCH_INTERNAL_LINK_1},        ///< Internal Link
+  {.Link = 4, .Module = 0, .PackageLink = HT_LIST_MATCH_INTERNAL_LINK_2},        ///< Internal Link
+  {.Link = 1, .Module = 1, .PackageLink = HT_LIST_MATCH_INTERNAL_LINK_0},        ///< Internal Link
+  {.Link = 5, .Module = 1, .PackageLink = HT_LIST_MATCH_INTERNAL_LINK_1},        ///< Internal Link
+  {.Link = 7, .Module = 1, .PackageLink = HT_LIST_MATCH_INTERNAL_LINK_2},        ///< Internal Link
+  {.Link = HT_LIST_TERMINAL, .Module = HT_LIST_TERMINAL, .PackageLink = HT_LIST_TERMINAL}, ///< End
 };
 
 /**
  * A default Ignore Link list to power off the 3rd internal sublink.
  */
 STATIC CONST IGNORE_LINK ROMDATA Fam15IgnoreLinkList[] = {
-  {HT_LIST_MATCH_ANY, HT_LIST_MATCH_INTERNAL_LINK_2, POWERED_OFF},
-  {HT_LIST_TERMINAL}
+  {.Socket = HT_LIST_MATCH_ANY, .Link = HT_LIST_MATCH_INTERNAL_LINK_2, .LinkState = POWERED_OFF},
+  {.Socket = HT_LIST_TERMINAL}
 };
 
 /**

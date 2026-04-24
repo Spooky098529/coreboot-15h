@@ -229,21 +229,21 @@
 
 /*  Declare the instance of the PSTATE option configuration structure  */
 OPTION_PSTATE_POST_CONFIGURATION      OptionPstatePostConfiguration = {
-  PSTATE_STRUCT_VERSION,
-  USER_PSTATE_OPTION_GATHER,
-  USER_PSTATE_OPTION_LEVEL
+  .OptPstateVersion = PSTATE_STRUCT_VERSION,
+  .PstateGather = USER_PSTATE_OPTION_GATHER,
+  .PstateLeveling = USER_PSTATE_OPTION_LEVEL
 };
 
 OPTION_PSTATE_LATE_CONFIGURATION      OptionPstateLateConfiguration = {
-  PSTATE_STRUCT_VERSION,
-  USER_SSDT_MAIN,
-  USER_PSTATE_OPTION_MAIN,
-  USER_CSTATE_OPTION_MAIN,
-  USER_PSTATE_CFG_PPC,
-  USER_PSTATE_CFG_PCT,
-  USER_PSTATE_CFG_PSD,
-  USER_PSTATE_CFG_PSS,
-  USER_PSTATE_CFG_XPSS
+  .OptPstateVersion = PSTATE_STRUCT_VERSION,
+  .SsdtFeature = USER_SSDT_MAIN,
+  .PstateFeature = USER_PSTATE_OPTION_MAIN,
+  .CstateFeature = USER_CSTATE_OPTION_MAIN,
+  .CfgPstatePpc = USER_PSTATE_CFG_PPC,
+  .CfgPstatePct = USER_PSTATE_CFG_PCT,
+  .CfgPstatePsd = USER_PSTATE_CFG_PSD,
+  .CfgPstatePss = USER_PSTATE_CFG_PSS,
+  .CfgPstateXpss = USER_PSTATE_CFG_XPSS
 };
 
 CONST CPU_SPECIFIC_SERVICES_XLAT ROMDATA PstateCpuFamilyServiceArray[] =
@@ -258,7 +258,7 @@ CONST CPU_SPECIFIC_SERVICES_XLAT ROMDATA PstateCpuFamilyServiceArray[] =
 };
 CONST CPU_FAMILY_SUPPORT_TABLE ROMDATA PstateFamilyServiceTable =
 {
-  (sizeof (PstateCpuFamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
-  &PstateCpuFamilyServiceArray[0]
+  .Elements = (sizeof (PstateCpuFamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
+  .FamilyTable = &PstateCpuFamilyServiceArray[0]
 };
 #endif  // _OPTION_PSTATE_INSTALL_H_

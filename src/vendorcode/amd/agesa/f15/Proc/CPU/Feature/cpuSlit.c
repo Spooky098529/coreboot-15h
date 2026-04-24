@@ -77,15 +77,15 @@ extern OPTION_SLIT_CONFIGURATION OptionSlitConfiguration;  // global user config
 
 STATIC ACPI_TABLE_HEADER  ROMDATA CpuSlitHdrStruct =
 {
-  {'S','L','I','T'},
-  0,
-  1,
-  0,
-  {'A','M','D',' ',' ',' '},
-  {'A','G','E','S','A',' ',' ',' '},
-  1,
-  {'A','M','D',' '},
-  1
+  .Sign = {'S','L','I','T'},
+  .TableLength = 0,
+  .Revision = 1,
+  .Checksum = 0,
+  .OemId = {'A','M','D',' ',' ',' '},
+  .OemTableId = {'A','G','E','S','A',' ',' ',' '},
+  .OemRev = 1,
+  .CreatorId = {'A','M','D',' '},
+  .CreatorRev = 1
 };
 
 /*----------------------------------------------------------------------------------------

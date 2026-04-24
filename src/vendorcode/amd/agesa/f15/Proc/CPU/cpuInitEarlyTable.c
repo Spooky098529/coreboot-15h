@@ -92,12 +92,12 @@ extern F_PERFORM_EARLY_INIT_ON_CORE LoadMicrocodePatchAtEarly;
 
 CONST S_PERFORM_EARLY_INIT_ON_CORE ROMDATA CommonEarlyInitOnCoreTable[] =
 {
-  {McaInitializationAtEarly, PERFORM_EARLY_ANY_CONDITION},
-  {SetRegistersFromTablesAtEarly, PERFORM_EARLY_ANY_CONDITION},
-  {SetBrandIdRegistersAtEarly, PERFORM_EARLY_ANY_CONDITION},
-  {LocalApicInitializationAtEarly, PERFORM_EARLY_ANY_CONDITION},
-  {LoadMicrocodePatchAtEarly, PERFORM_EARLY_ANY_CONDITION},
-  {NULL, 0}
+  {.PerformEarlyInitOnCore = McaInitializationAtEarly, .PerformEarlyInitFlag = PERFORM_EARLY_ANY_CONDITION},
+  {.PerformEarlyInitOnCore = SetRegistersFromTablesAtEarly, .PerformEarlyInitFlag = PERFORM_EARLY_ANY_CONDITION},
+  {.PerformEarlyInitOnCore = SetBrandIdRegistersAtEarly, .PerformEarlyInitFlag = PERFORM_EARLY_ANY_CONDITION},
+  {.PerformEarlyInitOnCore = LocalApicInitializationAtEarly, .PerformEarlyInitFlag = PERFORM_EARLY_ANY_CONDITION},
+  {.PerformEarlyInitOnCore = LoadMicrocodePatchAtEarly, .PerformEarlyInitFlag = PERFORM_EARLY_ANY_CONDITION},
+  {.PerformEarlyInitOnCore = NULL, .PerformEarlyInitFlag = 0}
 };
 
 /*------------------------------------------------------------------------------------*/

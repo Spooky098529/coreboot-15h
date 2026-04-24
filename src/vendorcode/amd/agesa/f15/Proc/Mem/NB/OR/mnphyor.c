@@ -143,26 +143,26 @@ MemNInitPhyCompOr (
   //
   CONST STATIC TXPREPN_STRUCT TxPrePNDataDqsV15Or[] = {
     //{TxPreP, TxPreN}[Speed][Drive Strength] at 1.5V
-    {DDR667 + DDR800, {0x924, 0x924, 0x924, 0x924}},
-    {DDR1066 + DDR1333, {0xFF6, 0xFF6, 0xFF6, 0xFF6}},
-    {DDR1600 + DDR1866, {0xFF6, 0xFF6, 0xFF6, 0xFF6}}
+    {.Speed = DDR667 + DDR800, .TxPrePNVal = {0x924, 0x924, 0x924, 0x924}},
+    {.Speed = DDR1066 + DDR1333, .TxPrePNVal = {0xFF6, 0xFF6, 0xFF6, 0xFF6}},
+    {.Speed = DDR1600 + DDR1866, .TxPrePNVal = {0xFF6, 0xFF6, 0xFF6, 0xFF6}}
   };
   CONST STATIC TXPREPN_STRUCT TxPrePNDataDqsV135Or[] = {
     //{TxPreP, TxPreN}[Speed][Drive Strength] at 1.35V
-    {DDR667 + DDR800, {0xFF6, 0xB6D, 0xB6D, 0x924}},
-    {DDR1066 + DDR1333, {0xFF6, 0xFF6, 0xFF6, 0xFF6}},
-    {DDR1600 + DDR1866, {0xFF6, 0xFF6, 0xFF6, 0xFF6}}
+    {.Speed = DDR667 + DDR800, .TxPrePNVal = {0xFF6, 0xB6D, 0xB6D, 0x924}},
+    {.Speed = DDR1066 + DDR1333, .TxPrePNVal = {0xFF6, 0xFF6, 0xFF6, 0xFF6}},
+    {.Speed = DDR1600 + DDR1866, .TxPrePNVal = {0xFF6, 0xFF6, 0xFF6, 0xFF6}}
   };
   CONST STATIC TXPREPN_STRUCT TxPrePNDataDqsV125Or[] = {
     //{TxPreP, TxPreN}[Speed][Drive Strength] at 1.25V
-    {DDR667 + DDR800, {0xFF6, 0xDAD, 0xDAD, 0x924}},
-    {DDR1066 + DDR1333, {0xFF6, 0xFF6, 0xFF6, 0xFF6}},
-    {DDR1600 + DDR1866, {0xFF6, 0xFF6, 0xFF6, 0xFF6}}
+    {.Speed = DDR667 + DDR800, .TxPrePNVal = {0xFF6, 0xDAD, 0xDAD, 0x924}},
+    {.Speed = DDR1066 + DDR1333, .TxPrePNVal = {0xFF6, 0xFF6, 0xFF6, 0xFF6}},
+    {.Speed = DDR1600 + DDR1866, .TxPrePNVal = {0xFF6, 0xFF6, 0xFF6, 0xFF6}}
   };
   CONST STATIC TXPREPN_ENTRY TxPrePNDataDqsOr[] = {
-    {GET_SIZE_OF (TxPrePNDataDqsV15Or), (TXPREPN_STRUCT *)&TxPrePNDataDqsV15Or},
-    {GET_SIZE_OF (TxPrePNDataDqsV135Or), (TXPREPN_STRUCT *)&TxPrePNDataDqsV135Or},
-    {GET_SIZE_OF (TxPrePNDataDqsV125Or), (TXPREPN_STRUCT *)&TxPrePNDataDqsV125Or}
+    {.TxPrePNTblSize = GET_SIZE_OF (TxPrePNDataDqsV15Or), .TxPrePNTblPtr = (TXPREPN_STRUCT *)&TxPrePNDataDqsV15Or},
+    {.TxPrePNTblSize = GET_SIZE_OF (TxPrePNDataDqsV135Or), .TxPrePNTblPtr = (TXPREPN_STRUCT *)&TxPrePNDataDqsV135Or},
+    {.TxPrePNTblSize = GET_SIZE_OF (TxPrePNDataDqsV125Or), .TxPrePNTblPtr = (TXPREPN_STRUCT *)&TxPrePNDataDqsV125Or}
   };
 
   //
@@ -170,26 +170,26 @@ MemNInitPhyCompOr (
   //
   CONST STATIC TXPREPN_STRUCT TxPrePNDataDqsV15OrB1[] = {
     //{TxPreP, TxPreN}[Speed][Drive Strength] at 1.5V
-    {DDR667 + DDR800, {0xB6D, 0x6DB, 0x492, 0x492}},
-    {DDR1066 + DDR1333, {0xFFF, 0x924, 0x6DB, 0x6DB}},
-    {DDR1600 + DDR1866, {0xFFF, 0xFFF, 0xFFF, 0xB6D}}
+    {.Speed = DDR667 + DDR800, .TxPrePNVal = {0xB6D, 0x6DB, 0x492, 0x492}},
+    {.Speed = DDR1066 + DDR1333, .TxPrePNVal = {0xFFF, 0x924, 0x6DB, 0x6DB}},
+    {.Speed = DDR1600 + DDR1866, .TxPrePNVal = {0xFFF, 0xFFF, 0xFFF, 0xB6D}}
   };
   CONST STATIC TXPREPN_STRUCT TxPrePNDataDqsV135OrB1[] = {
     //{TxPreP, TxPreN}[Speed][Drive Strength] at 1.35V
-    {DDR667 + DDR800, {0xFFF, 0x924, 0x6DB, 0x492}},
-    {DDR1066 + DDR1333, {0xFFF, 0xDB6, 0xB6D, 0x6DB}},
-    {DDR1600 + DDR1866, {0xFFF, 0xFFF, 0xFFF, 0xDB6}}
+    {.Speed = DDR667 + DDR800, .TxPrePNVal = {0xFFF, 0x924, 0x6DB, 0x492}},
+    {.Speed = DDR1066 + DDR1333, .TxPrePNVal = {0xFFF, 0xDB6, 0xB6D, 0x6DB}},
+    {.Speed = DDR1600 + DDR1866, .TxPrePNVal = {0xFFF, 0xFFF, 0xFFF, 0xDB6}}
   };
   CONST STATIC TXPREPN_STRUCT TxPrePNDataDqsV125OrB1[] = {
     //{TxPreP, TxPreN}[Speed][Drive Strength] at 1.25V
-    {DDR667 + DDR800, {0xFFF, 0xB6D, 0x924, 0x6DB}},
-    {DDR1066 + DDR1333, {0xFFF, 0xFFF, 0xDB6, 0x924}},
-    {DDR1600 + DDR1866, {0xFFF, 0xFFF, 0xFFF, 0xFFF}}
+    {.Speed = DDR667 + DDR800, .TxPrePNVal = {0xFFF, 0xB6D, 0x924, 0x6DB}},
+    {.Speed = DDR1066 + DDR1333, .TxPrePNVal = {0xFFF, 0xFFF, 0xDB6, 0x924}},
+    {.Speed = DDR1600 + DDR1866, .TxPrePNVal = {0xFFF, 0xFFF, 0xFFF, 0xFFF}}
   };
   CONST STATIC TXPREPN_ENTRY TxPrePNDataDqsOrB1[] = {
-    {GET_SIZE_OF (TxPrePNDataDqsV15OrB1), (TXPREPN_STRUCT *)&TxPrePNDataDqsV15OrB1},
-    {GET_SIZE_OF (TxPrePNDataDqsV135OrB1), (TXPREPN_STRUCT *)&TxPrePNDataDqsV135OrB1},
-    {GET_SIZE_OF (TxPrePNDataDqsV125OrB1), (TXPREPN_STRUCT *)&TxPrePNDataDqsV125OrB1}
+    {.TxPrePNTblSize = GET_SIZE_OF (TxPrePNDataDqsV15OrB1), .TxPrePNTblPtr = (TXPREPN_STRUCT *)&TxPrePNDataDqsV15OrB1},
+    {.TxPrePNTblSize = GET_SIZE_OF (TxPrePNDataDqsV135OrB1), .TxPrePNTblPtr = (TXPREPN_STRUCT *)&TxPrePNDataDqsV135OrB1},
+    {.TxPrePNTblSize = GET_SIZE_OF (TxPrePNDataDqsV125OrB1), .TxPrePNTblPtr = (TXPREPN_STRUCT *)&TxPrePNDataDqsV125OrB1}
   };
 
   //
@@ -197,26 +197,26 @@ MemNInitPhyCompOr (
   //
   CONST STATIC TXPREPN_STRUCT TxPrePNCmdAddrV15Or[] = {
     //{TxPreP, TxPreN}[Speed][Drive Strength] at 1.5V
-    {DDR667 + DDR800, {0x492, 0x492, 0x492, 0x492}},
-    {DDR1066 + DDR1333, {0x6DB, 0x6DB, 0x6DB, 0x6DB}},
-    {DDR1600 + DDR1866, {0xB6D, 0xB6D, 0xB6D, 0xB6D}}
+    {.Speed = DDR667 + DDR800, .TxPrePNVal = {0x492, 0x492, 0x492, 0x492}},
+    {.Speed = DDR1066 + DDR1333, .TxPrePNVal = {0x6DB, 0x6DB, 0x6DB, 0x6DB}},
+    {.Speed = DDR1600 + DDR1866, .TxPrePNVal = {0xB6D, 0xB6D, 0xB6D, 0xB6D}}
   };
   CONST STATIC TXPREPN_STRUCT TxPrePNCmdAddrV135Or[] = {
     //{TxPreP, TxPreN}[Speed][Drive Strength] at 1.35V
-    {DDR667 + DDR800, {0x492, 0x492, 0x492, 0x492}},
-    {DDR1066 + DDR1333, {0x924, 0x6DB, 0x6DB, 0x6DB}},
-    {DDR1600 + DDR1866, {0xB6D, 0xB6D, 0x924, 0x924}}
+    {.Speed = DDR667 + DDR800, .TxPrePNVal = {0x492, 0x492, 0x492, 0x492}},
+    {.Speed = DDR1066 + DDR1333, .TxPrePNVal = {0x924, 0x6DB, 0x6DB, 0x6DB}},
+    {.Speed = DDR1600 + DDR1866, .TxPrePNVal = {0xB6D, 0xB6D, 0x924, 0x924}}
   };
   CONST STATIC TXPREPN_STRUCT TxPrePNCmdAddrV125Or[] = {
     //{TxPreP, TxPreN}[Speed][Drive Strength] at 1.25V
-    {DDR667 + DDR800, {0x492, 0x492, 0x492, 0x492}},
-    {DDR1066 + DDR1333, {0xDAD, 0x924, 0x6DB, 0x492}},
-    {DDR1600 + DDR1866, {0xFF6, 0xDAD, 0xB64, 0xB64}}
+    {.Speed = DDR667 + DDR800, .TxPrePNVal = {0x492, 0x492, 0x492, 0x492}},
+    {.Speed = DDR1066 + DDR1333, .TxPrePNVal = {0xDAD, 0x924, 0x6DB, 0x492}},
+    {.Speed = DDR1600 + DDR1866, .TxPrePNVal = {0xFF6, 0xDAD, 0xB64, 0xB64}}
   };
   CONST STATIC TXPREPN_ENTRY TxPrePNCmdAddrOr[] = {
-    {GET_SIZE_OF (TxPrePNCmdAddrV15Or), (TXPREPN_STRUCT *)&TxPrePNCmdAddrV15Or},
-    {GET_SIZE_OF (TxPrePNCmdAddrV135Or), (TXPREPN_STRUCT *)&TxPrePNCmdAddrV135Or},
-    {GET_SIZE_OF (TxPrePNCmdAddrV125Or), (TXPREPN_STRUCT *)&TxPrePNCmdAddrV125Or}
+    {.TxPrePNTblSize = GET_SIZE_OF (TxPrePNCmdAddrV15Or), .TxPrePNTblPtr = (TXPREPN_STRUCT *)&TxPrePNCmdAddrV15Or},
+    {.TxPrePNTblSize = GET_SIZE_OF (TxPrePNCmdAddrV135Or), .TxPrePNTblPtr = (TXPREPN_STRUCT *)&TxPrePNCmdAddrV135Or},
+    {.TxPrePNTblSize = GET_SIZE_OF (TxPrePNCmdAddrV125Or), .TxPrePNTblPtr = (TXPREPN_STRUCT *)&TxPrePNCmdAddrV125Or}
   };
 
   //
@@ -224,26 +224,26 @@ MemNInitPhyCompOr (
   //
   CONST STATIC TXPREPN_STRUCT TxPrePNClockV15Or[] = {
     //{TxPreP, TxPreN}[Speed][Drive Strength] at 1.5V
-    {DDR667 + DDR800, {0x924, 0x924, 0x924, 0x924}},
-    {DDR1066 + DDR1333, {0xFF6, 0xFF6, 0xFF6, 0xB6D}},
-    {DDR1600 + DDR1866, {0xFF6, 0xFF6, 0xFF6, 0xFF6}}
+    {.Speed = DDR667 + DDR800, .TxPrePNVal = {0x924, 0x924, 0x924, 0x924}},
+    {.Speed = DDR1066 + DDR1333, .TxPrePNVal = {0xFF6, 0xFF6, 0xFF6, 0xB6D}},
+    {.Speed = DDR1600 + DDR1866, .TxPrePNVal = {0xFF6, 0xFF6, 0xFF6, 0xFF6}}
   };
   CONST STATIC TXPREPN_STRUCT TxPrePNClockV135Or[] = {
     //{TxPreP, TxPreN}[Speed][Drive Strength] at 1.35V
-    {DDR667 + DDR800, {0xDAD, 0xDAD, 0x924, 0x924}},
-    {DDR1066 + DDR1333, {0xFF6, 0xFF6, 0xFF6, 0xDAD}},
-    {DDR1600 + DDR1866, {0xFF6, 0xFF6, 0xFF6, 0xDAD}}
+    {.Speed = DDR667 + DDR800, .TxPrePNVal = {0xDAD, 0xDAD, 0x924, 0x924}},
+    {.Speed = DDR1066 + DDR1333, .TxPrePNVal = {0xFF6, 0xFF6, 0xFF6, 0xDAD}},
+    {.Speed = DDR1600 + DDR1866, .TxPrePNVal = {0xFF6, 0xFF6, 0xFF6, 0xDAD}}
   };
   CONST STATIC TXPREPN_STRUCT TxPrePNClockV125Or[] = {
     //{TxPreP, TxPreN}[Speed][Drive Strength] at 1.25V
-    {DDR667 + DDR800, {0xDAD, 0xDAD, 0x924, 0x924}},
-    {DDR1066 + DDR1333, {0xFF6, 0xFF6, 0xFF6, 0xFF6}},
-    {DDR1600 + DDR1866, {0xFF6, 0xFF6, 0xFF6, 0xFF6}}
+    {.Speed = DDR667 + DDR800, .TxPrePNVal = {0xDAD, 0xDAD, 0x924, 0x924}},
+    {.Speed = DDR1066 + DDR1333, .TxPrePNVal = {0xFF6, 0xFF6, 0xFF6, 0xFF6}},
+    {.Speed = DDR1600 + DDR1866, .TxPrePNVal = {0xFF6, 0xFF6, 0xFF6, 0xFF6}}
   };
   CONST STATIC TXPREPN_ENTRY TxPrePNClockOr[] = {
-    {GET_SIZE_OF (TxPrePNClockV15Or), (TXPREPN_STRUCT *)&TxPrePNClockV15Or},
-    {GET_SIZE_OF (TxPrePNClockV135Or), (TXPREPN_STRUCT *)&TxPrePNClockV135Or},
-    {GET_SIZE_OF (TxPrePNClockV125Or), (TXPREPN_STRUCT *)&TxPrePNClockV125Or}
+    {.TxPrePNTblSize = GET_SIZE_OF (TxPrePNClockV15Or), .TxPrePNTblPtr = (TXPREPN_STRUCT *)&TxPrePNClockV15Or},
+    {.TxPrePNTblSize = GET_SIZE_OF (TxPrePNClockV135Or), .TxPrePNTblPtr = (TXPREPN_STRUCT *)&TxPrePNClockV135Or},
+    {.TxPrePNTblSize = GET_SIZE_OF (TxPrePNClockV125Or), .TxPrePNTblPtr = (TXPREPN_STRUCT *)&TxPrePNClockV125Or}
   };
 
   //
@@ -254,20 +254,20 @@ MemNInitPhyCompOr (
     // 3. Program TxPreP/TxPreN for Data and DQS according toTable 46 if VDDIO is 1.5V or Table 47 if 1.35V.
     //    A. Program D18F2x9C_x0D0F_0[F,8:0]0[A,6]_dct[1:0]={0000b, TxPreP, TxPreN}.
     //    B. Program D18F2x9C_x0D0F_0[F,8:0]0[A,6]_dct[1:0]={0000b, TxPreP, TxPreN}.
-    {BFDqsDrvStren, BFDataByteTxPreDriverCal2Pad1, BFDataByteTxPreDriverCal2Pad1, 0, TxPrePNDataDqsOr},
-    {BFDataDrvStren, BFDataByteTxPreDriverCal2Pad2, BFDataByteTxPreDriverCal2Pad2, 0, TxPrePNDataDqsOr},
-    {BFDataDrvStren, BFDataByteTxPreDriverCal, BFDataByteTxPreDriverCal, 8, TxPrePNDataDqsOr},
+    {.IndexBitField = BFDqsDrvStren, .StartTargetBitField = BFDataByteTxPreDriverCal2Pad1, .EndTargetBitField = BFDataByteTxPreDriverCal2Pad1, .ExtraValue = 0, .TxPrePN = TxPrePNDataDqsOr},
+    {.IndexBitField = BFDataDrvStren, .StartTargetBitField = BFDataByteTxPreDriverCal2Pad2, .EndTargetBitField = BFDataByteTxPreDriverCal2Pad2, .ExtraValue = 0, .TxPrePN = TxPrePNDataDqsOr},
+    {.IndexBitField = BFDataDrvStren, .StartTargetBitField = BFDataByteTxPreDriverCal, .EndTargetBitField = BFDataByteTxPreDriverCal, .ExtraValue = 8, .TxPrePN = TxPrePNDataDqsOr},
     // 4. Program TxPreP/TxPreN for Cmd/Addr according to Table 49 if VDDIO is 1.5V or Table 50 if 1.35V.
     //    A. Program D18F2x9C_x0D0F_[C,8][1:0][12,0E,0A,06]_dct[1:0]={0000b, TxPreP, TxPreN}.
     //    B. Program D18F2x9C_x0D0F_[C,8][1:0]02_dct[1:0]={1000b, TxPreP, TxPreN}.
-    {BFCsOdtDrvStren, BFCmdAddr0TxPreDriverCal2Pad1, BFCmdAddr0TxPreDriverCal2Pad2, 0, TxPrePNCmdAddrOr},
-    {BFAddrCmdDrvStren, BFCmdAddr1TxPreDriverCal2Pad1, BFAddrTxPreDriverCal2Pad4, 0, TxPrePNCmdAddrOr},
-    {BFCsOdtDrvStren, BFCmdAddr0TxPreDriverCalPad0, BFCmdAddr0TxPreDriverCalPad0, 8, TxPrePNCmdAddrOr},
-    {BFCkeDrvStren, BFAddrTxPreDriverCalPad0, BFAddrTxPreDriverCalPad0, 8, TxPrePNCmdAddrOr},
-    {BFAddrCmdDrvStren, BFCmdAddr1TxPreDriverCalPad0, BFCmdAddr1TxPreDriverCalPad0, 8, TxPrePNCmdAddrOr},
+    {.IndexBitField = BFCsOdtDrvStren, .StartTargetBitField = BFCmdAddr0TxPreDriverCal2Pad1, .EndTargetBitField = BFCmdAddr0TxPreDriverCal2Pad2, .ExtraValue = 0, .TxPrePN = TxPrePNCmdAddrOr},
+    {.IndexBitField = BFAddrCmdDrvStren, .StartTargetBitField = BFCmdAddr1TxPreDriverCal2Pad1, .EndTargetBitField = BFAddrTxPreDriverCal2Pad4, .ExtraValue = 0, .TxPrePN = TxPrePNCmdAddrOr},
+    {.IndexBitField = BFCsOdtDrvStren, .StartTargetBitField = BFCmdAddr0TxPreDriverCalPad0, .EndTargetBitField = BFCmdAddr0TxPreDriverCalPad0, .ExtraValue = 8, .TxPrePN = TxPrePNCmdAddrOr},
+    {.IndexBitField = BFCkeDrvStren, .StartTargetBitField = BFAddrTxPreDriverCalPad0, .EndTargetBitField = BFAddrTxPreDriverCalPad0, .ExtraValue = 8, .TxPrePN = TxPrePNCmdAddrOr},
+    {.IndexBitField = BFAddrCmdDrvStren, .StartTargetBitField = BFCmdAddr1TxPreDriverCalPad0, .EndTargetBitField = BFCmdAddr1TxPreDriverCalPad0, .ExtraValue = 8, .TxPrePN = TxPrePNCmdAddrOr},
     // 5. Program TxPreP/TxPreN for Clock according to Table 52 if VDDIO is 1.5V or Table 53 if 1.35V.
     //    A. Program D18F2x9C_x0D0F_2[2:0]02_dct[1:0]={1000b, TxPreP, TxPreN}.
-    {BFClkDrvStren, BFClock0TxPreDriverCalPad0, BFClock2TxPreDriverCalPad0, 8, TxPrePNClockOr}
+    {.IndexBitField = BFClkDrvStren, .StartTargetBitField = BFClock0TxPreDriverCalPad0, .EndTargetBitField = BFClock2TxPreDriverCalPad0, .ExtraValue = 8, .TxPrePN = TxPrePNClockOr}
   };
 
   BIT_FIELD_NAME CurrentBitField;

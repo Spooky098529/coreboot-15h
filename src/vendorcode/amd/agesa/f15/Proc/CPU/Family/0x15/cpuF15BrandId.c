@@ -114,7 +114,7 @@ CONST CHAR8 ROMDATA str_Unprogrammed_Sample[48] = "AMD Unprogrammed Engineering 
  */
 CONST CPU_F15_EXCEPTION_BRAND ROMDATA CpuF15ExceptionBrandIdString[] =
 {
-  {str_Exception_0}
+  {.Stringstart = str_Exception_0}
 };
 
 /*---------------------------------------------------------------------------------------*/

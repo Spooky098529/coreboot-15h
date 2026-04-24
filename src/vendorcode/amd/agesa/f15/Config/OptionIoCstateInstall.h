@@ -126,8 +126,8 @@ CONST CPU_SPECIFIC_SERVICES_XLAT ROMDATA IoCstateFamilyServiceArray[] =
 
 CONST CPU_FAMILY_SUPPORT_TABLE ROMDATA IoCstateFamilyServiceTable =
 {
-  (sizeof (IoCstateFamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
-  &IoCstateFamilyServiceArray[0]
+  .Elements = (sizeof (IoCstateFamilyServiceArray) / sizeof (CPU_SPECIFIC_SERVICES_XLAT)),
+  .FamilyTable = &IoCstateFamilyServiceArray[0]
 };
 
 #endif // _OPTION_IO_CSTATE_INSTALL_H_

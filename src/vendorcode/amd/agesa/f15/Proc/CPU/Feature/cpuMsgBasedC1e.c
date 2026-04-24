@@ -205,8 +205,8 @@ EnableMsgC1eOnSocket (
 
 CONST CPU_FEATURE_DESCRIPTOR ROMDATA CpuFeatureMsgBasedC1e =
 {
-  MsgBasedC1e,
-  (CPU_FEAT_AFTER_PM_INIT | CPU_FEAT_AFTER_POST_MTRR_SYNC | CPU_FEAT_AFTER_RESUME_MTRR_SYNC),
-  IsMsgBasedC1eFeatureEnabled,
-  InitializeMsgBasedC1eFeature
+  .Feature = MsgBasedC1e,
+  .EntryPoint = (CPU_FEAT_AFTER_PM_INIT | CPU_FEAT_AFTER_POST_MTRR_SYNC | CPU_FEAT_AFTER_RESUME_MTRR_SYNC),
+  .IsEnabled = IsMsgBasedC1eFeatureEnabled,
+  .InitializeFeature = InitializeMsgBasedC1eFeature
 };
