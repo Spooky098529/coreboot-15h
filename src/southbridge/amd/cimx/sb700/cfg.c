@@ -108,7 +108,7 @@ void sb700_cimx_config(AMDSBCFG *sb_config)
 
 	/* SATA */
 	sb_config->SataController = 1;
-	sb_config->SataClass = CONFIG_SATA_CONTROLLER_MODE; //0 native, 1 raid, 2 ahci
+	sb_config->SataClass = CONFIG_SB700_SATA_MODE;
 	sb_config->SataSmbus = 0;
 	sb_config->SataAggrLinkPmCap = 1;
 	sb_config->SataPortMultCap = 1;

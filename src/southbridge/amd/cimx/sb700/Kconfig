@@ -22,17 +22,57 @@ config SOUTHBRIDGE_AMD_CIMX_SB700
 	select HAVE_CF9_RESET_PREPARE
 
 if SOUTHBRIDGE_AMD_CIMX_SB700
-config SATA_CONTROLLER_MODE
-	hex
-	default 0x0
+
+config ENABLE_SB_CIMX_DEBUGGER
+	bool "Enable CIMx Debugging"
+	default n
 	help
-		0x0 = Native IDE mode.
-		0x1 = RAID mode.
-		0x2 = AHCI mode.
-		0x3 = Legacy IDE mode.
-		0x4 = IDE->AHCI mode.
-		0x5 = AHCI mode as 7804 ID (AMD driver).
-		0x6 = IDE->AHCI mode as 7804 ID (AMD driver).
+	  This option enables the AMD CIMX debugger and redirects it to the coreboot console.
+
+	  Warning: Only enable this option when debuging or tracing AMD CIMX code.
+
+choice
+	prompt "SATA Controller Mode"
+	default SB700_SATA_NATIVE_IDE
+
+config SB700_SATA_NATIVE_IDE
+	bool "Native"
+
+config SB700_SATA_RAID
+	bool "RAID"
+
+config SB700_SATA_AHCI
+	bool "AHCI"
+
+config SB700_SATA_LEGACY_IDE
+	bool "Legacy IDE"
+
+config SB700_SATA_IDE_TO_AHCI
+	bool "IDE -> AHCI"
+
+config SB700_SATA_AHCI_AMD
+	bool "AHCI, AMD driver"
+
+config SB700_SATA_IDE_TO_AHCI_AMD
+	bool "IDE -> AHCI, AMD driver"
+
+endchoice
+
+config SB700_SATA_MODE
+	hex
+	default 0x00 if SB700_SATA_NATIVE_IDE
+	default 0x01 if SB700_SATA_RAID
+	default 0x02 if SB700_SATA_AHCI
+	default 0x03 if SB700_SATA_LEGACY_IDE
+	default 0x04 if SB700_SATA_IDE_TO_AHCI
+	default 0x05 if SB700_SATA_AHCI_AMD
+	default 0x06 if SB700_SATA_IDE_TO_AHCI_AMD
+
+config SB700_SATA_HIDE_UNUSED_PORTS
+	bool "Hide unused SATA ports"
+	default y
+	help
+	  Hide unconnected SATA ports from the OS to cut polling overhead.
 
 config PCIB_ENABLE
 	bool
@@ -58,19 +98,5 @@ config HPET_MIN_TICKS
 config BOOTBLOCK_SOUTHBRIDGE_INIT
 	string
 	default "southbridge/amd/cimx/sb700/bootblock.c"
-
-config SB700_SATA_HIDE_UNUSED_PORTS
-	bool "Hide unused SATA ports"
-	default y
-	help
-	  Hide unconnected SATA ports from the OS to cut polling overhead.
-
-config ENABLE_SB_CIMX_DEBUGGER
-	bool "Enable CIMx Debugging"
-	default n
-	help
-	  This option enables the AMD CIMX debugger and redirects it to the coreboot console.
-
-	  Warning: Only enable this option when debuging or tracing AMD CIMX code.
 
 endif #SOUTHBRIDGE_AMD_CIMX_SB700
