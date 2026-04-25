@@ -33,7 +33,7 @@ config ENABLE_SB_CIMX_DEBUGGER
 
 choice
 	prompt "SATA Controller Mode"
-	default SB700_SATA_NATIVE_IDE
+	default SB700_SATA_AHCI
 
 config SB700_SATA_NATIVE_IDE
 	bool "Native"
