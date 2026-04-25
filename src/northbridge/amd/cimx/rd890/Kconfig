@@ -41,21 +41,41 @@ config PCIEXP_L1_SUB_STATE
 	bool
 	default n
 
-config RD890_PCIE_ASPM
-	int "PCIe ASPM mode for NB ports (0=off, 2=L1, 3=L0s+L1)"
-	default 2
+choice
+	prompt "PCIe ASPM Support"
+	default RD890_PCIE_ASPM_L1
 	help
 	  ASPM mode for RD890 NB PCIe ports. CIMx negotiates with each
-	  endpoint and only enables modes both sides support.
+	  endpoint and only enables modes both sides support. ASPM may
+	  be enabled at boot by coreboot (see Devices) or by the OS.
 
-	  0 = Disabled
-	  1 = L0s only
-	  2 = L1 only (good power/compatibility balance)
-	  3 = L0s and L1
-	  4 = L0s downstream only
-	  5 = L0s downstream only and L1
+config RD890_PCIE_ASPM_DISABLED
+	bool "Disabled"
 
-	  PLL power-off in L1 activates automatically when the endpoint's
-	  L1 exit latency tolerance allows it.
+config RD890_PCIE_ASPM_L0S
+	bool "L0s"
+
+config RD890_PCIE_ASPM_L1
+	bool "L1, balanced"
+
+config RD890_PCIE_ASPM_L0S_AND_L1
+	bool "L0s and L1"
+
+config RD890_PCIE_ASPM_L0S_DOWNSTREAM
+	bool "L0s downstream"
+
+config RD890_PCIE_ASPM_L0S_DOWNSTREAM_AND_L1
+	bool "L0s downstream and L1"
+
+endchoice
+
+config RD890_PCIE_ASPM_MODE
+	hex
+	default 0x00 if RD890_PCIE_ASPM_DISABLED
+	default 0x01 if RD890_PCIE_ASPM_L0S
+	default 0x02 if RD890_PCIE_ASPM_L1
+	default 0x03 if RD890_PCIE_ASPM_L0S_AND_L1
+	default 0x04 if RD890_PCIE_ASPM_L0S_DOWNSTREAM
+	default 0x05 if RD890_PCIE_ASPM_L0S_DOWNSTREAM_AND_L1
 
 endif # NORTHBRIDGE_AMD_CIMX_RD890

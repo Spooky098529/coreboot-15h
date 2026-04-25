@@ -365,21 +365,15 @@ static void rd890_init(void *chip_info) {
 	 * PciePreTrainingInit skips PcieLibCplBufferAllocation() for any core
 	 * with this flag OFF, so force the flag ON so the buffers are set up.
          * Other cores seem to have this enabled by default.
-         * TODO: Potentially make this conditional on NB revision, if it
-         * causes problems for northbridges which don't have GPP3b (SR5650?)
 	 */
 	pcie_cfg[nb_index].CoreSetting[3].CplBufferAllocation = ON;
 
 	{
-		uint8_t aspm = rd890_info->port_aspm;
-		if (!aspm)
-			aspm = CONFIG_RD890_PCIE_ASPM;
-
 		for (i = MIN_PORT_ID; i <= MAX_PORT_ID; i++) {
 			if ((rd890_info->port_enable & (1 << i)) != 0) {
 				pcie_cfg[nb_index].PortConfiguration[i].PortPresent = ON;
 				pcie_cfg[nb_index].PortConfiguration[i].PortLinkMode = PcieLinkModeGen2;
-				pcie_cfg[nb_index].PortConfiguration[i].PortAspm = aspm;
+				pcie_cfg[nb_index].PortConfiguration[i].PortAspm = CONFIG_RD890_PCIE_ASPM_MODE;
 			}
 		}
 	}
