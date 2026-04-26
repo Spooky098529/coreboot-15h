@@ -26,6 +26,8 @@
 #include <northbridge/amd/agesa/agesawrapper.h>
 #include <northbridge/amd/agesa/agesa_helper.h>
 #include <northbridge/amd/agesa/family15/reset_test.h>
+#include <southbridge/amd/cimx/sb700/gpio.h>
+#include <device/pci_ops.h>
 #include <nb_cimx.h>
 #include <sb_cimx.h>
 #include <cbmem.h>
@@ -37,6 +39,24 @@
  * PS2 keyboard and mouse are on SUPERIO_WINBOND_W83627DHG, port 0x2E
  */
 #define SIO_PORT 0x164e
+
+static void setup_gpio(void) {
+	uint16_t v16;
+
+	sb700_gpio_config(53, OUTPUT);
+	sb700_gpio_config(54, OUTPUT);
+	sb700_gpio_config(56, OUTPUT);
+	sb700_gpio_config(57, OUTPUT);
+	sb700_gpio_config(61, OUTPUT);
+	sb700_gpio_config(62, OUTPUT);
+
+	sb700_gpio_set(53, HIGH);
+	sb700_gpio_set(54, HIGH);
+
+	v16 = pci_read_config16(PCI_DEV(0, 0x14, 3), 0xC8);
+	v16 &= ~(BIT0|BIT1|BIT4|BIT5|BIT8);
+	pci_write_config16(PCI_DEV(0, 0x14, 3), 0xC8, v16);
+}
 
 void cache_as_ram_main(unsigned long bist, unsigned long cpu_init_detectedx)
 {
@@ -97,6 +117,8 @@ void cache_as_ram_main(unsigned long bist, unsigned long cpu_init_detectedx)
 		board_reset();
 		die("After soft_reset - shouldn't see this message!!!\n");
 	}
+
+	setup_gpio();
 
 	post_code(0x40);
 	agesawrapper_amdinitpost();
