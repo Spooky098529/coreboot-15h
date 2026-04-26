@@ -142,8 +142,8 @@ typedef struct acpi_table_header {
 	u32  asl_compiler_revision;  /* ASL compiler revision number */
 } __packed acpi_header_t;
 
-/* A maximum number of 32 ACPI tables ought to be enough for now. */
-#define MAX_ACPI_TABLES 32
+/* A maximum number of 48 ACPI tables ought to be enough for now. */
+#define MAX_ACPI_TABLES 48
 
 /* RSDT (Root System Description Table) */
 typedef struct acpi_rsdt {

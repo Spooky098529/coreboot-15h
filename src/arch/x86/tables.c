@@ -89,7 +89,7 @@ static unsigned long write_acpi_table(unsigned long rom_table_end)
 {
 	unsigned long high_table_pointer;
 
-#define MAX_ACPI_SIZE (144 * 1024)
+#define MAX_ACPI_SIZE (160 * 1024)
 
 	post_code(0x9c);
 
