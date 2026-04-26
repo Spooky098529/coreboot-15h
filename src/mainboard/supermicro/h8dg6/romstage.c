@@ -26,6 +26,8 @@
 #include <northbridge/amd/agesa/agesawrapper.h>
 #include <northbridge/amd/agesa/agesa_helper.h>
 #include <northbridge/amd/agesa/family15/reset_test.h>
+#include <southbridge/amd/cimx/sb700/gpio.h>
+#include <device/pci_ops.h>
 #include <nb_cimx.h>
 #include <sb_cimx.h>
 #include <cbmem.h>
@@ -37,6 +39,40 @@
  * PS2 keyboard and mouse are on SUPERIO_WINBOND_W83627DHG, port 0x2E
  */
 #define SIO_PORT 0x164e
+
+static void setup_gpio_early(void) {
+	uint16_t v16;
+
+	sb700_gpio_config(49, OUTPUT);
+	sb700_gpio_config(51, TRISTATE);
+	sb700_gpio_config(53, OUTPUT);
+	sb700_gpio_config(54, OUTPUT);
+	sb700_gpio_config(56, OUTPUT);
+	sb700_gpio_config(57, OUTPUT);
+
+	sb700_gpio_set(49, HIGH);
+
+	/* IMC_GPIO[0,1,4,5,8] are Outputs */
+	v16 = pci_read_config16(PCI_DEV(0, 0x14, 3), 0xC8);
+	v16 &= ~(BIT0|BIT1|BIT4|BIT5|BIT8);
+	pci_write_config16(PCI_DEV(0, 0x14, 3), 0xC8, v16);
+
+	/* Set IMC_GPIO[8] HIGH */
+	/* Enables SPD access */
+	v16 = pci_read_config16(PCI_DEV(0, 0x14, 3), 0xC6);
+	v16 |= (BIT8);
+	pci_write_config16(PCI_DEV(0, 0x14, 3), 0xC6, v16);
+}
+
+static void setup_gpio_late(void){
+	uint16_t v16;
+
+	/* Set IMC_GPIO[8] LOW */
+	/* Enables HWMON access */
+	v16 = pci_read_config16(PCI_DEV(0, 0x14, 3), 0xC6);
+	v16 &= ~(BIT8);
+	pci_write_config16(PCI_DEV(0, 0x14, 3), 0xC6, v16);
+}
 
 void cache_as_ram_main(unsigned long bist, unsigned long cpu_init_detectedx)
 {
@@ -93,6 +129,8 @@ void cache_as_ram_main(unsigned long bist, unsigned long cpu_init_detectedx)
 		die("After soft_reset - shouldn't see this message!!!\n");
 	}
 
+	setup_gpio_early();
+
 	post_code(0x40);
 	agesawrapper_amdinitpost();
 
@@ -101,6 +139,8 @@ void cache_as_ram_main(unsigned long bist, unsigned long cpu_init_detectedx)
 	post_code(0x41);
 	agesawrapper_amdinitenv();
 	post_code(0x42);
+
+	setup_gpio_late();
 
 	post_code(0x50);
 	printk(BIOS_DEBUG, "Disabling cache as RAM ");
