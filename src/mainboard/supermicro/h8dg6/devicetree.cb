@@ -243,6 +243,9 @@ chip northbridge/amd/agesa/family15/root_complex
 							device pnp 5e on #hwm
 							end
 						end #drivers/i2c/w83795
+						chip drivers/pc80/tpm
+							device pnp 4e.0 on end          # TPM module
+						end
 					end # LPC
 					device pci 14.4 on
 						device pci 4.0 on end # onboard VGA
