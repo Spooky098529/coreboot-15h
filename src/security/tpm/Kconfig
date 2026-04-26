@@ -41,6 +41,7 @@ config USER_TPM1
 	depends on MAINBOARD_HAS_LPC_TPM || \
 		   MAINBOARD_HAS_I2C_TPM_GENERIC || \
 		   MAINBOARD_HAS_I2C_TPM_ATMEL
+	select VBOOT_LIB
 	help
 		Enable this option to enable TPM 1.0 - 1.2 support in coreboot.
 
