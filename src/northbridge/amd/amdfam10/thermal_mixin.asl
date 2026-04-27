@@ -37,24 +37,8 @@
  *
  *   K10TEMP_CRT_TENTHS_K
  *     Critical (emergency shutdown) temperature in tenths of Kelvin.
- *     When defined, this board-specific threshold is used directly
- *     instead of deriving _CRT from F3x64[HtcTmpLmt].  Boards that
- *     already have a calibrated SMBus-sensor zone (\_TZ.TZ00) can use
- *     this to set the CPU-die sensor zone to a safe higher threshold
- *     that provides a secondary line of defence without conflicting
- *     with the primary SMBus zone.
  *     Example for 105°C:  #define K10TEMP_CRT_TENTHS_K  3782
- *
- *   K10TEMP_HOT_OFFSET
- *     Offset in tenths of Kelvin subtracted from _CRT to obtain _HOT.
- *     Default 100 (10°C).
- *     Example for 85°C hot when _CRT = 105°C:
- *       #define K10TEMP_HOT_OFFSET  200
  */
-
-#ifndef K10TEMP_HOT_OFFSET
-# define K10TEMP_HOT_OFFSET	200 /* 20°C below limit/CRT */
-#endif
 
 #define K10TEMP_KELVIN_OFFSET	2732
 #define K10TEMP_TLIMIT_OFFSET	520
@@ -91,16 +75,33 @@ ThermalZone (TZ00) {
 	}
 
 	Method (_CRT) {	/* Critical temp in tenths degree Kelvin. */
+		/* Critical triggers an OS-level emergency shutdown.
+		   Overrides at the board level can be set, but it's
+		   set to 105°C as a default value for now.
+		   TODO: Calculate this value with a ceiling of ~115C
+			 - which is the max reading value */
 #ifdef K10TEMP_CRT_TENTHS_K
-		/* Allow override of thermal zone critical temp */
+		/* Allow board override of thermal zone critical temp */
 		Return (K10TEMP_CRT_TENTHS_K)
 #else
-		/*
-		 * Calculate _CRT from hardware register F3x64[HtcTmpLmt].
+		Return (3782)	/* 105°C fallback: (0x6A * 5) + TLIMIT_OFFSET + KELVIN_OFFSET */
+#endif
+	}
+
+	Method (_HOT) {	/* Hot temp in tenths degree Kelvin, hardware-specific + offset */
+
+                /*
+		 * Calculate _HOT from hardware register F3x64[HtcTmpLmt].
 		 * If TLMT is zero the register wasn't programmed for this
-		 * board/CPU, so fall back to 105°C. This avoids false-positive
-		 * critical-temperature OS shutdowns but also allows
-		 * the tCaseMax/HtcTmpLmt to influence the value if known/set. 
+		 * board/CPU, so fall back to 85°C (CRT - 20).
+		 * This avoids false-positive critical-temperature OS shutdowns
+		 * but also allows the tCaseMax/HtcTmpLmt to influence the value
+		 * if set/read from the CPU registers. The actual value programmed
+		 * into this register can be influenced by vendorcode or
+		 * come directly from the boot CPU's register, as this value is
+		 * ideally CPU model dependant and roughly aligns with tCaseMax.
+                 * Should report HOT when the hardware is set to start throttling,
+                 * so the OS can also take corrective power-saving action.
 		 */
 		If (LNotEqual (TLMT, Zero)) {
 			Multiply (TLMT, 10, Local0)
@@ -108,11 +109,7 @@ ThermalZone (TZ00) {
 			Add (Local0, K10TEMP_TLIMIT_OFFSET, Local0)
 			Return (Add (Local0, K10TEMP_KELVIN_OFFSET))
 		}
-		Return (3782)	/* 105°C fallback: (0x6A * 5) + TLIMIT_OFFSET + KELVIN_OFFSET */
-#endif
-	}
 
-	Method (_HOT) {	/* Hot temp in tenths degree Kelvin. */
-		Return (Subtract (_CRT, K10TEMP_HOT_OFFSET))
+		Return (Subtract (_CRT, 200))
 	}
 }

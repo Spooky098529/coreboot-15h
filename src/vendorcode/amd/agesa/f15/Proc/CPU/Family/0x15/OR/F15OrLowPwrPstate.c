@@ -180,21 +180,27 @@ F15OrInitializeLowPwrPstate (
     ((PSTATE_MSR *) &LocalMsrRegister)->PsEnable = 0;
     LibAmdMsrWrite ((PS_REG_BASE + PstateMaxVal), &LocalMsrRegister, StdHeader);
 
-    // Step 9 --- If F3x64[HtcTmpLmt] == 0, write 7Fh to F3x64[HtcTmpLmt]
+    // Step 9 --- If F3x64[HtcTmpLmt] == 0, write to F3x64[HtcTmpLmt]
     // Step 10 --- Write 1b to F3x64[HtcEn]
     GetPciAddress (StdHeader, Socket, 0, &IntNode0PciAddress, &IgnoredSts);
     if (Core == 0) {
       IntNode0PciAddress.Address.Function = FUNC_3;
       IntNode0PciAddress.Address.Register = HTC_REG;
       LibAmdPciRead (AccessWidth32, IntNode0PciAddress, &PciData, StdHeader);
+      IDS_HDT_CONSOLE (MAIN_FLOW, "      Pre HtcEn = 0x%02X\n", ((HTC_REGISTER *) &PciData)->HtcEn);
+      IDS_HDT_CONSOLE (MAIN_FLOW, "      Pre HtcTmpLmt = %d C\n", ((((HTC_REGISTER *) &PciData)->HtcTmpLmt) >> 1) + 52);
+      IDS_HDT_CONSOLE (MAIN_FLOW, "      Pre HtcHystLmt = %d C\n", ((((HTC_REGISTER *) &PciData)->HtcHystLmt) >> 1));
+      IDS_HDT_CONSOLE (MAIN_FLOW, "      Pre HtcSlewSel = 0x%02X\n", ((HTC_REGISTER *) &PciData)->HtcSlewSel);
       ((HTC_REGISTER *) &PciData)->HtcEn = 1;
-      ((HTC_REGISTER *) &PciData)->HtcTmpLmt = 0x14; // Throttle at 62C
+      if (((HTC_REGISTER *) &PciData)->HtcTmpLmt == 0) {
+        ((HTC_REGISTER *) &PciData)->HtcTmpLmt = 0x5E; // Default throttle temp at 85C
+      }
       IDS_OPTION_HOOK (IDS_HTC_CTRL, &PciData, StdHeader);
       LibAmdPciWrite (AccessWidth32, IntNode0PciAddress, &PciData, StdHeader);
-      IDS_HDT_CONSOLE (MAIN_FLOW, "      HtcEn = 0x%02X\n", ((HTC_REGISTER *) &PciData)->HtcEn);
-      IDS_HDT_CONSOLE (MAIN_FLOW, "      HtcTmpLmt = %d C\n", ((((HTC_REGISTER *) &PciData)->HtcTmpLmt) >> 1) + 52);
-      IDS_HDT_CONSOLE (MAIN_FLOW, "      HtcHystLmt = %d C\n", ((((HTC_REGISTER *) &PciData)->HtcHystLmt) >> 1));
-      IDS_HDT_CONSOLE (MAIN_FLOW, "      HtcSlewSel = 0x%02X\n", ((HTC_REGISTER *) &PciData)->HtcSlewSel);
+      IDS_HDT_CONSOLE (MAIN_FLOW, "      Post HtcEn = 0x%02X\n", ((HTC_REGISTER *) &PciData)->HtcEn);
+      IDS_HDT_CONSOLE (MAIN_FLOW, "      Post HtcTmpLmt = %d C\n", ((((HTC_REGISTER *) &PciData)->HtcTmpLmt) >> 1) + 52);
+      IDS_HDT_CONSOLE (MAIN_FLOW, "      Post HtcHystLmt = %d C\n", ((((HTC_REGISTER *) &PciData)->HtcHystLmt) >> 1));
+      IDS_HDT_CONSOLE (MAIN_FLOW, "      Post HtcSlewSel = 0x%02X\n", ((HTC_REGISTER *) &PciData)->HtcSlewSel);
     }
 
     // Step 11 --- Write OriginalPstate to MSR_C001_0062[PstateCmd]
