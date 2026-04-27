@@ -35,6 +35,20 @@ struct southbridge_amd_cimx_sb800_config
 	u8  gpp_configuration;
 
 	/*
+	 * Bitmask of SB GPP ports on which ASPM must be permanently disabled.
+	 * Bit 0 = PORT1 (D15.0), bit 1 = PORT2 (D15.1),
+	 * bit 2 = PORT3 (D15.2), bit 3 = PORT4 (D15.3).
+	 *
+	 * Linux enables ASPM based on LnkCap even if firmware left it
+	 * disabled.  Set a bit here for any endpoint that malfunctions with
+	 * ASPM L1 active (e.g. ASMedia ASM1042 USB3 xHCI DMA corruption).
+	 * sb800_final() will clear LnkCap ASPMS, LnkCtl ASPMC/EN_CLK_PM on
+	 * the root port and its downstream endpoint(s), and clear any stale
+	 * PME_Status the endpoint carried across a warm reboot.
+	 */
+	u8  gpp_aspm_disable;
+
+	/*
 	 * SB800 IMC and fan control
 	 */
 

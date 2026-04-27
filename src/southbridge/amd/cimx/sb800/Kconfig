@@ -21,6 +21,12 @@ config SOUTHBRIDGE_AMD_CIMX_SB800
 	select AMD_SB_CIMX
 	select HAVE_CF9_RESET
 	select HAVE_CF9_RESET_PREPARE
+	# The SB800 azalia_ops.init points at azalia_audio_init() so
+	# the codec verb table from the mainboard's hda_verb.c gets
+	# written to the codec.  That function lives in
+	# src/device/azalia_device.c, which only builds when
+	# AZALIA_PLUGIN_SUPPORT is selected.
+	select AZALIA_PLUGIN_SUPPORT
 
 if SOUTHBRIDGE_AMD_CIMX_SB800
 config BOOTBLOCK_SOUTHBRIDGE_INIT
@@ -74,6 +80,40 @@ config SB800_SATA_MODE
 	default 0x0 if SB800_SATA_IDE
 	default 0x1 if SB800_SATA_RAID
 	default 0x2 if SB800_SATA_AHCI
+
+config SB800_SATA_CLK_AUTO_OFF
+	bool "SATA reference clock auto-off when idle (power saving)"
+	default n
+	help
+	  Sets sb_config->SataClkAutoOff so SATA reference clocks are gated
+	  when the link is idle.  Saves a small amount of idle power but
+	  has been observed to cause boot hangs on SB950 when a SATA device
+	  is connected at power-on; PHY bring-up races against clock
+	  re-gating.  Disable unless experimenting with power savings on a
+	  system that boots reliably without SATA devices at power-on.
+
+config SB800_SATA_PHY_PLL_SHUTDOWN
+	bool "SATA PHY PLL shutdown when idle (power saving)"
+	default n
+	help
+	  Power down the SATA PHY PLL when no devices are connected.
+	  Ported from the SB900 CIMx (RPR section on SATA PHY power
+	  management; same silicon as SB800/SB950).  Like CLK_AUTO_OFF
+	  this can cause boot hangs on SB950 when devices are attached at
+	  power-on.  Disabled by default.
+
+	  This sets SATA PCI Config REG87[6] (or REG87[6,7] on A11 silicon),
+	  and on A12+ also sets REG48[11], REG4C[31:26]=0x3F, REG84[31]=0.
+
+config SB800_USB_PHY_POWER_DOWN
+	bool "USB PHY power-down on disconnected ports (power saving)"
+	default n
+	help
+	  Sets sb_config->UsbPhyPowerDown so the USB PHY is powered down
+	  on ports with no connected device.  Saves a small amount of
+	  power but is incompatible with some keyboards/devices that
+	  generate noise on the line during enumeration.  Disabled by
+	  default.
 
 config SB_SUPERIO_HWM
 	bool

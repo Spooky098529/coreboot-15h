@@ -1661,6 +1661,7 @@ SB_MISC_REG34                   EQU     034h
 /*
 SB_MISC_REG40                   EQU     040h
 */
+#define SB_MISC_REG50           0x50         //  MiscCntrl2 (LPC A-Link cycle bypass)
 
 #define SB_MISC_REG80           0x80        /**< SB_MISC_REG80
                                    *   @par

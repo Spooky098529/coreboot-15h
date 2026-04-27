@@ -524,6 +524,32 @@ sataInitAfterPciEnum (
     SataPortMode >>= 2;
   }
   WritePCI (((SATA_BUS_DEV_FUN << 16) + SB_SATA_REG04), AccWidthUint8, &dbVar);
+
+#if CONFIG(SB800_SATA_PHY_PLL_SHUTDOWN)
+  // SATA PHY PLL Shutdown -- power down PHY PLL when idle (power saving).
+  // Ported from SB900 CIMx (same silicon as SB800/SB950).
+  // A12+ uses BIT6 only; A11 uses BIT6+BIT7.  SB950 is always A12+.
+  // Off by default: can cause boot hangs on SB950 when SATA devices
+  // are connected at power-on.  Enable via CONFIG_SB800_SATA_PHY_PLL_SHUTDOWN.
+  {
+    UINT8 revId = getRevisionID();
+    if (revId < 0x12) {
+      // A11: set BIT6+BIT7 in REG87
+      RWPCI (((SATA_BUS_DEV_FUN << 16) + SB_SATA_REG87), AccWidthUint8 | S3_SAVE, ~(BIT6 + BIT7), BIT6 + BIT7);
+    } else {
+      // A12+: set BIT6 only in REG87
+      RWPCI (((SATA_BUS_DEV_FUN << 16) + SB_SATA_REG87), AccWidthUint8 | S3_SAVE, ~BIT6, BIT6);
+      // A12+ additional register settings (from SB900 CIMx)
+      // SATA PCI Config 0x4C[31:26] = 111111b
+      RWPCI (((SATA_BUS_DEV_FUN << 16) + 0x4C), AccWidthUint32 | S3_SAVE, (UINT32)(~(0x3f << 26)), (UINT32)(0x3f << 26));
+      // SATA PCI Config 0x48[11] = 1
+      RWPCI (((SATA_BUS_DEV_FUN << 16) + SB_SATA_REG48), AccWidthUint32 | S3_SAVE, (UINT32)(~(0x01 << 11)), (UINT32)(0x01 << 11));
+      // SATA PCI Config 0x84[31] = 0
+      RWPCI (((SATA_BUS_DEV_FUN << 16) + SB_SATA_REG84), AccWidthUint32 | S3_SAVE, (UINT32)(~(0x01 << 31)), (UINT32)(0x00 << 31));
+    }
+  }
+#endif
+
   //Disable write access to pci header, pm capabilities
   RWPCI (((SATA_BUS_DEV_FUN << 16) + SB_SATA_REG40), AccWidthUint8 | S3_SAVE, ~BIT0, 0);
 }

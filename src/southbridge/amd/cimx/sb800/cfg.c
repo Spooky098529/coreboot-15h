@@ -78,11 +78,13 @@ void sb800_cimx_config(AMDSBCFG *sb_config)
 	sb_config->SbUsbPll = 0;
 	/* CG PLL multiplier for USB Rx 1.1 mode (0=disable, 1=enable) */
 	sb_config->UsbRxMode = USB_RX_MODE;
+	sb_config->UsbPhyPowerDown = CONFIG(SB800_USB_PHY_POWER_DOWN) ? 1 : 0;
 
 	/* SATA */
 	sb_config->SataClass = SATA_MODE;
 	sb_config->SataIdeMode = SATA_IDE_MODE;
 	sb_config->SataPortMultCap = SATA_PORT_MULT_CAP_RESERVED;
+	sb_config->SataClkAutoOff = CONFIG(SB800_SATA_CLK_AUTO_OFF) ? 1 : 0;
 	sb_config->SATAMODE.SataMode.SataController = SATA_CONTROLLER;
 	sb_config->SATAMODE.SataMode.SataIdeCombMdPriSecOpt = 0; //0 -IDE as primary, 1 -IDE as secondary.
 								//TODO: set to secondary not take effect.

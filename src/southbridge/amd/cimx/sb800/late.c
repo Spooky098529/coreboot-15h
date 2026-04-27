@@ -20,6 +20,7 @@
 #include <device/pci.h>		/* device_operations */
 #include <device/pci_ops.h>
 #include <device/pci_ids.h>
+#include <device/azalia_device.h>
 #include <bootstate.h>
 #include <arch/ioapic.h>
 #include <device/smbus.h>	/* smbus_bus_operations */
@@ -80,11 +81,19 @@ static u32 sb800_callout_entry(u32 func, u32 data, void *config)
 #define HOST_PORTS_IMPL           0x0c /* bitmap of implemented ports */
 
 #define HOST_CTL_AHCI_EN          (1 << 31) /* AHCI enabled */
+#define HOST_CTL_IE               (1 << 1)  /* global HBA interrupt enable */
+
+#define AHCI_PORT_REG_BASE        0x100     /* first port register block */
+#define AHCI_PORT_SIZE            0x80      /* each port block is 0x80 bytes */
+#define AHCI_PORT_PxIS            0x10      /* port interrupt status (W1C) */
+#define AHCI_PORT_PxSERR          0x30      /* port serial ATA error (W1C) */
+
 static void ahci_raid_init(struct device *dev)
 {
 	u8 irq = 0;
 	void *bar5;
 	u32 caps, ports, val;
+	int port;
 
 	val = pci_read_config16(dev, PCI_CLASS_DEVICE);
 	if (val == PCI_CLASS_STORAGE_SATA) {
@@ -97,7 +106,7 @@ static void ahci_raid_init(struct device *dev)
 	}
 
 	irq = pci_read_config8(dev, PCI_INTERRUPT_LINE);
-	bar5 = (void *)(uintptr_t)pci_read_config32(dev, PCI_BASE_ADDRESS_5);
+	bar5 = (void *)(uintptr_t)(pci_read_config32(dev, PCI_BASE_ADDRESS_5) & ~0xf);
 	printk(BIOS_DEBUG, "IOMEM base: %p, IRQ: 0x%X\n", bar5, irq);
 
 	caps = read32(bar5 + HOST_CAP);
@@ -110,6 +119,18 @@ static void ahci_raid_init(struct device *dev)
 	if (!(val & HOST_CTL_AHCI_EN)) {
 		write32(bar5 + HOST_CTL, val | HOST_CTL_AHCI_EN);
 	}
+
+	/* disable GHC.IE then wipe PxIS/PxSERR; CIMx can leave these set */
+	val = read32(bar5 + HOST_CTL);
+	write32(bar5 + HOST_CTL, val & ~HOST_CTL_IE);
+	for (port = 0; port < 32; port++) {
+		if (!(ports & (1u << port)))
+			continue;
+		void *pbase = bar5 + AHCI_PORT_REG_BASE + port * AHCI_PORT_SIZE;
+		write32(pbase + AHCI_PORT_PxIS,   0xFFFFFFFF);
+		write32(pbase + AHCI_PORT_PxSERR, 0xFFFFFFFF);
+	}
+	write32(bar5 + HOST_IRQ_STAT, 0xFFFFFFFF);
 
 	dev->command |= PCI_COMMAND_MASTER;
 	pci_write_config8(dev, PCI_COMMAND, dev->command);
@@ -204,11 +225,112 @@ static const struct pci_driver raid5_driver __pci_driver = {
 	.device = PCI_DEVICE_ID_ATI_SB800_SATA_RAID5,
 };
 
-static struct device_operations usb_ops = {
+/* SB900-era EHCI improvements and A12+/A13+ errata; SB800 CIMx predates these */
+static void usb_ehci_init(struct device *dev)
+{
+	u32 bar;
+	u8 rev = pci_s_read_config8(PCI_DEV(0, 0x14, 0), 0x08);
+
+	bar = pci_read_config32(dev, PCI_BASE_ADDRESS_0) & ~0x0f;
+	if (!bar)
+		return;
+
+	printk(BIOS_DEBUG, "SB800 EHCI %s: post-CIMx fixups (BAR=%08x rev=%02x)\n",
+	       dev_path(dev), bar, rev);
+
+	/* Enable Dynamic Clock Gating (BIT12) + Global Clock Gating (BIT14).
+	 * The SB800 CIMx clears BIT12; the SB900 CIMx sets both. */
+	write32((void *)(uintptr_t)(bar + SB_EHCI_BAR_REGBC),
+		(read32((void *)(uintptr_t)(bar + SB_EHCI_BAR_REGBC))
+		 & ~(BIT12 | BIT14)) | BIT12 | BIT14);
+
+	/* PHY enhancement (SB900 sets BIT5 at BAR+0xB0) */
+	write32((void *)(uintptr_t)(bar + SB_EHCI_BAR_REGB0),
+		read32((void *)(uintptr_t)(bar + SB_EHCI_BAR_REGB0)) | BIT5);
+
+	/* L1 Early Exit + PING response fix + empty-list detection.
+	 * SB800 CIMx only sets BIT0 at PCI 0x54; SB900 uses 0x26b. */
+	pci_write_config32(dev, SB_EHCI_REG54,
+		(pci_read_config32(dev, SB_EHCI_REG54) & ~0x7ff) | 0x26b);
+
+	/* A12+ errata (SB900 CIMx: RPR 7.25, 7.30) */
+	if (rev >= 0x12) {
+		/* RPR 7.25: LS wake from S3/S4/S5 when EHCI owns port */
+		pci_write_config32(dev, SB_EHCI_REG54,
+			pci_read_config32(dev, SB_EHCI_REG54) | BIT4);
+		/* RPR 7.30: lMU hang near end of uFrame 7 */
+		pci_write_config32(dev, SB_EHCI_REG54,
+			pci_read_config32(dev, SB_EHCI_REG54) | BIT11);
+	}
+
+	/* A13+ errata (SB900 CIMx) */
+	if (rev >= 0x13) {
+		/* SB02674 (RPR 7.25): framelist read delay */
+		pci_write_config16(dev, SB_EHCI_REG54,
+			(pci_read_config16(dev, SB_EHCI_REG54) & 0x5FFF)
+			| BIT13 | BIT15);
+		/* SB02684 (RPR 7.26): timing compensation */
+		pci_write_config16(dev, SB_EHCI_REG50 + 2,
+			pci_read_config16(dev, SB_EHCI_REG50 + 2) | BIT3);
+		/* SB02687 (RPR 7.26): controller stability */
+		pci_write_config16(dev, SB_EHCI_REG54 + 2,
+			(pci_read_config16(dev, SB_EHCI_REG54 + 2) & 0xFFFC)
+			| BIT0 | BIT1);
+		/* SB02700 (RPR 7.28): data transfer enhancement */
+		pci_write_config16(dev, SB_EHCI_REG54 + 2,
+			(pci_read_config16(dev, SB_EHCI_REG54 + 2) & 0xFFFB)
+			| BIT2);
+		/* SB02703 (RPR 7.29): frame synchronization */
+		pci_write_config16(dev, SB_EHCI_REG54 + 2,
+			(pci_read_config16(dev, SB_EHCI_REG54 + 2) & 0xFFF7)
+			| BIT3);
+	}
+}
+
+/* SB900-era OHCI clock gating and A12+ arbiter errata; SB800 CIMx predates these */
+static void usb_ohci_init(struct device *dev)
+{
+	u8 rev = pci_s_read_config8(PCI_DEV(0, 0x14, 0), 0x08);
+
+	printk(BIOS_DEBUG, "SB800 OHCI %s: post-CIMx fixups (rev=%02x)\n",
+	       dev_path(dev), rev);
+
+	/* L1 Early Exit + Enhanced Arbiter + Global Clock Gating.
+	 * The SB800 CIMx does not touch register 0x80 at all. */
+	pci_write_config32(dev, 0x80,
+		(pci_read_config32(dev, 0x80)
+		 & ~(BIT0 | BIT4 | BIT5 | BIT6 | BIT7))
+		| BIT0 | BIT4 | BIT7);
+
+	/* A12+ (RPR 7.21): enhanced arbiter mode + USB 1.1 false CRC fix */
+	if (rev >= 0x12) {
+		pci_write_config16(dev, 0x80,
+			(pci_read_config16(dev, 0x80) & ~(BIT4 | BIT5 | BIT8))
+			| BIT4 | BIT5 | BIT8);
+		/* RPR 7.23: USB 1.1 full-speed false CRC errors fix */
+		pci_write_config32(dev, 0x80,
+			pci_read_config32(dev, 0x80) | BIT10);
+	}
+
+	/* SOF Synchronization + Periodic List Advance (PCI 0x52 BIT3|BIT4) */
+	pci_write_config8(dev, 0x52,
+		pci_read_config8(dev, 0x52) | BIT3 | BIT4);
+}
+
+static struct device_operations usb_ehci_ops = {
 	.read_resources = pci_ehci_read_resources,
 	.set_resources = pci_dev_set_resources,
 	.enable_resources = pci_dev_enable_resources,
-	.init = 0,
+	.init = usb_ehci_init,
+	.scan_bus = 0,
+	.ops_pci = &lops_pci,
+};
+
+static struct device_operations usb_ohci_ops = {
+	.read_resources = pci_ehci_read_resources,
+	.set_resources = pci_dev_set_resources,
+	.enable_resources = pci_dev_enable_resources,
+	.init = usb_ohci_init,
 	.scan_bus = 0,
 	.ops_pci = &lops_pci,
 };
@@ -217,19 +339,19 @@ static struct device_operations usb_ops = {
  * The pci id of usb ctrl 0 and 1 are the same.
  */
 static const struct pci_driver usb_ohci123_driver __pci_driver = {
-	.ops = &usb_ops,
+	.ops = &usb_ohci_ops,
 	.vendor = PCI_VENDOR_ID_ATI,
 	.device = PCI_DEVICE_ID_ATI_SB800_USB_18_0, /* OHCI-USB1, OHCI-USB2, OHCI-USB3 */
 };
 
 static const struct pci_driver usb_ehci123_driver __pci_driver = {
-	.ops = &usb_ops,
+	.ops = &usb_ehci_ops,
 	.vendor = PCI_VENDOR_ID_ATI,
 	.device = PCI_DEVICE_ID_ATI_SB800_USB_18_2, /* EHCI-USB1, EHCI-USB2, EHCI-USB3 */
 };
 
 static const struct pci_driver usb_ohci4_driver __pci_driver = {
-	.ops = &usb_ops,
+	.ops = &usb_ohci_ops,
 	.vendor = PCI_VENDOR_ID_ATI,
 	.device = PCI_DEVICE_ID_ATI_SB800_USB_20_5, /* OHCI-USB4 */
 };
@@ -239,7 +361,8 @@ static struct device_operations azalia_ops = {
 	.read_resources = pci_dev_read_resources,
 	.set_resources = pci_dev_set_resources,
 	.enable_resources = pci_dev_enable_resources,
-	.init = 0,
+	/* SB800 CIMx omitted this; without it the codec verb table is never written */
+	.init = azalia_audio_init,
 	.scan_bus = 0,
 	.ops_pci = &lops_pci,
 };
@@ -266,6 +389,30 @@ static const struct pci_driver gec_driver __pci_driver = {
 	.device = PCI_DEVICE_ID_ATI_SB800_GEC,
 };
 
+/* use pci_scan_bridge to prevent pciexp_enable_aspm running on SB GPP ports */
+static struct device_operations sb_pcie_ops = {
+	.read_resources   = pci_bus_read_resources,
+	.set_resources    = pci_dev_set_resources,
+	.enable_resources = pci_bus_enable_resources,
+	.init             = 0,
+	.scan_bus         = pci_scan_bridge,
+	.ops_pci          = &lops_pci,
+};
+
+static const unsigned short sb_pcie_devs[] = {
+	PCI_DEVICE_ID_ATI_SB800_PCIEA,
+	PCI_DEVICE_ID_ATI_SB800_PCIEB,
+	PCI_DEVICE_ID_ATI_SB800_PCIEC,
+	PCI_DEVICE_ID_ATI_SB800_PCIED,
+	0
+};
+
+static const struct pci_driver sb_pcie_driver __pci_driver = {
+	.ops = &sb_pcie_ops,
+	.vendor = PCI_VENDOR_ID_ATI,
+	.devices = sb_pcie_devs,
+};
+
 /**
  *  Fill build time defaults.
  */
@@ -277,6 +424,46 @@ static void sb800_init(void *chip_info)
 
 	/* Initially enable all GPP ports 0 to 3 */
 	abcfg_reg(0xc0, 0x01FF, 0x0F4);
+
+	/* USB power management enhancement from SB900 CIMx (PMIO 0xF0 BIT12) */
+	RWMEM(ACPI_MMIO_BASE + PMIO_BASE + SB_PMIOA_REGF0,
+	      AccWidthUint16, 0xFFFF, BIT12);
+
+	/* A13+ errata from SB900 CIMx; same silicon, SB800 CIMx predates these */
+	{
+		u8 rev = pci_s_read_config8(PCI_DEV(0, 0x14, 0), 0x08);
+
+		if (rev >= 0x13) {
+			printk(BIOS_DEBUG, "SB800: applying A13+ errata fixups (rev=%02x)\n", rev);
+
+			/* SB02643: USB FidVid power management */
+			RWMEM(ACPI_MMIO_BASE + PMIO_BASE + SB_PMIOA_REGB4,
+			      AccWidthUint8, ~BIT7, BIT7);
+
+			/* SB02686 (RPR 7.27): USB gating control */
+			RWMEM(ACPI_MMIO_BASE + PMIO_BASE + SB_PMIOA_REGED,
+			      AccWidthUint8, ~BIT2, BIT2);
+
+			/* RPR 2.14: Enable delayed SLP_S3/S5 to the board */
+			RWMEM(ACPI_MMIO_BASE + PMIO_BASE + SB_PMIOA_REGC0 + 1,
+			      AccWidthUint8, 0xFF, BIT2);
+
+			/* RPR 2.15: Enable C-State wake-up before warm reset */
+			RWMEM(ACPI_MMIO_BASE + PMIO_BASE + SB_PMIOA_REGBE,
+			      AccWidthUint8, ~BIT0, BIT0);
+
+			/* RPR 3.16: Disable LPC A-Link cycle bypass */
+			RWMEM(ACPI_MMIO_BASE + MISC_BASE + SB_MISC_REG50,
+			      AccWidthUint32, ~BIT19, BIT19);
+
+			/* RPR 3.5: Enable LPCCLK0 power-down (when IMC disabled).
+			 * OBS261463: skip if IMC is enabled (fan control). */
+			if (!CONFIG(SB800_IMC_FWM)) {
+				RWMEM(ACPI_MMIO_BASE + PMIO_BASE + SB_PMIOA_REGD2,
+				      AccWidthUint8, ~BIT3, BIT3);
+			}
+		}
+	}
 }
 
 /**
@@ -467,8 +654,81 @@ static void sb800_enable(struct device *dev)
 	}
 }
 
+/* clear ASPM on GPP ports in gpp_aspm_disable: root+endpoint LnkCtl, LnkCap ASPMS, stale PME_Status */
+static void sb800_final(void *chip_info)
+{
+	struct southbridge_amd_cimx_sb800_config *sb = chip_info;
+	static const u8 gpp_devfns[4] = {
+		SB_PCIE_PORT1_DEVFN,
+		SB_PCIE_PORT2_DEVFN,
+		SB_PCIE_PORT3_DEVFN,
+		SB_PCIE_PORT4_DEVFN,
+	};
+	unsigned int i;
+
+	if (!sb || !sb->gpp_aspm_disable)
+		return;
+
+	for (i = 0; i < ARRAY_SIZE(gpp_devfns); i++) {
+		struct device *rp;
+		u16 cap;
+		u32 lnkcap;
+		u16 lnkctl;
+
+		if (!(sb->gpp_aspm_disable & (1 << i)))
+			continue;
+
+		rp = dev_find_slot(0, gpp_devfns[i]);
+		if (!rp || !rp->enabled)
+			continue;
+		cap = pci_find_capability(rp, PCI_CAP_ID_PCIE);
+		if (!cap)
+			continue;
+
+		lnkcap = pci_read_config32(rp, cap + PCI_EXP_LNKCAP);
+		if (lnkcap & PCI_EXP_LNKCAP_ASPMS) {
+			pci_write_config32(rp, cap + PCI_EXP_LNKCAP,
+					   lnkcap & ~PCI_EXP_LNKCAP_ASPMS);
+			printk(BIOS_INFO,
+			       "sb800: GPP%u: cleared LnkCap ASPM (was 0x%08x)\n",
+			       i + 1, lnkcap);
+		}
+
+		lnkctl = pci_read_config16(rp, cap + PCI_EXP_LNKCTL);
+		if (lnkctl & (0x3 | PCI_EXP_EN_CLK_PM))
+			pci_write_config16(rp, cap + PCI_EXP_LNKCTL,
+					   lnkctl & ~(0x3 | PCI_EXP_EN_CLK_PM));
+
+		if (!rp->link_list)
+			continue;
+		struct device *ep;
+		for (ep = rp->link_list->children; ep; ep = ep->sibling) {
+			u16 ep_cap = pci_find_capability(ep, PCI_CAP_ID_PCIE);
+			if (ep_cap) {
+				u16 ep_lnkctl = pci_read_config16(ep, ep_cap + PCI_EXP_LNKCTL);
+				if (ep_lnkctl & (0x3 | PCI_EXP_EN_CLK_PM)) {
+					pci_write_config16(ep, ep_cap + PCI_EXP_LNKCTL,
+						ep_lnkctl & ~(0x3 | PCI_EXP_EN_CLK_PM));
+					printk(BIOS_INFO,
+					       "sb800: GPP%u: cleared %s LnkCtl ASPM/CLK_PM"
+					       " (was 0x%04x)\n",
+					       i + 1, dev_path(ep), ep_lnkctl);
+				}
+			}
+
+			u8 pm_cap = pci_find_capability(ep, PCI_CAP_ID_PM);
+			if (pm_cap) {
+				u16 pmcsr = pci_read_config16(ep, pm_cap + PCI_PM_CTRL);
+				if (pmcsr & PCI_PM_CTRL_PME_STATUS)
+					pci_write_config16(ep, pm_cap + PCI_PM_CTRL, pmcsr);
+			}
+		}
+	}
+}
+
 struct chip_operations southbridge_amd_cimx_sb800_ops = {
 	CHIP_NAME("ATI SB800")
 	.init = sb800_init,
 	.enable_dev = sb800_enable,
+	.final = sb800_final,
 };
