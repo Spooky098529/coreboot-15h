@@ -63,6 +63,11 @@
 #define BLDCFG_AMD_PSTATE_CAP_VALUE 0
 #define BLDCFG_USE_HT_ASSIST FALSE
 
+/* CC6 deep C-state: gates power to idle cores via IO-based entry.
+ * 0x840 sits above the ACPI PM block (0x800-0x83F). */
+#define BLDCFG_PLATFORM_CSTATE_MODE CStateModeC6
+#define BLDCFG_PLATFORM_CSTATE_IO_BASE_ADDRESS 0x840
+
 /*** IO Configuration ***/
 
 #define BLDCFG_PLAT_NUM_IO_APICS 3
@@ -99,7 +104,7 @@ CONST AP_MTRR_SETTINGS ROMDATA board_ap_mtrr_list[] = {
 
 #define BLDCFG_VRM_CURRENT_LIMIT     120000
 #define BLDCFG_VRM_INRUSH_CURRENT_LIMIT 0
-#define BLDCFG_VRM_LOW_POWER_THRESHOLD  0
+#define BLDCFG_VRM_LOW_POWER_THRESHOLD  24000
 
 /****** AMD Platform Install ******/
 #include "ScorpiusInstall.h"

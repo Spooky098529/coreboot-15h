@@ -14,8 +14,8 @@ chip northbridge/amd/agesa/family15/root_complex
 					device pci 0.2 off end # IOMMU
 					device pci 2.0 on end # GFX port 0 - PCIEX16_1 - Primary GPU slot
 					device pci 3.0 off end # GFX port 1 - not wired
-					device pci 4.0 on end # GPP port 0 - Onboard SATA
-					device pci 5.0 on end # GPP port 1 - Onboard SATA
+					device pci 4.0 on end # GPP port 0 - ASMedia ASM1061 SATA [1b21:0612] #1 (SATA6G_E1, white)
+					device pci 5.0 on end # GPP port 1 - ASMedia ASM1061 SATA [1b21:0612] #2 (SATA6G_E2, white)
 					device pci 6.0 off end # GPP port 2 - not wired
 					device pci 7.0 off end # GPP port 3 - not wired
 					device pci 9.0 on end # GPP port 4 - ASMedia Technology ASM1042 USB 3.0 Host [1b21:1042]
@@ -29,6 +29,12 @@ chip northbridge/amd/agesa/family15/root_complex
 					register "gpp2_configuration" = "0" # AAAA: PCIEX16_3 is x16 (port 11). Can be split with PCIEX16_4.
 					register "gpp3a_configuration" = "6" # GPP111111: all six GPP3a ports used as x1
 					register "port_enable" = "0x2E34"
+
+					# ASM1061 (ports 4,5) and ASM1042 (port 9) are incompatible with PCIe L1
+					register "port_aspm_disable" = "(1 << 4) | (1 << 5) | (1 << 9)"
+
+					# port 9 (ASM1042) shows correctable errors at Gen2; marginal board trace
+					register "port_gen1" = "(1 << 9)"
 				end # cimx/rd890
 				chip southbridge/amd/cimx/sb800
 					device pci 11.0 on end # SATA (AHCI, 6 ports)
@@ -58,31 +64,28 @@ chip northbridge/amd/agesa/family15/root_complex
 					device pci 14.2 on end # HD Audio
 					device pci 14.3 on # LPC bridge
 						chip superio/ite/it8721f # ITE IT8721F
-							# Use all 8 voltage inputs (VIN0-VIN7)
-							register "ec.vin_mask"            = "VIN_ALL"
+							# VIN0=+12V, VIN1=+5V, VIN2=VCORE, VIN3=+3.3V, VIN5=VDDA; others unwired
+							register "ec.vin_mask"            = "VIN0 | VIN1 | VIN2 | VIN3 | VIN5"
 
-							# Temperature sensors
-							# TMPIN1 (p90, CPU socket NTC)
-							# TMPIN2 (p89, MB ambient NTC) NTC thermistor OT2 (MB ambient)
-							# TMPIN3 (p88, NB die temp diode)
+							# TMPIN3 unused on R2.0; leave unconfigured to avoid open-input alarm
 							register "TMPIN1.mode"            = "THERMAL_RESISTOR"
 							register "TMPIN2.mode"            = "THERMAL_RESISTOR"
-							register "TMPIN3.mode"            = "THERMAL_RESISTOR"
 
-							# CPU fan control for FAN1/CPU_FAN
-							# "SmartGuardian" mode driven by TMPIN1/CPU temp
+							# FAN1=CPU_FAN+CPU_OPT (PWM1), FAN2=CHA_FAN1 (PWM2), FAN3=CHA_FAN2 (PWM3)
+							# FAN4=CHA_FAN3, FAN5=CHA_FAN4 (both mirror PWM3 via reg 0x0B)
+
+							# FAN1 / CPU_FAN: 30% at 70°C, 100% at 100°C, stops below 60°C
 							register "FAN1.mode"              = "FAN_SMART_AUTOMATIC"
 							register "FAN1.smart.tmpin"       = "1"
-							register "FAN1.smart.tmp_off"     = "40"
-							register "FAN1.smart.tmp_start"   = "50"
-							register "FAN1.smart.tmp_full"    = "85"
+							register "FAN1.smart.tmp_off"     = "60"
+							register "FAN1.smart.tmp_start"   = "70"
+							register "FAN1.smart.tmp_full"    = "100"
 							register "FAN1.smart.tmp_delta"   = "2"
 							register "FAN1.smart.pwm_start"   = "30"
-							register "FAN1.smart.slope"       = "1"
-							register "FAN1.smart.smoothing"   = "1"
+							register "FAN1.smart.slope"       = "6"
+							register "FAN1.smart.smoothing"   = "0"
 
-							# Optional CPU fan control for FAN2/CPU_OPT
-							# "SmartGuardian" mode driven by TMPIN2/MB temp
+							# FAN2 / CHA_FAN1: 30% at 45°C, 100% at 75°C
 							register "FAN2.mode"              = "FAN_SMART_AUTOMATIC"
 							register "FAN2.smart.tmpin"       = "2"
 							register "FAN2.smart.tmp_off"     = "35"
@@ -90,11 +93,10 @@ chip northbridge/amd/agesa/family15/root_complex
 							register "FAN2.smart.tmp_full"    = "75"
 							register "FAN2.smart.tmp_delta"   = "2"
 							register "FAN2.smart.pwm_start"   = "30"
-							register "FAN2.smart.slope"       = "1"
-							register "FAN2.smart.smoothing"   = "1"
+							register "FAN2.smart.slope"       = "6"
+							register "FAN2.smart.smoothing"   = "0"
 
-							# Chassis fan control for FAN3/CHA_FAN
-							# "SmartGuardian" mode driven by TMPIN2/MB temp
+							# FAN3 / CHA_FAN2: same curve as FAN2
 							register "FAN3.mode"              = "FAN_SMART_AUTOMATIC"
 							register "FAN3.smart.tmpin"       = "2"
 							register "FAN3.smart.tmp_off"     = "35"
@@ -102,10 +104,14 @@ chip northbridge/amd/agesa/family15/root_complex
 							register "FAN3.smart.tmp_full"    = "75"
 							register "FAN3.smart.tmp_delta"   = "2"
 							register "FAN3.smart.pwm_start"   = "30"
-							register "FAN3.smart.slope"       = "1"
-							register "FAN3.smart.smoothing"   = "1"
+							register "FAN3.smart.slope"       = "6"
+							register "FAN3.smart.smoothing"   = "0"
 
-							# FAN_CTL4/CHA_FAN2 is not configured for this model
+							# FAN4/FAN5 mirror PWM3 (no independent channel); pin-mux unlocked in romstage
+							register "FAN4.mode"              = "FAN_MODE_ON"
+							register "FAN4.pwm_source"        = "3"
+							register "FAN5.mode"              = "FAN_MODE_ON"
+							register "FAN5.pwm_source"        = "3"
 
 							device pnp 2e.0 off end # FDC - no floppy drive
 							device pnp 2e.1 on
@@ -134,11 +140,13 @@ chip northbridge/amd/agesa/family15/root_complex
 					device pci 14.4 on end # PCI bridge
 					device pci 15.0 on end # SB PCIe 0 - PCIEX1_1 Slot
 					device pci 15.1 on end # SB PCIe 1 - Realtek RTL8111/8168 Gigabit Ethernet [10ec:8168]
-					device pci 15.2 on end # SB PCIe 2 - ASMedia Technology ASM1042 USB 3.0 Host [1b21:1042]
-					device pci 15.3 on end # SB PCIe 3 - ASMedia Technology ASM1042 USB 3.0 Host [1b21:1042]
+					device pci 15.2 on end # SB PCIe 2 - ASMedia ASM1042 USB 3.0 [1b21:1042] (see gpp_aspm_disable)
+					device pci 15.3 on end # SB PCIe 3 - ASMedia ASM1042 USB 3.0 [1b21:1042] (see gpp_aspm_disable)
 
 					register "gpp_configuration" = "4" # PCIe GPP lane config 1:1:1:1
 					register "boot_switch_sata_ide" = "0" # 0=SATA primary, 1=IDE primary
+					# D15.2 and D15.3 carry ASM1042 USB3; incompatible with PCIe L1
+					register "gpp_aspm_disable" = "(1 << 2) | (1 << 3)"
 				end # southbridge/amd/cimx/sb800
 			end # D18F0
 			device pci 18.1 on end

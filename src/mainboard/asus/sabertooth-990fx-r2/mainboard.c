@@ -15,24 +15,14 @@
 #include <southbridge/amd/cimx/sb800/gpio_oem.h>
 #include <southbridge/amd/cimx/sb800/pci_devs.h>
 #include <northbridge/amd/agesa/family15/pci_devs.h>
-
-/* SB GPP ASPM - default disabled
-   TODO: Connect this with ASPM configuration and test,
-         when testing devices behind the SB GPP did
-         not seem to work correctly with ASPM */
-#define SB_GPP_PORT1_ASPM 0 /* cap=3 active=0 */
-#define SB_GPP_PORT2_ASPM 0 /* cap=3 active=0 */
-#define SB_GPP_PORT3_ASPM 0 /* cap=3 active=0 */
-#define SB_GPP_PORT4_ASPM 0 /* cap=3 active=0 */
-
-/* A-Link / GPP PHY PLL power-down
-   TODO: Test if enabling this saves power
-         without causing a-link latency */
-#define ALINK_PHY_PLL_POWER_DOWN FALSE
-#define GPP_PHY_PLL_POWER_DOWN FALSE
-
-/* NB-side A-Link ASPM off, see above TODO */
-#define NB_SB_LINK_ASPM 0 /* 0=off, 1=L0s, 2=L1, 3=L0s+L1 */
+#include "ec.h"
+#include "vrm_asp1000c.h"
+#if CONFIG(BOARD_VRM_ASP0911)
+#include "vrm_asp0911.h"
+#endif
+#if CONFIG(BOARD_VRM_DIAG)
+#include "vrm_diag.h"
+#endif
 
 /*
  * PIC interrupt routing table.
@@ -222,9 +212,8 @@ static void sb800_gpio_dump_all(void)
  *
  *   GPIO61 (ball AB18, AGPIO61/SATA_IS0# alt fn 2): 2X16_SW - output.
  *   GPIO62 (ball AH21, AGPIO62/SATA_IS1# alt fn 2): 2X16_SW - output.
- *     The vendor BIOS drives both HIGH (reg 0xAA) in all configurations.
- *     (single GPU, 2-GPU, and fully populated).  LOW selects an alternate
- *     GPP2 lane topology for PCIEX16_3; Warns if LOW, shouldn't happen.
+ *     HIGH keeps GPP2 in the default lane config; LOW selects an
+ *     alternate topology for PCIEX16_3 (not supported here).
  *
  * Physical slot -> NB port mapping:
  *   PCIEX16_1 -> NB port  2 (dev 02.0, GPP1, x16 cap)
@@ -238,24 +227,10 @@ static void sb800_gpio_probe_slot_mux(void)
 	u8 iomux59, iomux61, iomux62;
 
 	/*
-	 * Switches GPIO59/61/62 to GPIO function (iomux=2),
-         * which allows reading current values.
-	 * The power-on default is iomux=0, which makes
-	 * FCH_GPIO() read ops unreliable.
-         * The vendor BIOS uses iomux=2 for all
-	 * three.
-	 *
-	 * GPIO61/62 (2X16_SW) control the GPP2 core lane mux.
-         * They are set high in romstage to avoid SATA_IS0#/IS1# being driven,
-	 * but we reconfigure them here make sure the register is set up
-         * in the correct way so we can read and log.
-	 * Value 0x2A (bits 5,3,1: pull-up enable, input-enable, output-config).
-	 *
-	 * GPIO59 (2X4_SENSE) is just an input.  Its iomux is switched to 2
-	 * so the sense bit is readable; no write to FCH_GPIO(59) is
-	 * needed as it's only used to tell which cards are inserted
-         * so the correct switching can be performed.
-         * TODO: Actually implement the switching.
+	 * Switch GPIO59/61/62 to GPIO function (iomux=2) so FCH_GPIO() reads
+	 * are reliable; power-on default iomux=0 leaves them on alternate fns.
+	 * GPIO61/62 (2X16_SW) are set HIGH to keep GPP2 in the default lane
+	 * config; LOW would select an alternate topology for PCIEX16_3.
 	 */
 	FCH_IOMUX(59) = 2;
 	FCH_IOMUX(61) = 2;
@@ -281,8 +256,6 @@ static void sb800_gpio_probe_slot_mux(void)
 
 	/*
 	 * GPIO59: 2X4_SENSE - LOW means PCIEx16_4 slot is populated.
-	 * The vendor BIOS also adjusts PIRQC/PIRQH routing when this is LOW
-	 * (PIRQC<->PIRQH swap observed between populated and empty configs).
 	 */
 	if (!(gpio59 >> 7))
 		printk(BIOS_INFO,
@@ -292,10 +265,9 @@ static void sb800_gpio_probe_slot_mux(void)
 		       "sabertooth: GPIO59 2X4_SENSE=H -> PCIEx16_4 (NB port 10, dev 0a) empty\n");
 
 	/*
-	 * GPIO61/62: 2X16_SW - vendor BIOS drives both high in all observed
-	 * configurations.  If low at coreboot boot, the GPP2 core (PCIEX16_3,
-	 * NB port 11, dev 0b) may be in an alternate lane configuration not
-	 * accounted for by the static devicetree; log a warning.
+	 * GPIO61/62: 2X16_SW - HIGH keeps GPP2 in the default lane config.
+	 * If LOW at boot, the GPP2 core (PCIEX16_3, NB port 11) may be in
+	 * an alternate lane config not accounted for in the devicetree.
 	 */
 	if (!(gpio61 >> 7) || !(gpio62 >> 7))
 		printk(BIOS_WARNING,
@@ -307,6 +279,62 @@ static void sb800_gpio_probe_slot_mux(void)
 		printk(BIOS_DEBUG,
 		       "sabertooth: 2X16_SW=H (GPIO61=H GPIO62=H) - "
 		       "GPP2 in normal mode, PCIEX16_3 routed to NB port 11\n");
+}
+
+/* ASUS board-specific SATA PHY calibration for ASM1061 */
+static void asm1061_phy_calibrate(struct device *dev)
+{
+	u32 val;
+
+	val = pci_read_config32(dev, 0xEC);
+	pci_write_config32(dev, 0xEC, val | (1 << 2));
+
+	pci_write_config32(dev, 0x2C, 0x84B71043);
+	pci_write_config8(dev, 0x0A, 0x06);
+
+	val = pci_read_config32(dev, 0xEC);
+	pci_write_config32(dev, 0xEC, val & ~(1 << 2));
+
+	printk(BIOS_INFO, "ASM1061 %s: SATA PHY calibration applied\n",
+	       dev_path(dev));
+}
+
+/* two-phase indirect PHY register write via PCI config 0xE0/0xF8/0xFC */
+static void asm1042_phy_write(struct device *dev, u32 phy_reg, u32 val)
+{
+	u32 bdf = ((u32)dev->bus->secondary << 8) | dev->path.pci.devfn;
+
+	pci_write_config32(dev, 0xE0, 0x02);
+	pci_write_config32(dev, 0xF8, bdf);
+	pci_write_config32(dev, 0xFC, phy_reg);
+	pci_write_config32(dev, 0xE0, 0x02);
+
+	pci_write_config32(dev, 0xF8, val);
+	pci_write_config32(dev, 0xFC, 0x00);
+	pci_write_config32(dev, 0xE0, 0x02);
+}
+
+/* board-specific xHCI PHY tuning for ASM1042; power-on defaults cause marginal signal integrity */
+static void asm1042_phy_tune(struct device *dev)
+{
+	asm1042_phy_write(dev, 0xF390, 0x1043);
+	asm1042_phy_write(dev, 0xF392, 0x8488);
+
+	printk(BIOS_INFO, "ASM1042 %s: xHCI PHY tuning applied\n",
+	       dev_path(dev));
+}
+
+static void mainboard_final(void *chip_info)
+{
+	struct device *dev;
+
+	dev = NULL;
+	while ((dev = dev_find_device(0x1b21, 0x0612, dev)) != NULL)
+		asm1061_phy_calibrate(dev);
+
+	dev = NULL;
+	while ((dev = dev_find_device(0x1b21, 0x1042, dev)) != NULL)
+		asm1042_phy_tune(dev);
 }
 
 static void pirq_setup(void)
@@ -376,9 +404,27 @@ static void mainboard_enable(struct device *dev)
 	 */
 	outb(0x00, 0x4D0);	/* primary PIC (IRQ0-7): all edge-triggered */
 	outb(0x0C, 0x4D1);	/* secondary PIC (IRQ8-15): IRQ10 + IRQ11 level-triggered */
+
+#if CONFIG(BOARD_VRM_REPORT)
+	{
+		int vcore_mv;
+		if (asp1000c_get_vcore_mv(&vcore_mv) == 0)
+			printk(BIOS_INFO,
+			       "VRM: CPU VCore = %d mV (ramstage)\n", vcore_mv);
+	}
+#endif
+
+#if CONFIG(BOARD_VRM_ASP0911)
+	asp0911_report();
+#endif
+
+#if CONFIG(BOARD_VRM_DIAG)
+	vrm_pmbus_diag();
+#endif
 }
 
 struct chip_operations mainboard_ops = {
 	CHIP_NAME("ASUS Sabertooth 990FX R2.0")
 	.enable_dev = mainboard_enable,
+	.final      = mainboard_final,
 };

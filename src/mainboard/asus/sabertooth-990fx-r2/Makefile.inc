@@ -14,8 +14,14 @@
 romstage-y += buildOpts.c
 romstage-y += BiosCallOuts.c
 romstage-y += OemCustomize.c
+romstage-y += ec.c
+romstage-y += vrm_asp1000c.c
 
 ramstage-y += buildOpts.c
 ramstage-y += BiosCallOuts.c
 ramstage-y += OemCustomize.c
+ramstage-y += ec.c
+ramstage-y += vrm_asp1000c.c
+ramstage-$(CONFIG_BOARD_VRM_ASP0911) += vrm_asp0911.c
+ramstage-$(CONFIG_BOARD_VRM_DIAG)   += vrm_diag.c
 

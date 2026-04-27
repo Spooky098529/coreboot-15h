@@ -16,6 +16,7 @@
 #include <cpu/x86/bist.h>
 #include <cpu/x86/lapic.h>
 #include <cpu/amd/car.h>
+#include <device/pnp_ops.h>
 #include <northbridge/amd/agesa/agesawrapper.h>
 #include <northbridge/amd/agesa/agesa_helper.h>
 #include <northbridge/amd/agesa/family15/reset_test.h>
@@ -26,13 +27,34 @@
 #include <cbmem.h>
 #include <vendorcode/amd/cimx/sb800/SB800.h>
 #include <southbridge/amd/cimx/sb800/gpio_oem.h>
+#include "ec.h"
+#include "vrm_asp1000c.h"
 
 /* Super I/O at 0x2e - confirmed via probe */
 /* Single COM1 header on board connected to superio */
 #define SERIAL_DEV PNP_DEV(0x2e, IT8721F_SP1)
+#define GPIO_DEV   PNP_DEV(0x2e, IT8721F_GPIO)
 
 /* Guard variable to prevent repeat hardware init */
 static int platform_init_done = 0;
+
+/* route FAN_TAC4/5 and FAN_OUT4/5 to EC in LDN-7 regs 0x25/0x27; chip default is GPIO */
+static void it8721f_unlock_fan45_pinmux(void)
+{
+	const pnp_devfn_t dev = GPIO_DEV;
+	u8 r;
+
+	pnp_enter_conf_state(dev);
+	pnp_set_logical_device(dev);
+
+	r = pnp_read_config(dev, 0x25);
+	pnp_write_config(dev, 0x25, r & ~((1 << 5) | (1 << 6)));
+
+	r = pnp_read_config(dev, 0x27);
+	pnp_write_config(dev, 0x27, r & ~((1 << 1) | (1 << 3)));
+
+	pnp_exit_conf_state(dev);
+}
 
 void cache_as_ram_main(unsigned long bist, unsigned long cpu_init_detectedx)
 {
@@ -69,9 +91,9 @@ void cache_as_ram_main(unsigned long bist, unsigned long cpu_init_detectedx)
 	 * TODO: Add logic to select the preferred port/lane allocation.
 	 */
 	FCH_IOMUX(61) = 2;   /* 2X16_SW: switch from SATA_IS0# to GPIO */
-	FCH_GPIO(61) = 0x2A; /* 2X16_SW: enable pull-up, match vendor BIOS */
+	FCH_GPIO(61) = 0x2A; /* 2X16_SW: pull-up HIGH, keep GPP2 in default lane config */
 	FCH_IOMUX(62) = 2;   /* 2X16_SW: switch from SATA_IS1# to GPIO */
-	FCH_GPIO(62) = 0x2A; /* 2X16_SW: enable pull-up, match vendor BIOS */
+	FCH_GPIO(62) = 0x2A; /* 2X16_SW: pull-up HIGH, keep GPP2 in default lane config */
 
 	post_code(0x31);
 
@@ -82,6 +104,10 @@ void cache_as_ram_main(unsigned long bist, unsigned long cpu_init_detectedx)
 	/* Enable Super I/O UART for early console */
 	ite_enable_serial(SERIAL_DEV, CONFIG_TTYS0_BASE);
 	post_code(0x34);
+
+	it8721f_unlock_fan45_pinmux();
+	kb3722q_ec_init();
+	asp1000c_init(); /* must run before AGESA changes CPU voltage */
 
 	console_init();
 
@@ -133,6 +159,18 @@ void cache_as_ram_main(unsigned long bist, unsigned long cpu_init_detectedx)
 	post_code(0x40);
 	printk(BIOS_DEBUG, "Calling agesawrapper_amdinitpost (memory init)\n");
 	agesawrapper_amdinitpost();
+
+	kb3722q_post_memory();
+
+#if CONFIG(BOARD_VRM_REPORT)
+	{
+		int vcore_mv;
+		if (asp1000c_get_vcore_mv(&vcore_mv) == 0)
+			printk(BIOS_INFO,
+			       "VRM: CPU VCore = %d mV (after AGESA)\n",
+			       vcore_mv);
+	}
+#endif
 
 	cbmem_initialize_empty();
 

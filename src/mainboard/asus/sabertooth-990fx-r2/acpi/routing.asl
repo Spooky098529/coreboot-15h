@@ -1,8 +1,7 @@
 /*
  * acpi/routing.asl -- PCI interrupt routing
  *
- * This differs from the vendor BIOS, and may need further tweaks
- * to ensure all devices are properly allocated to avoid polling fallbacks.
+ * May need further tweaks to ensure all devices avoid polling fallbacks.
  *
  * PR0  = PIC mode  (uses LNKA..LNKH link devices)
  * APR0 = APIC mode (direct GSI numbers, SB IOAPIC)

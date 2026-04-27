@@ -6,7 +6,12 @@ const u32 cim_verb_data[] = {
 	/* Codec 0: Realtek 0892 (vendor 0x10EC device 0x0892 rev 1.3 subsys 0x10438436) */
 	0x10EC0892,		/* Vendor/Device ID */
 	0x10438436,		/* Subsystem ID */
-	14,			/* Number of AZALIA_PIN_CFG entries */
+	15,			/* Number of entries (1 SUBVENDOR + 14 PIN_CFG) */
+	/* Program the codec's subsystem ID register so it advertises the
+	 * board's SSID rather than the chip's reset default.  Realtek's
+	 * Linux driver derives several BIOS hint bits (incl. its
+	 * "SKU not ready" check at NID 0x1D) from this. */
+	AZALIA_SUBVENDOR(0x0, 0x10438436),
 	/* NID 0x11  Port=Fixed/Int   Dev=SPDIF-Out    Conn=ATAPI         Color=Unknown  Loc=Int-Dig-Disp    Grp=4 Seq=0 */
 	AZALIA_PIN_CFG(0, 0x11, 0x99430140),
 	/* NID 0x12  Port=No-Conn     Dev=Speaker      Conn=1/8"          Color=Black    Loc=Ext-Rear        Grp=15 Seq=0 */

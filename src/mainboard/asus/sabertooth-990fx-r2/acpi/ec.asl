@@ -3,8 +3,12 @@
  *
  * ASUSTeK COMPUTER INC. SABERTOOTH 990FX R2.0
  *
- * This desktop board has no discret EC chip. The IT8721F
- * SuperIO at 0x2E provides keyboard, mouse, serial and hardware monitor.
+ * Note: the board has an ENE KB3722Q discrete EC (component O2U2) that
+ * masters the VRM SMBus and controls POST LEDs.  It uses ACPI EC ports
+ * 0x62/0x66 but is not OS-visible; all communication is firmware-internal.
+ * The IT8721F SuperIO at 0x2E provides keyboard, mouse, serial and
+ * hardware monitor functions exposed to the OS.
+ *
  * These ISA device declarations provide legacy compatibility for the
  * i8042 keyboard controller and PS/2 mouse on the LPC bus.
  */
