@@ -268,8 +268,7 @@ static void set_pcie_dereset(void *nbconfig) {
 
 	/*
 	 * HTIU_REGA8 controls PCIe PERST# deassert for all four byte lanes.
-	 * Hardware default is 0x28282828; vendor BIOS sets 0x6F6F6F6F.
-	 * Bits 0,1,2,6 (= 0x47) must be set in each byte to reach 0x6F.
+	 * Bits 0,1,2,6 (= 0x47) must be set in each byte; hardware default 0x28
 	 * Writing only 0x7 (bits 0-2 of byte 0) leaves bytes 1-3 at 0x28,
 	 * which keeps PERST# asserted for physical PCIe expansion slots.
          * The end effect is that without the correct mask here, we'll be
@@ -358,6 +357,13 @@ static void rd890_init(void *chip_info) {
 	for (i = 0; i <= MAX_CORE_ID; i++) {
 		pcie_cfg[nb_index].CoreSetting[i].SkipConfiguration = OFF;
 		pcie_cfg[nb_index].CoreSetting[i].PerformanceMode = OFF;
+#if CONFIG_RD890_PCIE_TX_DRIVE_STRENGTH != 2
+		/* Non-default TX drive strength: set ChannelType=0 (custom)
+		 * so the explicit drive strength value is used instead of
+		 * the Medium channel preset (which forces 22mA). */
+		pcie_cfg[nb_index].CoreSetting[i].ChannelType = 0;
+		pcie_cfg[nb_index].CoreSetting[i].TxDriveStrength = CONFIG_RD890_PCIE_TX_DRIVE_STRENGTH;
+#endif
 	}
 
 	/*
@@ -369,11 +375,27 @@ static void rd890_init(void *chip_info) {
 	pcie_cfg[nb_index].CoreSetting[3].CplBufferAllocation = ON;
 
 	{
+		u8 default_aspm = rd890_info->port_aspm;
+		if (!default_aspm)
+			default_aspm = CONFIG_RD890_PCIE_ASPM_MODE;
+
 		for (i = MIN_PORT_ID; i <= MAX_PORT_ID; i++) {
 			if ((rd890_info->port_enable & (1 << i)) != 0) {
+				u8 aspm = (rd890_info->port_aspm_disable & (1 << i))
+					? 0 /* Disabled */ : default_aspm;
+				u8 gen1 = !!(rd890_info->port_gen1 & (1 << i));
 				pcie_cfg[nb_index].PortConfiguration[i].PortPresent = ON;
-				pcie_cfg[nb_index].PortConfiguration[i].PortLinkMode = PcieLinkModeGen2;
-				pcie_cfg[nb_index].PortConfiguration[i].PortAspm = CONFIG_RD890_PCIE_ASPM_MODE;
+				pcie_cfg[nb_index].PortConfiguration[i].PortLinkMode =
+					gen1 ? PcieLinkModeGen1 : PcieLinkModeGen2;
+				pcie_cfg[nb_index].PortConfiguration[i].PortAspm = aspm;
+				if (rd890_info->port_aspm_disable & (1 << i))
+					printk(BIOS_INFO,
+					       "rd890: port %d ASPM forced disabled by devicetree\n",
+					       i);
+				if (gen1)
+					printk(BIOS_INFO,
+					       "rd890: port %d link speed forced to Gen1 by devicetree\n",
+					       i);
 			}
 		}
 	}
@@ -384,8 +406,69 @@ static void rd890_init(void *chip_info) {
 }
 
 static void rd890_final(void *chip_info) {
+	struct northbridge_amd_cimx_rd890_config *rd890_info = chip_info;
 	PCI_ADDR PciAddress;
 	uint32_t value;
+	int i;
+
+	/* clear ASPM on port_aspm_disable ports: root+endpoint LnkCtl, LnkCap ASPMS, stale PME_Status */
+	for (i = MIN_PORT_ID; i <= MAX_PORT_ID; i++) {
+		u16 cap;
+		u32 lnkcap;
+		u16 lnkctl;
+		struct device *dev;
+
+		if (!(rd890_info->port_aspm_disable & (1 << i)))
+			continue;
+		dev = dev_find_slot(0, PCI_DEVFN(i, 0));
+		if (!dev || !dev->enabled)
+			continue;
+		cap = pci_find_capability(dev, PCI_CAP_ID_PCIE);
+		if (!cap)
+			continue;
+
+		lnkcap = pci_read_config32(dev, cap + PCI_EXP_LNKCAP);
+		if (lnkcap & PCI_EXP_LNKCAP_ASPMS) {
+			pci_write_config32(dev, cap + PCI_EXP_LNKCAP,
+					   lnkcap & ~PCI_EXP_LNKCAP_ASPMS);
+			printk(BIOS_INFO,
+			       "rd890: port %d: cleared LnkCap ASPM (was 0x%08x)\n",
+			       i, lnkcap);
+		}
+
+		lnkctl = pci_read_config16(dev, cap + PCI_EXP_LNKCTL);
+		if (lnkctl & (0x3 | PCI_EXP_EN_CLK_PM))
+			pci_write_config16(dev, cap + PCI_EXP_LNKCTL,
+					   lnkctl & ~(0x3 | PCI_EXP_EN_CLK_PM));
+
+		if (dev->link_list) {
+			struct device *ep;
+			for (ep = dev->link_list->children; ep; ep = ep->sibling) {
+				u16 ep_cap = pci_find_capability(ep, PCI_CAP_ID_PCIE);
+				if (ep_cap) {
+					u16 ep_lnkctl = pci_read_config16(ep, ep_cap + PCI_EXP_LNKCTL);
+					if (ep_lnkctl & (0x3 | PCI_EXP_EN_CLK_PM)) {
+						pci_write_config16(ep, ep_cap + PCI_EXP_LNKCTL,
+							ep_lnkctl & ~(0x3 | PCI_EXP_EN_CLK_PM));
+						printk(BIOS_INFO,
+						       "rd890: port %d: cleared %s LnkCtl ASPM/CLK_PM (was 0x%04x)\n",
+						       i, dev_path(ep), ep_lnkctl);
+					}
+				}
+
+				u8 pm_cap = pci_find_capability(ep, PCI_CAP_ID_PM);
+				if (!pm_cap)
+					continue;
+				u16 pmcsr = pci_read_config16(ep, pm_cap + PCI_PM_CTRL);
+				if (pmcsr & PCI_PM_CTRL_PME_STATUS) {
+					pci_write_config16(ep, pm_cap + PCI_PM_CTRL, pmcsr); /* W1C */
+					printk(BIOS_INFO,
+					       "rd890: port %d: cleared PME_Status on %s\n",
+					       i, dev_path(ep));
+				}
+			}
+		}
+	}
 
 	if(RD890_TEST_THERMAL_SHUTDOWN) {
 		PciAddress.AddressValue = MAKE_SBDFO(0, 0, 0x18, 0x03, 0xE4);

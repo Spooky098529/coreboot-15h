@@ -78,4 +78,21 @@ config RD890_PCIE_ASPM_MODE
 	default 0x04 if RD890_PCIE_ASPM_L0S_DOWNSTREAM
 	default 0x05 if RD890_PCIE_ASPM_L0S_DOWNSTREAM_AND_L1
 
+config RD890_PCIE_TX_DRIVE_STRENGTH
+	int "PCIe TX drive strength (0=26mA, 1=20mA, 2=22mA, 3=24mA)"
+	default 2
+	help
+	  TX drive strength for RD890/990FX NB PCIe ports.  Lower drive
+	  strength saves power but may cause signal integrity issues on
+	  long PCIe traces.
+
+	  0 = 26mA (maximum, for long traces >18")
+	  1 = 20mA (minimum, for short traces <4.5")
+	  2 = 22mA (default, medium traces)
+	  3 = 24mA (slightly above default)
+
+	  The CIMx ChannelType preset (Medium) normally overrides this
+	  to 22mA.  This option sets ChannelType=0 (custom) so the
+	  explicit drive strength value is used instead.
+
 endif # NORTHBRIDGE_AMD_CIMX_RD890
