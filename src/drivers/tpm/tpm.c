@@ -6,7 +6,7 @@
 #include <security/tpm/tspi.h>
 
 #if CONFIG(HAVE_ACPI_RESUME)
-#include <acpi/acpi.h>
+#include <arch/acpi.h>
 #endif
 
 static void init_tpm_dev(void *unused)
