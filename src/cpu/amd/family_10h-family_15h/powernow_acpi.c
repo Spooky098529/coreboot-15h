@@ -292,9 +292,9 @@ void amd_generate_powernow(u32 pcontrol_blk, u8 plen, u8 onlyBSP)
 	else
 		pviModeFlag = 0;
 
-	/* Get PSmax's index */
+	/* PstateMaxVal is bits 6:4 per BKDG; a 7-bit mask on fam15h inflates the count on some silicon */
 	msr = rdmsr(PS_LIM_REG);
-	Pstate_max = (uint8_t) ((msr.lo >> PS_MAX_VAL_SHFT) & ((fam15h)?BIT_MASK_7:BIT_MASK_3));
+	Pstate_max = (uint8_t) ((msr.lo >> PS_MAX_VAL_SHFT) & BIT_MASK_3);
 
 	/* Determine if all enabled Pstates have the same fidvid */
 	uint8_t i;
@@ -308,14 +308,23 @@ void amd_generate_powernow(u32 pcontrol_blk, u8 plen, u8 onlyBSP)
 		}
 	}
 
-	/* Family 15h uses slightly different PSmax numbering */
+	/* fam15h PstateMaxVal is an inclusive index, not a count; cap to avoid overrunning Pstate_feq[] */
 	if (fam15h)
 		Pstate_max++;
+	if (Pstate_max > ARRAY_SIZE(Pstate_feq))
+		Pstate_max = ARRAY_SIZE(Pstate_feq);
 
 	/* Populate tables with all Pstate information */
 	for (Pstate_num = 0; Pstate_num < Pstate_max; Pstate_num++) {
 		/* Get power state information */
 		msr = rdmsr(PSTATE_0_MSR + Pstate_num + boost_count);
+
+		/* disabled P-states carry stale fid/did; stop here to avoid phantom _PSS entries */
+		if (!(msr.hi & PS_EN_MASK)) {
+			Pstate_max = Pstate_num;
+			break;
+		}
+
 		cpufid = (msr.lo & 0x3f);
 		cpudid = (msr.lo & 0x1c0) >> 6;
 		cpuvid = (msr.lo & 0xfe00) >> 9;
