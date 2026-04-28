@@ -60,9 +60,9 @@ static int codec_detect(u8 *base)
 	if (set_bits(base + 0x08, 1, 1) == -1)
 		goto no_codec;
 
-	/* clear STATESTS bits (BAR + 0xE)[2:0] */
+	/* clear STATESTS [3:0]: SB800/SB900 wire four SDIN pins, so 0x7 misses bit 3 */
 	reg32 = read32(base + 0x0E);
-	reg32 |= 7;
+	reg32 |= 0xf;
 	write32(base + 0x0E, reg32);
 
 	/* Wait for readback of register to
@@ -72,7 +72,7 @@ static int codec_detect(u8 *base)
 	do {
 		/* Wait 1ms based on BKDG wait time */
 		mdelay(1);
-		reg32 = read32(base + 0x0E);
+		reg32 = read32(base + 0x0E) & 0xf;
 	} while ((reg32 != 0) && --count);
 	/* Timeout occurred */
 	if (!count)
