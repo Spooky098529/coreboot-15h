@@ -79,6 +79,18 @@ struct ite_ec_fan_smartconfig {
 
 struct ite_ec_fan_config {
 	enum ite_ec_fan_mode mode;
+	/*
+	 * For chips with FEAT_FIVE_FANS (SUPERIO_ITE_ENV_CTRL_5FANS),
+	 * FAN_OUT4 and FAN_OUT5 don't have dedicated PWM generators --
+	 * they mirror one of the three real PWM channels (FAN_CTL1..3)
+	 * via the FAN_CTL{4,5}_SEL fields in PWM_SMOOTHING_FREQ
+	 * (reg 0x0b).  Set pwm_source to the PWM channel (1..3) that
+	 * should drive this fan output; 0 (default) leaves the field at
+	 * the chip's "no source" encoding so FAN_OUTx is held at the
+	 * inactive PWM polarity.  Ignored for fans 1..3 (each has its
+	 * own dedicated PWM generator) and on chips without 5FANS.
+	 */
+	u8 pwm_source;
 	struct ite_ec_fan_smartconfig smart;
 };
 

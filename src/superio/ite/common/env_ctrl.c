@@ -172,6 +172,38 @@ static void fan_smartconfig(const u16 base, const u8 fan,
 	pnp_write_hwm5_index(base, ITE_EC_FAN_CTL_PWM_AUTO(fan), pwm_auto);
 }
 
+/* FAN_OUT4/5 mirror one of three real PWM generators via reg 0x0B; chip default is "no source" */
+static void route_secondary_fan_pwm(const u16 base, const u8 fan,
+				    const u8 pwm_source)
+{
+	u8 reg, mask, val;
+
+	if (!CONFIG(SUPERIO_ITE_ENV_CTRL_5FANS))
+		return;
+	if (fan != 4 && fan != 5)
+		return;
+	if (pwm_source == 0)
+		return;	/* leave at chip default ("no source") */
+	if (pwm_source > 3) {
+		printk(BIOS_WARNING,
+		       "ITE EC: FAN%u pwm_source %u out of range (1..3)\n",
+		       fan, pwm_source);
+		return;
+	}
+
+	if (fan == 4) {
+		mask = ITE_EC_FAN_CTL4_SEL_NONE;	/* bits 1:0 */
+		val  = ITE_EC_FAN_CTL4_SEL(pwm_source);
+	} else {
+		mask = ITE_EC_FAN_CTL5_SEL_NONE;	/* bits 3:2 */
+		val  = ITE_EC_FAN_CTL5_SEL(pwm_source);
+	}
+
+	reg = pnp_read_hwm5_index(base, ITE_EC_FAN_PWM_SMOOTHING_FREQ);
+	reg = (reg & ~mask) | val;
+	pnp_write_hwm5_index(base, ITE_EC_FAN_PWM_SMOOTHING_FREQ, reg);
+}
+
 static void enable_fan(const u16 base, const u8 fan,
 		       const struct ite_ec_fan_config *const conf)
 {
@@ -215,6 +247,9 @@ static void enable_fan(const u16 base, const u8 fan,
 		else
 			reg &= ~ITE_EC_FAN_SEC_CTL_TAC_EN(fan);
 		pnp_write_hwm5_index(base, ITE_EC_FAN_SEC_CTL, reg);
+
+		if (conf->mode >= FAN_MODE_ON)
+			route_secondary_fan_pwm(base, fan, conf->pwm_source);
 	} else {
 		reg = pnp_read_hwm5_index(base, ITE_EC_FAN_MAIN_CTL);
 		if (conf->mode >= FAN_MODE_ON)
@@ -261,12 +296,20 @@ void ite_ec_init(const u16 base, const struct ite_ec_config *const conf)
 {
 	size_t i;
 
-	/* Configure 23.43kHz PWM active high output */
+	/* clear on warm reboot; retained EC register state can override SmartGuardian config */
+	pnp_write_hwm5_index(base, ITE_EC_FAN_MAIN_CTL, 0);
+
+	/* FANCTL_ONOFF chips keep clock bits in separate regs; don't write them into reg 0x14 */
+#if CONFIG(SUPERIO_ITE_ENV_CTRL_FANCTL_ONOFF)
+	pnp_write_hwm5_index(base, ITE_EC_FAN_CTL_MODE,
+		ITE_EC_FAN_CTL_MASTER_ON | ITE_EC_FAN_CTL_ALL_POL_HIGH);
+#else
 	u8 fan_ctl = pnp_read_hwm5_index(base, ITE_EC_FAN_CTL_MODE);
 	fan_ctl &= ~ITE_EC_FAN_PWM_CLOCK_MASK;
 	fan_ctl |= ITE_EC_FAN_PWM_DEFAULT_CLOCK;
 	fan_ctl |= ITE_EC_FAN_CTL_POLARITY_HIGH;
 	pnp_write_hwm5_index(base, ITE_EC_FAN_CTL_MODE, fan_ctl);
+#endif
 
 	/* Enable HWM if configured */
 	for (i = 0; i < ITE_EC_TMPIN_CNT; ++i)

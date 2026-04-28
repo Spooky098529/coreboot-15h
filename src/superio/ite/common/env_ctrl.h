@@ -90,8 +90,18 @@
 #define   ITE_EC_FAN_MAIN_CTL_COLL_FULL_SPEED	(1 << 3)
 #define   ITE_EC_FAN_MAIN_CTL_SMART(x)		(1 << ((x)-1))
 #define ITE_EC_FAN_CTL_MODE			0x14
-#define   ITE_EC_FAN_CTL_POLARITY_HIGH		(1 << 7)
-#define   ITE_EC_FAN_PWM_CLOCK_MASK		(7 << 4)
+/*
+ * Older IT87xx (pre-IT8721F): bit 7 = global polarity, bits [6:4] = PWM
+ * base-clock select, bits [2:0] = per-fan software on/off.
+ *
+ * IT8721F and later with FEAT_FANCTL_ONOFF: the register layout is
+ * completely different — bit 0 = master fan-controller enable, bits [5:1] =
+ * per-channel active-high polarity for PWM1..PWM5.  Polarity 0 = active-low
+ * (inverted), 1 = active-high (normal).  The PWM base-clock is controlled by
+ * register 0x0C upper bits (FAN1/3) and the FREQ2 register (FAN2), not here.
+ */
+#define   ITE_EC_FAN_CTL_POLARITY_HIGH		(1 << 7)  /* older chips only */
+#define   ITE_EC_FAN_PWM_CLOCK_MASK		(7 << 4)  /* older chips only */
 #define   ITE_EC_FAN_PWM_CLOCK_48MHZ		(0 << 4)
 #define   ITE_EC_FAN_PWM_CLOCK_24MHZ		(1 << 4)
 #define   ITE_EC_FAN_PWM_CLOCK_12MHZ		(2 << 4)
@@ -101,6 +111,9 @@
 #define   ITE_EC_FAN_PWM_CLOCK_1_5MHZ		(6 << 4)
 #define   ITE_EC_FAN_PWM_CLOCK_51KHZ		(7 << 4)
 #define   ITE_EC_FAN_PWM_MIN_DUTY_20		(1 << 3)
+/* FANCTL_ONOFF chips (IT8721F+): register 0x14 layout */
+#define   ITE_EC_FAN_CTL_MASTER_ON		(1 << 0)
+#define   ITE_EC_FAN_CTL_ALL_POL_HIGH		(0x1f << 1)  /* bits 5:1 */
 #define   ITE_EC_FAN_CTL_ON(x)			(1 << ((x)-1))
 
 #define ITE_EC_FAN_CTL_PWM_CONTROL(x)					\
@@ -109,13 +122,16 @@
 						: (0x15 + ((x)-1))	\
 	)
 
-#if CONFIG(SUPERIO_ITE_ENV_CTRL_5FANS)
-#define   ITE_EC_FAN_CTL_TEMPIN_MASK		(7 << 3)
-#define   ITE_EC_FAN_CTL_TEMPIN(x)		((((x)-1) & 7) << 3)
-#else
+/*
+ * TEMPIN field in the PWM_CONTROL register (0x15..0x17) selects which of
+ * the three temperature channels drives the SmartGuardian curve.  On all
+ * currently supported IT87xx chips (including IT8721F and IT8613E) this is
+ * a 2-bit field at bits [1:0]:  0 = TMPIN1, 1 = TMPIN2, 2 = TMPIN3.
+ * The 5FANS feature only adds extra tach inputs; it does not widen or
+ * relocate the TEMPIN field.
+ */
 #define   ITE_EC_FAN_CTL_TEMPIN_MASK		(3 << 0)
 #define   ITE_EC_FAN_CTL_TEMPIN(x)		(((x)-1) & 3)
-#endif
 
 #define   ITE_EC_FAN_CTL_PWM_MODE_SOFTWARE	(0 << 7)
 #define   ITE_EC_FAN_CTL_PWM_MODE_AUTOMATIC	(1 << 7)
