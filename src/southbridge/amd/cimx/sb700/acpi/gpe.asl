@@ -63,7 +63,7 @@ Scope(\_GPE) {	/* Start Scope GPE */
 	/*  Temp warning (TWarn) event  */
 	Method(_L09) {
 		//DBGO("\\_GPE\\_L09\n")
-		Notify (\_TZ.TZ00, 0x80)
+		Notify (\_SB.PCI0.NBF3.TZ00, 0x80)
 	}
 
 	/*  Reserved  */

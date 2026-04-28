@@ -193,7 +193,8 @@ F15OrInitializeLowPwrPstate (
       IDS_HDT_CONSOLE (MAIN_FLOW, "      Pre HtcSlewSel = 0x%02X\n", ((HTC_REGISTER *) &PciData)->HtcSlewSel);
       ((HTC_REGISTER *) &PciData)->HtcEn = 1;
       if (((HTC_REGISTER *) &PciData)->HtcTmpLmt == 0) {
-        ((HTC_REGISTER *) &PciData)->HtcTmpLmt = 0x5E; // Default throttle temp at 85C
+	// if unset, default throttle temp to lowest known value
+        ((HTC_REGISTER *) &PciData)->HtcTmpLmt = 0x24; // Opteron 6386 HtcTmpLmt, 70C
       }
       IDS_OPTION_HOOK (IDS_HTC_CTRL, &PciData, StdHeader);
       LibAmdPciWrite (AccessWidth32, IntNode0PciAddress, &PciData, StdHeader);

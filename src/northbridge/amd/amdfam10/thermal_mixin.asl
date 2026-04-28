@@ -76,15 +76,20 @@ ThermalZone (TZ00) {
 
 	Method (_CRT) {	/* Critical temp in tenths degree Kelvin. */
 		/* Critical triggers an OS-level emergency shutdown.
-		   Overrides at the board level can be set, but it's
-		   set to 105°C as a default value for now.
-		   TODO: Calculate this value with a ceiling of ~115C
-			 - which is the max reading value */
+		   Overrides at the board level can be set */
 #ifdef K10TEMP_CRT_TENTHS_K
 		/* Allow board override of thermal zone critical temp */
 		Return (K10TEMP_CRT_TENTHS_K)
 #else
-		Return (3782)	/* 105°C fallback: (0x6A * 5) + TLIMIT_OFFSET + KELVIN_OFFSET */
+		/* Shutdown 15C above throttle temperature */
+		Add (_HOT, 150, Local0)
+
+		/* Shutdown at 105C regardless of throttle temperature */
+		If (Local0 > 3782)
+		{
+		    Return (3782)
+		}
+		Return (Local0)
 #endif
 	}
 
@@ -93,23 +98,26 @@ ThermalZone (TZ00) {
                 /*
 		 * Calculate _HOT from hardware register F3x64[HtcTmpLmt].
 		 * If TLMT is zero the register wasn't programmed for this
-		 * board/CPU, so fall back to 85°C (CRT - 20).
+		 * board/CPU, fall back to the lowest known HtcTmpLmt value.
 		 * This avoids false-positive critical-temperature OS shutdowns
 		 * but also allows the tCaseMax/HtcTmpLmt to influence the value
 		 * if set/read from the CPU registers. The actual value programmed
 		 * into this register can be influenced by vendorcode or
 		 * come directly from the boot CPU's register, as this value is
-		 * ideally CPU model dependant and roughly aligns with tCaseMax.
+		 * ideally CPU model dependant and roughly scales with tCaseMax.
                  * Should report HOT when the hardware is set to start throttling,
                  * so the OS can also take corrective power-saving action.
 		 */
-		If (LNotEqual (TLMT, Zero)) {
-			Multiply (TLMT, 10, Local0)
+		Multiply (TLMT, 10, Local0)
+		If (LNotEqual (Local0, Zero)) {
 			ShiftRight (Local0, 1, Local0)
 			Add (Local0, K10TEMP_TLIMIT_OFFSET, Local0)
 			Return (Add (Local0, K10TEMP_KELVIN_OFFSET))
 		}
 
-		Return (Subtract (_CRT, 200))
+		/* Use the Lowest known HtcTmpLmt as a fallback:
+		 * 70C for Opteron 6386
+		 */
+		Return (3432)
 	}
 }
