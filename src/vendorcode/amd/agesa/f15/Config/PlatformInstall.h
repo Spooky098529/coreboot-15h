@@ -2320,7 +2320,7 @@ BUILD_OPT_CFG UserOptions = {
   //Build Configuration Area
   .CfgPciMmioAddress = CFG_PCI_MMIO_BASE,
   .CfgPciMmioSize = CFG_PCI_MMIO_SIZE,
-  .MaxVrmType = {
+  .CfgPlatVrmCfg = {
     // CoreVrm
     {
       CFG_VRM_CURRENT_LIMIT,              // VrmCurrentLimit
