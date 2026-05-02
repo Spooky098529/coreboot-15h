@@ -40,6 +40,9 @@
  */
 #define SIO_PORT 0x164e
 
+#define MB_TEMP_MAX	55 // degrees celsius
+#define MB_HTC_MAX	(((MB_TEMP_MAX - 52) << 1) & 0x7F)
+
 static void setup_gpio(void) {
 	uint16_t v16;
 
@@ -60,6 +63,7 @@ static void setup_gpio(void) {
 
 void cache_as_ram_main(unsigned long bist, unsigned long cpu_init_detectedx)
 {
+	u32 htctmplmt;
 	u32 val;
 
 	/* Must come first to enable PCI MMCONF. */
@@ -119,6 +123,16 @@ void cache_as_ram_main(unsigned long bist, unsigned long cpu_init_detectedx)
 	}
 
 	setup_gpio();
+
+	/* replace HtcTmpLmt with MB_HTC_MAX (if needed) */
+	val = pci_s_read_config32(PCI_DEV(0, 0x18, 3), 0x64);
+	htctmplmt = ((val >> 16) & 0x7F);
+	if(htctmplmt > MB_HTC_MAX) {
+		val &= ~(0x7F << 16);
+		val |= (MB_HTC_MAX << 16);
+		pci_s_write_config32(PCI_DEV(0, 0x18, 3), 0x64, val);
+	}
+
 
 	post_code(0x40);
 	agesawrapper_amdinitpost();
