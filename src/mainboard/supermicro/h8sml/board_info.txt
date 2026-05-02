@@ -1,5 +1,27 @@
+Board name: H8SML-i
 Category: server
-Board URL: http://www.supermicro.com/aplus/motherboard/opteron3000/sr56x0/h8sml.cfm
+Board URL: https://www.supermicro.com/products/archive/motherboard/h8sml-i
+ROM package: SOIC-8
+ROM protocol: SPI
+ROM socketed: n
+
+Board name: H8SML-iF
+Category: server
+Board URL: https://www.supermicro.com/products/archive/motherboard/h8sml-if
+ROM package: SOIC-8
+ROM protocol: SPI
+ROM socketed: n
+
+Board name: H8SML-7
+Category: server
+Board URL: https://www.supermicro.com/products/archive/motherboard/h8sml-7
+ROM package: SOIC-8
+ROM protocol: SPI
+ROM socketed: n
+
+Board name: H8SML-7F
+Category: server
+Board URL: https://www.supermicro.com/products/archive/motherboard/h8sml-7f
 ROM package: SOIC-8
 ROM protocol: SPI
 ROM socketed: n

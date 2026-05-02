@@ -1,11 +1,11 @@
-Board name: H8DGI+-F
+Board name: H8DGi
 Category: server
 Board URL: https://www.supermicro.com/products/archive/motherboard/h8dgi
 ROM package: SOIC-8
 ROM protocol: SPI
 ROM socketed: n
 
-Board name: H8DG6+-F
+Board name: H8DG6
 Category: server
 Board URL: https://www.supermicro.com/products/archive/motherboard/h8dg6
 ROM package: SOIC-8
