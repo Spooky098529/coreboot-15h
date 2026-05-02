@@ -2290,37 +2290,37 @@ FCH_PLATFORM_POLICY  FchUserOptions = {
 };
 
 BUILD_OPT_CFG UserOptions = {
-  {                                             // AGESA version string
-    AGESA_CODE_SIGNATURE,                       //    code header Signature
-    AGESA_PACKAGE_STRING,                       //    8 character ID
-    AGESA_VERSION_STRING,                       //    12 character version string
-    0                                           //    null string terminator
+  .VersionString = {                                             // AGESA version string
+    .Signature = AGESA_CODE_SIGNATURE,                       //    code header Signature
+    .ComponentName = AGESA_PACKAGE_STRING,                       //    8 character ID
+    .Version = AGESA_VERSION_STRING,                       //    12 character version string
+    .TerminatorNull = 0                                           //    null string terminator
   },
   //Build Option Area
-  OPTION_UDIMMS,                        //UDIMMS
-  OPTION_RDIMMS,                        //RDIMMS
-  OPTION_LRDIMMS,                       //LRDIMMS
-  OPTION_ECC,                           //ECC
-  OPTION_BANK_INTERLEAVE,               //BANK_INTERLEAVE
-  OPTION_DCT_INTERLEAVE,                //DCT_INTERLEAVE
-  OPTION_NODE_INTERLEAVE,               //NODE_INTERLEAVE
-  OPTION_PARALLEL_TRAINING,             //PARALLEL_TRAINING
-  OPTION_ONLINE_SPARE,                  //ONLINE_SPARE
-  OPTION_MEM_RESTORE,                   //MEM CONTEXT RESTORE
-  OPTION_MULTISOCKET,                   //MULTISOCKET
-  OPTION_ACPI_PSTATES,                  //ACPI_PSTATES
-  OPTION_CPU_PSTATE_HPC_MODE,           //High Preformace Computing (HPC) mode
-  OPTION_SRAT,                          //SRAT
-  OPTION_SLIT,                          //SLIT
-  OPTION_WHEA,                          //WHEA
-  OPTION_DMI,                           //DMI
-  OPTION_EARLY_SAMPLES,                 //EARLY_SAMPLES
-  OPTION_ADDR_TO_CS_TRANSLATOR,         //ADDR_TO_CS_TRANSLATOR
+  .OptionUDimms = OPTION_UDIMMS,                        //UDIMMS
+  .OptionRDimms = OPTION_RDIMMS,                        //RDIMMS
+  .OptionLrDimms = OPTION_LRDIMMS,                       //LRDIMMS
+  .OptionEcc = OPTION_ECC,                           //ECC
+  .OptionBankInterleave = OPTION_BANK_INTERLEAVE,               //BANK_INTERLEAVE
+  .OptionDctInterleave = OPTION_DCT_INTERLEAVE,                //DCT_INTERLEAVE
+  .OptionNodeInterleave = OPTION_NODE_INTERLEAVE,               //NODE_INTERLEAVE
+  .OptionParallelTraining = OPTION_PARALLEL_TRAINING,             //PARALLEL_TRAINING
+  .OptionOnlineSpare = OPTION_ONLINE_SPARE,                  //ONLINE_SPARE
+  .OptionMemRestore = OPTION_MEM_RESTORE,                   //MEM CONTEXT RESTORE
+  .OptionMultisocket = OPTION_MULTISOCKET,                   //MULTISOCKET
+  .OptionAcpiPstates = OPTION_ACPI_PSTATES,                  //ACPI_PSTATES
+  .OptionPStatesInHpcMode = OPTION_CPU_PSTATE_HPC_MODE,           //High Preformace Computing (HPC) mode
+  .OptionSrat = OPTION_SRAT,                          //SRAT
+  .OptionSlit = OPTION_SLIT,                          //SLIT
+  .OptionWhea = OPTION_WHEA,                          //WHEA
+  .OptionDmi = OPTION_DMI,                           //DMI
+  .OptionEarlySamples = OPTION_EARLY_SAMPLES,                 //EARLY_SAMPLES
+  .OptionAddrToCsTranslator = OPTION_ADDR_TO_CS_TRANSLATOR,         //ADDR_TO_CS_TRANSLATOR
 
   //Build Configuration Area
-  CFG_PCI_MMIO_BASE,
-  CFG_PCI_MMIO_SIZE,
-  {
+  .CfgPciMmioAddress = CFG_PCI_MMIO_BASE,
+  .CfgPciMmioSize = CFG_PCI_MMIO_SIZE,
+  .MaxVrmType = {
     // CoreVrm
     {
       CFG_VRM_CURRENT_LIMIT,              // VrmCurrentLimit
@@ -2340,119 +2340,119 @@ BUILD_OPT_CFG UserOptions = {
       CFG_VRM_NB_INRUSH_CURRENT_LIMIT     // VrmNbInrushCurrentLimit
     }
   },
-  CFG_PLAT_NUM_IO_APICS,                //PlatformApicIoNumber
-  CFG_MEM_INIT_PSTATE,                  //MemoryInitPstate
-  CFG_C1E_MODE,                         //C1eMode
-  CFG_C1E_OPDATA,                       //C1ePlatformData
-  CFG_C1E_OPDATA1,                      //C1ePlatformData1
-  CFG_C1E_OPDATA2,                      //C1ePlatformData2
-  CFG_C1E_OPDATA3,                      //C1ePlatformData3
-  CFG_CSTATE_MODE,                      //CStateMode
-  CFG_CSTATE_OPDATA,                    //CStatePlatformData
-  CFG_CSTATE_IO_BASE_ADDRESS,           //CStateIoBaseAddress
-  CFG_CPB_MODE,                         //CpbMode
-  LOW_POWER_PSTATE_FOR_PROCHOT_AUTO,    //Low power Pstate for PROCHOT, it's always set to 'AUTO'
-  CFG_CORE_LEVELING_MODE,               //CoreLevelingCofig
-  {
-    CFG_PLATFORM_CONTROL_FLOW_MODE,       // The platform's control flow mode.
-    CFG_USE_HT_ASSIST,                    // CfgUseHtAssist
-    CFG_USE_ATM_MODE,                     // CfgUseAtmMode
-    CFG_USE_32_BYTE_REFRESH,              // Display Refresh uses 32 byte packets.
-    CFG_USE_VARIABLE_MCT_ISOC_PRIORITY,   // The Memory controller will be set to Variable Isoc Priority.
+  .CfgPlatNumIoApics = CFG_PLAT_NUM_IO_APICS,                //PlatformApicIoNumber
+  .CfgMemInitPstate = CFG_MEM_INIT_PSTATE,                  //MemoryInitPstate
+  .CfgPlatformC1eMode = CFG_C1E_MODE,                         //C1eMode
+  .CfgPlatformC1eOpData = CFG_C1E_OPDATA,                       //C1ePlatformData
+  .CfgPlatformC1eOpData1 = CFG_C1E_OPDATA1,                      //C1ePlatformData1
+  .CfgPlatformC1eOpData2 = CFG_C1E_OPDATA2,                      //C1ePlatformData2
+  .CfgPlatformC1eOpData3 = CFG_C1E_OPDATA3,                      //C1ePlatformData3
+  .CfgPlatformCStateMode = CFG_CSTATE_MODE,                      //CStateMode
+  .CfgPlatformCStateOpData = CFG_CSTATE_OPDATA,                    //CStatePlatformData
+  .CfgPlatformCStateIoBaseAddress = CFG_CSTATE_IO_BASE_ADDRESS,           //CStateIoBaseAddress
+  .CfgPlatformCpbMode = CFG_CPB_MODE,                         //CpbMode
+  .CfgLowPowerPstateForProcHot = LOW_POWER_PSTATE_FOR_PROCHOT_AUTO,    //Low power Pstate for PROCHOT, it's always set to 'AUTO'
+  .CfgCoreLevelingMode = CFG_CORE_LEVELING_MODE,               //CoreLevelingCofig
+  .CfgPerformanceProfile = {
+    .PlatformControlFlowMode = CFG_PLATFORM_CONTROL_FLOW_MODE,       // The platform's control flow mode.
+    .UseHtAssist = CFG_USE_HT_ASSIST,                    // CfgUseHtAssist
+    .UseAtmMode = CFG_USE_ATM_MODE,                     // CfgUseAtmMode
+    .Use32ByteRefresh = CFG_USE_32_BYTE_REFRESH,              // Display Refresh uses 32 byte packets.
+    .UseVariableMctIsocPriority = CFG_USE_VARIABLE_MCT_ISOC_PRIORITY,   // The Memory controller will be set to Variable Isoc Priority.
     // ADVANCED_PERFORMANCE_PROFILE
-    {
-      CFG_PERFORMANCE_HARDWARE_PREFETCHER,  // Hardware prefetcher mode
-      CFG_PERFORMANCE_SOFTWARE_PREFETCHES,  // Software prefetcher mode
-      CFG_PERFORMANCE_DRAM_PREFETCHER       // Dram prefetcher mode
+    .AdvancedPerformanceProfile = {
+      .HardwarePrefetchMode = CFG_PERFORMANCE_HARDWARE_PREFETCHER,  // Hardware prefetcher mode
+      .SoftwarePrefetchMode = CFG_PERFORMANCE_SOFTWARE_PREFETCHES,  // Software prefetcher mode
+      .DramPrefetchMode = CFG_PERFORMANCE_DRAM_PREFETCHER       // Dram prefetcher mode
     },
-    CFG_PLATFORM_POWER_POLICY_MODE        // The platform's power policy mode.
+    .PlatformPowerPolicy = CFG_PLATFORM_POWER_POLICY_MODE        // The platform's power policy mode.
   },
-  (CPU_HT_DEEMPHASIS_LEVEL *)CFG_PLATFORM_DEEMPHASIS_LIST,         // Deemphasis settings
-  CFG_AMD_PLATFORM_TYPE,                //AmdPlatformType
-  CFG_AMD_PSTATE_CAP_VALUE,             // Amd pstate ceiling enabling deck
+  .CfgPlatformDeemphasisList = (CPU_HT_DEEMPHASIS_LEVEL *)CFG_PLATFORM_DEEMPHASIS_LIST,         // Deemphasis settings
+  .CfgAmdPlatformType = CFG_AMD_PLATFORM_TYPE,                //AmdPlatformType
+  .CfgAmdPstateCapValue = CFG_AMD_PSTATE_CAP_VALUE,             // Amd pstate ceiling enabling deck
 
-  CFG_MEMORY_BUS_FREQUENCY_LIMIT,       // CfgMemoryBusFrequencyLimit
-  CFG_MEMORY_MODE_UNGANGED,             // CfgMemoryModeUnganged
-  CFG_MEMORY_QUAD_RANK_CAPABLE,         // CfgMemoryQuadRankCapable
-  CFG_MEMORY_QUADRANK_TYPE,             // CfgMemoryQuadrankType
-  CFG_MEMORY_RDIMM_CAPABLE,             // CfgMemoryRDimmCapable
-  CFG_MEMORY_LRDIMM_CAPABLE,            // CfgMemoryLRDimmCapable
-  CFG_MEMORY_UDIMM_CAPABLE,             // CfgMemoryUDimmCapable
-  CFG_MEMORY_SODIMM_CAPABLE,            // CfgMemorySodimmCapable
-  CFG_LIMIT_MEMORY_TO_BELOW_1TB,        // CfgLimitMemoryToBelow1Tb
-  CFG_MEMORY_ENABLE_BANK_INTERLEAVING,  // CfgMemoryEnableBankInterleaving
-  CFG_MEMORY_ENABLE_NODE_INTERLEAVING,  // CfgMemoryEnableNodeInterleaving
-  CFG_MEMORY_CHANNEL_INTERLEAVING,      // CfgMemoryChannelInterleaving
-  CFG_MEMORY_POWER_DOWN,                // CfgMemoryPowerDown
-  CFG_POWER_DOWN_MODE,                  // CfgPowerDownMode
-  CFG_ONLINE_SPARE,                     // CfgOnlineSpare
-  CFG_MEMORY_PARITY_ENABLE,             // CfgMemoryParityEnable
-  CFG_BANK_SWIZZLE,                     // CfgBankSwizzle
-  CFG_TIMING_MODE_SELECT,               // CfgTimingModeSelect
-  CFG_MEMORY_CLOCK_SELECT,              // CfgMemoryClockSelect
-  CFG_DQS_TRAINING_CONTROL,             // CfgDqsTrainingControl
-  CFG_IGNORE_SPD_CHECKSUM,              // CfgIgnoreSpdChecksum
-  CFG_USE_BURST_MODE,                   // CfgUseBurstMode
-  CFG_MEMORY_ALL_CLOCKS_ON,             // CfgMemoryAllClocksOn
-  CFG_ENABLE_ECC_FEATURE,               // CfgEnableEccFeature
-  CFG_ECC_REDIRECTION,                  // CfgEccRedirection
-  CFG_SCRUB_DRAM_RATE,                  // CfgScrubDramRate
-  CFG_SCRUB_L2_RATE,                    // CfgScrubL2Rate
-  CFG_SCRUB_L3_RATE,                    // CfgScrubL3Rate
-  CFG_SCRUB_IC_RATE,                    // CfgScrubIcRate
-  CFG_SCRUB_DC_RATE,                    // CfgScrubDcRate
-  CFG_ECC_SYNC_FLOOD,                   // CfgEccSyncFlood
-  CFG_ECC_SYMBOL_SIZE,                  // CfgEccSymbolSize
-  CFG_HEAP_DRAM_ADDRESS,                // CfgHeapDramAddress
-  CFG_1GB_ALIGN,                        // CfgNodeMem1GBAlign
-  CFG_S3_LATE_RESTORE,                  // CfgS3LateRestore
-  CFG_ACPI_PSTATE_PSD_INDPX,            // CfgAcpiPstateIndependent
-  (AP_MTRR_SETTINGS *) CFG_AP_MTRR_SETTINGS_LIST, // CfgApMtrrSettingsList
-  CFG_UMA_MODE,                         // CfgUmaMode
-  CFG_UMA_SIZE,                         // CfgUmaSize
-  CFG_UMA_ABOVE4G,                      // CfgUmaAbove4G
-  CFG_UMA_ALIGNMENT,                    // CfgUmaAlignment
-  CFG_PROCESSOR_SCOPE_IN_SB,            // CfgProcessorScopeInSb
-  CFG_PROCESSOR_SCOPE_NAME0,            // CfgProcessorScopeName0
-  CFG_PROCESSOR_SCOPE_NAME1,            // CfgProcessorScopeName1
-  CFG_GNB_HD_AUDIO,                     // CfgGnbHdAudio
-  CFG_ABM_SUPPORT,                      // CfgAbmSupport
-  CFG_DYNAMIC_REFRESH_RATE,             // CfgDynamicRefreshRate
-  CFG_LCD_BACK_LIGHT_CONTROL,           // CfgLcdBackLightControl
-  CFG_GNB_STEREO_3D_PINOUT,             // CfgGnb3dStereoPinIndex
-  CFG_TEMP_PCIE_MMIO_BASE_ADDRESS,      // CfgTempPcieMmioBaseAddress
-  CFG_GNB_IGPU_SSID,                    // CfgGnbIGPUSSID
-  CFG_GNB_HDAUDIO_SSID,                 // CfgGnbHDAudioSSID
-  CFG_GNB_PCIE_SSID,                    // CfgGnbPcieSSID
-  CFG_GFX_LVDS_SPREAD_SPECTRUM,         // CfgLvdsSpreadSpectrum
-  CFG_GFX_LVDS_SPREAD_SPECTRUM_RATE,    // CfgLvdsSpreadSpectrumRate
+  .CfgMemoryBusFrequencyLimit = CFG_MEMORY_BUS_FREQUENCY_LIMIT,       // CfgMemoryBusFrequencyLimit
+  .CfgMemoryModeUnganged = CFG_MEMORY_MODE_UNGANGED,             // CfgMemoryModeUnganged
+  .CfgMemoryQuadRankCapable = CFG_MEMORY_QUAD_RANK_CAPABLE,         // CfgMemoryQuadRankCapable
+  .CfgMemoryQuadrankType = CFG_MEMORY_QUADRANK_TYPE,             // CfgMemoryQuadrankType
+  .CfgMemoryRDimmCapable = CFG_MEMORY_RDIMM_CAPABLE,             // CfgMemoryRDimmCapable
+  .CfgMemoryLRDimmCapable = CFG_MEMORY_LRDIMM_CAPABLE,            // CfgMemoryLRDimmCapable
+  .CfgMemoryUDimmCapable = CFG_MEMORY_UDIMM_CAPABLE,             // CfgMemoryUDimmCapable
+  .CfgMemorySODimmCapable = CFG_MEMORY_SODIMM_CAPABLE,            // CfgMemorySodimmCapable
+  .CfgLimitMemoryToBelow1Tb = CFG_LIMIT_MEMORY_TO_BELOW_1TB,        // CfgLimitMemoryToBelow1Tb
+  .CfgMemoryEnableBankInterleaving = CFG_MEMORY_ENABLE_BANK_INTERLEAVING,  // CfgMemoryEnableBankInterleaving
+  .CfgMemoryEnableNodeInterleaving = CFG_MEMORY_ENABLE_NODE_INTERLEAVING,  // CfgMemoryEnableNodeInterleaving
+  .CfgMemoryChannelInterleaving = CFG_MEMORY_CHANNEL_INTERLEAVING,      // CfgMemoryChannelInterleaving
+  .CfgMemoryPowerDown = CFG_MEMORY_POWER_DOWN,                // CfgMemoryPowerDown
+  .CfgPowerDownMode = CFG_POWER_DOWN_MODE,                  // CfgPowerDownMode
+  .CfgOnlineSpare = CFG_ONLINE_SPARE,                     // CfgOnlineSpare
+  .CfgMemoryParityEnable = CFG_MEMORY_PARITY_ENABLE,             // CfgMemoryParityEnable
+  .CfgBankSwizzle = CFG_BANK_SWIZZLE,                     // CfgBankSwizzle
+  .CfgTimingModeSelect = CFG_TIMING_MODE_SELECT,               // CfgTimingModeSelect
+  .CfgMemoryClockSelect = CFG_MEMORY_CLOCK_SELECT,              // CfgMemoryClockSelect
+  .CfgDqsTrainingControl = CFG_DQS_TRAINING_CONTROL,             // CfgDqsTrainingControl
+  .CfgIgnoreSpdChecksum = CFG_IGNORE_SPD_CHECKSUM,              // CfgIgnoreSpdChecksum
+  .CfgUseBurstMode = CFG_USE_BURST_MODE,                   // CfgUseBurstMode
+  .CfgMemoryAllClocksOn = CFG_MEMORY_ALL_CLOCKS_ON,             // CfgMemoryAllClocksOn
+  .CfgEnableEccFeature = CFG_ENABLE_ECC_FEATURE,               // CfgEnableEccFeature
+  .CfgEccRedirection = CFG_ECC_REDIRECTION,                  // CfgEccRedirection
+  .CfgScrubDramRate = CFG_SCRUB_DRAM_RATE,                  // CfgScrubDramRate
+  .CfgScrubL2Rate = CFG_SCRUB_L2_RATE,                    // CfgScrubL2Rate
+  .CfgScrubL3Rate = CFG_SCRUB_L3_RATE,                    // CfgScrubL3Rate
+  .CfgScrubIcRate = CFG_SCRUB_IC_RATE,                    // CfgScrubIcRate
+  .CfgScrubDcRate = CFG_SCRUB_DC_RATE,                    // CfgScrubDcRate
+  .CfgEccSyncFlood = CFG_ECC_SYNC_FLOOD,                   // CfgEccSyncFlood
+  .CfgEccSymbolSize = CFG_ECC_SYMBOL_SIZE,                  // CfgEccSymbolSize
+  .CfgHeapDramAddress = CFG_HEAP_DRAM_ADDRESS,                // CfgHeapDramAddress
+  .CfgNodeMem1GBAlign = CFG_1GB_ALIGN,                        // CfgNodeMem1GBAlign
+  .CfgS3LateRestore = CFG_S3_LATE_RESTORE,                  // CfgS3LateRestore
+  .CfgAcpiPstateIndependent = CFG_ACPI_PSTATE_PSD_INDPX,            // CfgAcpiPstateIndependent
+  .CfgApMtrrSettingsList = (AP_MTRR_SETTINGS *) CFG_AP_MTRR_SETTINGS_LIST, // CfgApMtrrSettingsList
+  .CfgUmaMode = CFG_UMA_MODE,                         // CfgUmaMode
+  .CfgUmaSize = CFG_UMA_SIZE,                         // CfgUmaSize
+  .CfgUmaAbove4G = CFG_UMA_ABOVE4G,                      // CfgUmaAbove4G
+  .CfgUmaAlignment = CFG_UMA_ALIGNMENT,                    // CfgUmaAlignment
+  .CfgProcessorScopeInSb = CFG_PROCESSOR_SCOPE_IN_SB,            // CfgProcessorScopeInSb
+  .CfgProcessorScopeName0 = CFG_PROCESSOR_SCOPE_NAME0,            // CfgProcessorScopeName0
+  .CfgProcessorScopeName1 = CFG_PROCESSOR_SCOPE_NAME1,            // CfgProcessorScopeName1
+  .CfgGnbHdAudio = CFG_GNB_HD_AUDIO,                     // CfgGnbHdAudio
+  .CfgAbmSupport = CFG_ABM_SUPPORT,                      // CfgAbmSupport
+  .CfgDynamicRefreshRate = CFG_DYNAMIC_REFRESH_RATE,             // CfgDynamicRefreshRate
+  .CfgLcdBackLightControl = CFG_LCD_BACK_LIGHT_CONTROL,           // CfgLcdBackLightControl
+  .CfgGnb3dStereoPinIndex = CFG_GNB_STEREO_3D_PINOUT,             // CfgGnb3dStereoPinIndex
+  .CfgTempPcieMmioBaseAddress = CFG_TEMP_PCIE_MMIO_BASE_ADDRESS,      // CfgTempPcieMmioBaseAddress
+  .CfgGnbIGPUSSID = CFG_GNB_IGPU_SSID,                    // CfgGnbIGPUSSID
+  .CfgGnbHDAudioSSID = CFG_GNB_HDAUDIO_SSID,                 // CfgGnbHDAudioSSID
+  .CfgGnbPcieSSID = CFG_GNB_PCIE_SSID,                    // CfgGnbPcieSSID
+  .CfgLvdsSpreadSpectrum = CFG_GFX_LVDS_SPREAD_SPECTRUM,         // CfgLvdsSpreadSpectrum
+  .CfgLvdsSpreadSpectrumRate = CFG_GFX_LVDS_SPREAD_SPECTRUM_RATE,    // CfgLvdsSpreadSpectrumRate
 
-  &FchUserOptions,                      // FchBldCfg
+  .FchBldCfg = &FchUserOptions,                      // FchBldCfg
 
-  CFG_IOMMU_SUPPORT,                    // CfgIommuSupport
-  CFG_LVDS_POWER_ON_SEQ_DIGON_TO_DE,    // CfgLvdsPowerOnSeqDigonToDe
-  CFG_LVDS_POWER_ON_SEQ_DE_TO_VARY_BL,  // CfgLvdsPowerOnSeqDeToVaryBl
-  CFG_LVDS_POWER_ON_SEQ_DE_TO_DIGON,    // CfgLvdsPowerOnSeqDeToDigon
-  CFG_LVDS_POWERS_ON_SEQ_VARY_BL_TO_DE, // CfgLvdsPowerOnSeqVaryBlToDe
-  CFG_LVDS_POWER_ON_SEQ_ON_TO_OFF_DELAY,// CfgLvdsPowerOnSeqOnToOffDelay
-  CFG_LVDS_POWER_ON_SEQ_VARY_BL_TO_BLON,// CfgLvdsPowerOnSeqVaryBlToBlon
-  CFG_LVDS_POWER_ON_SEQ_BLON_TO_VARY_BL,// CfgLvdsPowerOnSeqBlonToVaryBl
-  CFG_LVDS_MAX_PIXEL_CLOCK_FREQ,        // CfgLvdsMaxPixelClockFreq
-  CFG_LCD_BIT_DEPTH_CONTROL_VALUE,      // CfgLcdBitDepthControlValue
-  CFG_LVDS_24BBP_PANEL_MODE,            // CfgLvds24bbpPanelMode
-  {{
+  .CfgIommuSupport = CFG_IOMMU_SUPPORT,                    // CfgIommuSupport
+  .CfgLvdsPowerOnSeqDigonToDe = CFG_LVDS_POWER_ON_SEQ_DIGON_TO_DE,    // CfgLvdsPowerOnSeqDigonToDe
+  .CfgLvdsPowerOnSeqDeToVaryBl = CFG_LVDS_POWER_ON_SEQ_DE_TO_VARY_BL,  // CfgLvdsPowerOnSeqDeToVaryBl
+  .CfgLvdsPowerOnSeqDeToDigon = CFG_LVDS_POWER_ON_SEQ_DE_TO_DIGON,    // CfgLvdsPowerOnSeqDeToDigon
+  .CfgLvdsPowerOnSeqVaryBlToDe = CFG_LVDS_POWERS_ON_SEQ_VARY_BL_TO_DE, // CfgLvdsPowerOnSeqVaryBlToDe
+  .CfgLvdsPowerOnSeqOnToOffDelay = CFG_LVDS_POWER_ON_SEQ_ON_TO_OFF_DELAY,// CfgLvdsPowerOnSeqOnToOffDelay
+  .CfgLvdsPowerOnSeqVaryBlToBlon = CFG_LVDS_POWER_ON_SEQ_VARY_BL_TO_BLON,// CfgLvdsPowerOnSeqVaryBlToBlon
+  .CfgLvdsPowerOnSeqBlonToVaryBl = CFG_LVDS_POWER_ON_SEQ_BLON_TO_VARY_BL,// CfgLvdsPowerOnSeqBlonToVaryBl
+  .CfgLvdsMaxPixelClockFreq = CFG_LVDS_MAX_PIXEL_CLOCK_FREQ,        // CfgLvdsMaxPixelClockFreq
+  .CfgLcdBitDepthControlValue = CFG_LCD_BIT_DEPTH_CONTROL_VALUE,      // CfgLcdBitDepthControlValue
+  .CfgLvds24bbpPanelMode = CFG_LVDS_24BBP_PANEL_MODE,            // CfgLvds24bbpPanelMode
+  .CfgLvdsMiscControl = {{
     CFG_LVDS_MISC_888_FPDI_MODE,          // CfgLvdsMiscControl
     CFG_LVDS_MISC_DL_CH_SWAP,             // CfgLvdsMiscControl
     CFG_LVDS_MISC_VSYNC_ACTIVE_LOW,       // CfgLvdsMiscControl
     CFG_LVDS_MISC_HSYNC_ACTIVE_LOW,       // CfgLvdsMiscControl
     CFG_LVDS_MISC_BLON_ACTIVE_LOW,        // CfgLvdsMiscControl
   }},
-  CFG_PCIE_REFCLK_SPREAD_SPECTRUM,      // CfgPcieRefClkSpreadSpectrum
-  CFG_ENABLE_EXTERNAL_VREF,             // CfgExternalVrefCtlFeature
-  CFG_FORCE_TRAIN_MODE,                 // CfgForceTrainMode
-  CFG_GNB_REMOTE_DISPLAY_SUPPORT,       // CfgGnbRemoteDisplaySupport
-  (IOMMU_EXCLUSION_RANGE_DESCRIPTOR *) CFG_IOMMU_EXCLUSION_RANGE_LIST, // CfgIvrsExclusionRangeList
-  0,                                    //reserved...
+  .CfgPcieRefClkSpreadSpectrum = CFG_PCIE_REFCLK_SPREAD_SPECTRUM,      // CfgPcieRefClkSpreadSpectrum
+  .CfgExternalVrefCtlFeature = CFG_ENABLE_EXTERNAL_VREF,             // CfgExternalVrefCtlFeature
+  .CfgForceTrainMode = CFG_FORCE_TRAIN_MODE,                 // CfgForceTrainMode
+  .CfgGnbRemoteDisplaySupport = CFG_GNB_REMOTE_DISPLAY_SUPPORT,       // CfgGnbRemoteDisplaySupport
+  .CfgIvrsExclusionRangeList = (IOMMU_EXCLUSION_RANGE_DESCRIPTOR *) CFG_IOMMU_EXCLUSION_RANGE_LIST, // CfgIvrsExclusionRangeList
+  .Reserved = 0,                                    //reserved...
 };
 
 CONST DISPATCH_TABLE ROMDATA ApDispatchTable[] =
@@ -2465,7 +2465,7 @@ CONST DISPATCH_TABLE ROMDATA ApDispatchTable[] =
   L3_FEAT_AP_ENABLE_CACHE
   // Cpu Late Init
   CPU_LATE_INIT_AP_TASK
-  { 0, NULL }
+  { .FunctionId = 0, .EntryPoint = NULL }
 };
 
 #if AGESA_ENTRY_INIT_EARLY == TRUE
