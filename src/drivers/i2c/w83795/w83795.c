@@ -20,6 +20,7 @@
 #if CONFIG(SOUTHBRIDGE_AMD_CIMX_SB700)
 // AGESA codebase
 #include <southbridge/amd/cimx/sb700/smbus.h>
+#include <device/pci_ops.h>
 #else
 // Raptor codebase
 #include <device/smbus.h>
@@ -170,11 +171,30 @@ static uint32_t get_fanin_rpm(struct device *dev, uint16_t reg) {
 
 static void w83795_init(struct device *dev, u8 dts_src)
 {
+	/* This value has the benefit of making Pct = C */
+	/* Allowing both relative and absolute parameters */
+	const int temp_max_default = 100;
+
 	struct drivers_i2c_w83795_config *config = dev->chip_info;
 	uint8_t i;
 	uint8_t val;
 	const char *label;
 	uint8_t fan_mode;
+	int temp1_max;
+	int temp2_max;
+	int temp3_max;
+	int temp4_max;
+	int temp5_max;
+	int temp6_max;
+	int tr1_max;
+	int tr2_max;
+	int tr3_max;
+	int tr4_max;
+	int tr5_max;
+	int tr6_max;
+	int dts_max;
+	int k10_htctmplmt;
+	uint32_t v32;
 
 	fan_mode = config->fan_mode;
 
@@ -205,6 +225,56 @@ static void w83795_init(struct device *dev, u8 dts_src)
 	/* Reset H/W Monitor */
 	val |= W83795_REG_CONFIG_INIT;
 	w83795_write(dev, W83795_REG_CONFIG, val);
+
+	/* Use devicetree temperature maxima */
+	temp1_max = config->temp1_max;
+	temp2_max = config->temp2_max;
+	temp3_max = config->temp3_max;
+	temp4_max = config->temp4_max;
+	temp5_max = config->temp5_max;
+	temp6_max = config->temp6_max;
+	tr1_max = config->tr1_max;
+	tr2_max = config->tr2_max;
+	tr3_max = config->tr3_max;
+	tr4_max = config->tr4_max;
+	tr5_max = config->tr5_max;
+	tr6_max = config->tr6_max;
+	dts_max = config->dts_max;
+
+	/* Read Max Temperature from HW */
+	if(CONFIG(CPU_AMD_AGESA_FAMILY15)) {
+		v32 = pci_s_read_config32(PCI_DEV(0, 0x18, 3), 0x64);
+		k10_htctmplmt = (((v32 >> 16) & 0x7F)>>1) + 52;
+		printk(BIOS_INFO, "HtcTmpLmt =  %d\n", k10_htctmplmt);
+		if(temp1_max == 0xFF) temp1_max = k10_htctmplmt;
+		if(temp2_max == 0xFF) temp2_max = k10_htctmplmt;
+		if(temp3_max == 0xFF) temp3_max = k10_htctmplmt;
+		if(temp4_max == 0xFF) temp4_max = k10_htctmplmt;
+		if(temp5_max == 0xFF) temp5_max = k10_htctmplmt;
+		if(temp6_max == 0xFF) temp6_max = k10_htctmplmt;
+		if(tr1_max == 0xFF) tr1_max = k10_htctmplmt;
+		if(tr2_max == 0xFF) tr2_max = k10_htctmplmt;
+		if(tr3_max == 0xFF) tr3_max = k10_htctmplmt;
+		if(tr4_max == 0xFF) tr4_max = k10_htctmplmt;
+		if(tr5_max == 0xFF) tr5_max = k10_htctmplmt;
+		if(tr6_max == 0xFF) tr6_max = k10_htctmplmt;
+		if(dts_max == 0xFF) dts_max = k10_htctmplmt;
+	}
+
+	/* Default to 100C temperature maxima */
+	if(!temp1_max) temp1_max = temp_max_default;
+	if(!temp2_max) temp2_max = temp_max_default;
+	if(!temp3_max) temp3_max = temp_max_default;
+	if(!temp4_max) temp4_max = temp_max_default;
+	if(!temp5_max) temp5_max = temp_max_default;
+	if(!temp6_max) temp6_max = temp_max_default;
+	if(!tr1_max) tr1_max = temp_max_default;
+	if(!tr2_max) tr2_max = temp_max_default;
+	if(!tr3_max) tr3_max = temp_max_default;
+	if(!tr4_max) tr4_max = temp_max_default;
+	if(!tr5_max) tr5_max = temp_max_default;
+	if(!tr6_max) tr6_max = temp_max_default;
+	if(!dts_max) dts_max = temp_max_default;
 
 	/* --- Configure Senor Inputs --- */
 	/* Digital Temperature Sensor Configuration */
@@ -302,18 +372,18 @@ static void w83795_init(struct device *dev, u8 dts_src)
 	if(fan_mode != MANUAL_MODE) {
 		/* Set limits before connecting sensors/temperatures/fans */
 		/* Critical Temperature to Full Speed all fan */
-		w83795_write(dev, W83795_REG_CTFS(0), config->temp1_critical_temperature);
-		w83795_write(dev, W83795_REG_CTFS(1), config->temp2_critical_temperature);
-		w83795_write(dev, W83795_REG_CTFS(2), config->temp3_critical_temperature);
-		w83795_write(dev, W83795_REG_CTFS(3), config->temp4_critical_temperature);
-		w83795_write(dev, W83795_REG_CTFS(4), config->temp5_critical_temperature);
-		w83795_write(dev, W83795_REG_CTFS(5), config->temp6_critical_temperature);
-		printk(BIOS_DEBUG, "Temperature1 Critical: %d C\n", config->temp1_critical_temperature);
-		printk(BIOS_DEBUG, "Temperature2 Critical: %d C\n", config->temp2_critical_temperature);
-		printk(BIOS_DEBUG, "Temperature3 Critical: %d C\n", config->temp3_critical_temperature);
-		printk(BIOS_DEBUG, "Temperature4 Critical: %d C\n", config->temp4_critical_temperature);
-		printk(BIOS_DEBUG, "Temperature5 Critical: %d C\n", config->temp5_critical_temperature);
-		printk(BIOS_DEBUG, "Temperature6 Critical: %d C\n", config->temp6_critical_temperature);
+		w83795_write(dev, W83795_REG_CTFS(0), temp1_max * config->temp1_critical_temperature / 100);
+		w83795_write(dev, W83795_REG_CTFS(1), temp2_max * config->temp2_critical_temperature / 100);
+		w83795_write(dev, W83795_REG_CTFS(2), temp3_max * config->temp3_critical_temperature / 100);
+		w83795_write(dev, W83795_REG_CTFS(3), temp4_max * config->temp4_critical_temperature / 100);
+		w83795_write(dev, W83795_REG_CTFS(4), temp5_max * config->temp5_critical_temperature / 100);
+		w83795_write(dev, W83795_REG_CTFS(5), temp6_max * config->temp6_critical_temperature / 100);
+		printk(BIOS_DEBUG, "Temperature1 Critical: %d C\n", temp1_max * config->temp1_critical_temperature / 100);
+		printk(BIOS_DEBUG, "Temperature2 Critical: %d C\n", temp2_max * config->temp2_critical_temperature / 100);
+		printk(BIOS_DEBUG, "Temperature3 Critical: %d C\n", temp3_max * config->temp3_critical_temperature / 100);
+		printk(BIOS_DEBUG, "Temperature4 Critical: %d C\n", temp4_max * config->temp4_critical_temperature / 100);
+		printk(BIOS_DEBUG, "Temperature5 Critical: %d C\n", temp5_max * config->temp5_critical_temperature / 100);
+		printk(BIOS_DEBUG, "Temperature6 Critical: %d C\n", temp6_max * config->temp6_critical_temperature / 100);
 
 		/* Hystersis of Temperature */
 		/* Temperature +/- values for target/critical temperatures */
@@ -463,34 +533,34 @@ static void w83795_init(struct device *dev, u8 dts_src)
 	}
 
 	/* Temperature Limits for Alarms */
-	w83795_write(dev, W83795_REG_TEMP_CRIT(0), config->tr1_critical_temperature);
-	w83795_write(dev, W83795_REG_TEMP_CRIT(1), config->tr2_critical_temperature);
-	w83795_write(dev, W83795_REG_TEMP_CRIT(2), config->tr3_critical_temperature);
-	w83795_write(dev, W83795_REG_TEMP_CRIT(3), config->tr4_critical_temperature);
-	w83795_write(dev, W83795_REG_TEMP_CRIT(4), config->tr5_critical_temperature);
-	w83795_write(dev, W83795_REG_TEMP_CRIT(5), config->tr6_critical_temperature);
-	w83795_write(dev, W83795_REG_DTS_CRIT, config->dts_critical_temperature);
-	w83795_write(dev, W83795_REG_TEMP_CRIT_HYSTER(0), config->tr1_critical_hysteresis);
-	w83795_write(dev, W83795_REG_TEMP_CRIT_HYSTER(1), config->tr2_critical_hysteresis);
-	w83795_write(dev, W83795_REG_TEMP_CRIT_HYSTER(2), config->tr3_critical_hysteresis);
-	w83795_write(dev, W83795_REG_TEMP_CRIT_HYSTER(3), config->tr4_critical_hysteresis);
-	w83795_write(dev, W83795_REG_TEMP_CRIT_HYSTER(4), config->tr5_critical_hysteresis);
-	w83795_write(dev, W83795_REG_TEMP_CRIT_HYSTER(5), config->tr6_critical_hysteresis);
-	w83795_write(dev, W83795_REG_DTS_CRIT_HYSTER, config->dts_critical_hysteresis);
-	w83795_write(dev, W83795_REG_TEMP_WARN(0), config->tr1_warning_temperature);
-	w83795_write(dev, W83795_REG_TEMP_WARN(1), config->tr2_warning_temperature);
-	w83795_write(dev, W83795_REG_TEMP_WARN(2), config->tr3_warning_temperature);
-	w83795_write(dev, W83795_REG_TEMP_WARN(3), config->tr4_warning_temperature);
-	w83795_write(dev, W83795_REG_TEMP_WARN(4), config->tr5_warning_temperature);
-	w83795_write(dev, W83795_REG_TEMP_WARN(5), config->tr6_warning_temperature);
-	w83795_write(dev, W83795_REG_DTS_WARN, config->dts_warning_temperature);
-	w83795_write(dev, W83795_REG_TEMP_WARN_HYSTER(0), config->tr1_warning_hysteresis);
-	w83795_write(dev, W83795_REG_TEMP_WARN_HYSTER(1), config->tr2_warning_hysteresis);
-	w83795_write(dev, W83795_REG_TEMP_WARN_HYSTER(2), config->tr3_warning_hysteresis);
-	w83795_write(dev, W83795_REG_TEMP_WARN_HYSTER(3), config->tr4_warning_hysteresis);
-	w83795_write(dev, W83795_REG_TEMP_WARN_HYSTER(4), config->tr5_warning_hysteresis);
-	w83795_write(dev, W83795_REG_TEMP_WARN_HYSTER(5), config->tr6_warning_hysteresis);
-	w83795_write(dev, W83795_REG_DTS_WARN_HYSTER, config->dts_warning_hysteresis);
+	w83795_write(dev, W83795_REG_TEMP_CRIT(0), tr1_max * config->tr1_critical_temperature / 100);
+	w83795_write(dev, W83795_REG_TEMP_CRIT(1), tr2_max * config->tr2_critical_temperature / 100);
+	w83795_write(dev, W83795_REG_TEMP_CRIT(2), tr3_max * config->tr3_critical_temperature / 100);
+	w83795_write(dev, W83795_REG_TEMP_CRIT(3), tr4_max * config->tr4_critical_temperature / 100);
+	w83795_write(dev, W83795_REG_TEMP_CRIT(4), tr5_max * config->tr5_critical_temperature / 100);
+	w83795_write(dev, W83795_REG_TEMP_CRIT(5), tr6_max * config->tr6_critical_temperature / 100);
+	w83795_write(dev, W83795_REG_DTS_CRIT, dts_max * config->dts_critical_temperature / 100);
+	w83795_write(dev, W83795_REG_TEMP_CRIT_HYSTER(0), tr1_max * config->tr1_critical_hysteresis / 100);
+	w83795_write(dev, W83795_REG_TEMP_CRIT_HYSTER(1), tr2_max * config->tr2_critical_hysteresis / 100);
+	w83795_write(dev, W83795_REG_TEMP_CRIT_HYSTER(2), tr3_max * config->tr3_critical_hysteresis / 100);
+	w83795_write(dev, W83795_REG_TEMP_CRIT_HYSTER(3), tr4_max * config->tr4_critical_hysteresis / 100);
+	w83795_write(dev, W83795_REG_TEMP_CRIT_HYSTER(4), tr5_max * config->tr5_critical_hysteresis / 100);
+	w83795_write(dev, W83795_REG_TEMP_CRIT_HYSTER(5), tr6_max * config->tr6_critical_hysteresis / 100);
+	w83795_write(dev, W83795_REG_DTS_CRIT_HYSTER, dts_max * config->dts_critical_hysteresis / 100);
+	w83795_write(dev, W83795_REG_TEMP_WARN(0), tr1_max * config->tr1_warning_temperature / 100);
+	w83795_write(dev, W83795_REG_TEMP_WARN(1), tr2_max * config->tr2_warning_temperature / 100);
+	w83795_write(dev, W83795_REG_TEMP_WARN(2), tr3_max * config->tr3_warning_temperature / 100);
+	w83795_write(dev, W83795_REG_TEMP_WARN(3), tr4_max * config->tr4_warning_temperature / 100);
+	w83795_write(dev, W83795_REG_TEMP_WARN(4), tr5_max * config->tr5_warning_temperature / 100);
+	w83795_write(dev, W83795_REG_TEMP_WARN(5), tr6_max * config->tr6_warning_temperature / 100);
+	w83795_write(dev, W83795_REG_DTS_WARN, dts_max * config->dts_warning_temperature / 100);
+	w83795_write(dev, W83795_REG_TEMP_WARN_HYSTER(0), tr1_max * config->tr1_warning_hysteresis / 100);
+	w83795_write(dev, W83795_REG_TEMP_WARN_HYSTER(1), tr2_max * config->tr2_warning_hysteresis / 100);
+	w83795_write(dev, W83795_REG_TEMP_WARN_HYSTER(2), tr3_max * config->tr3_warning_hysteresis / 100);
+	w83795_write(dev, W83795_REG_TEMP_WARN_HYSTER(3), tr4_max * config->tr4_warning_hysteresis / 100);
+	w83795_write(dev, W83795_REG_TEMP_WARN_HYSTER(4), tr5_max * config->tr5_warning_hysteresis / 100);
+	w83795_write(dev, W83795_REG_TEMP_WARN_HYSTER(5), tr6_max * config->tr6_warning_hysteresis / 100);
+	w83795_write(dev, W83795_REG_DTS_WARN_HYSTER, dts_max * config->dts_warning_hysteresis / 100);
 
 	/* Voltage high/low limits */
 	// 10-bit value... higheset 8 bits are written to main registers, lowest 2 bits written to LSB registers
@@ -628,18 +698,18 @@ static void w83795_init(struct device *dev, u8 dts_src)
 		w83795_write(dev, W83795_REG_FCMS1, 0x00);
 		w83795_write(dev, W83795_REG_FCMS2, 0x00);
 		printk(BIOS_INFO, "W83795G/ADG work in Thermal Cruise Mode\n");
-		w83795_write(dev, W83795_REG_TTTI(0), config->temp1_target_temperature);
-		w83795_write(dev, W83795_REG_TTTI(1), config->temp2_target_temperature);
-		w83795_write(dev, W83795_REG_TTTI(2), config->temp3_target_temperature);
-		w83795_write(dev, W83795_REG_TTTI(3), config->temp4_target_temperature);
-		w83795_write(dev, W83795_REG_TTTI(4), config->temp5_target_temperature);
-		w83795_write(dev, W83795_REG_TTTI(5), config->temp6_target_temperature);
-		printk(BIOS_DEBUG, "Temperature1 Target: %d C\n", config->temp1_target_temperature);
-		printk(BIOS_DEBUG, "Temperature2 Target: %d C\n", config->temp2_target_temperature);
-		printk(BIOS_DEBUG, "Temperature3 Target: %d C\n", config->temp3_target_temperature);
-		printk(BIOS_DEBUG, "Temperature4 Target: %d C\n", config->temp4_target_temperature);
-		printk(BIOS_DEBUG, "Temperature5 Target: %d C\n", config->temp5_target_temperature);
-		printk(BIOS_DEBUG, "Temperature6 Target: %d C\n", config->temp6_target_temperature);
+		w83795_write(dev, W83795_REG_TTTI(0), temp1_max * config->temp1_target_temperature / 100);
+		w83795_write(dev, W83795_REG_TTTI(1), temp2_max * config->temp2_target_temperature / 100);
+		w83795_write(dev, W83795_REG_TTTI(2), temp3_max * config->temp3_target_temperature / 100);
+		w83795_write(dev, W83795_REG_TTTI(3), temp4_max * config->temp4_target_temperature / 100);
+		w83795_write(dev, W83795_REG_TTTI(4), temp5_max * config->temp5_target_temperature / 100);
+		w83795_write(dev, W83795_REG_TTTI(5), temp6_max * config->temp6_target_temperature / 100);
+		printk(BIOS_DEBUG, "Temperature1 Target: %d C\n", temp1_max * config->temp1_target_temperature / 100);
+		printk(BIOS_DEBUG, "Temperature2 Target: %d C\n", temp2_max * config->temp2_target_temperature / 100);
+		printk(BIOS_DEBUG, "Temperature3 Target: %d C\n", temp3_max * config->temp3_target_temperature / 100);
+		printk(BIOS_DEBUG, "Temperature4 Target: %d C\n", temp4_max * config->temp4_target_temperature / 100);
+		printk(BIOS_DEBUG, "Temperature5 Target: %d C\n", temp5_max * config->temp5_target_temperature / 100);
+		printk(BIOS_DEBUG, "Temperature6 Target: %d C\n", temp6_max * config->temp6_target_temperature / 100);
 	}
 
 	if(fan_mode == SMART_FAN_MODE) {
@@ -655,18 +725,24 @@ static void w83795_init(struct device *dev, u8 dts_src)
 		printk(BIOS_INFO, "W83795G/ADG work in Smart Fan Mode\n");
 		/* Set the Relative Register-at SMART FAN IV Control Mode Table */
 		for(i = 0; i < W83795_SFIV_POINTS; i++) {
-			w83795_write(dev, W83795_REG_SFIV_T1_TEMPS(i), config->sfiv_table[0].temperatures[i]);
-			w83795_write(dev, W83795_REG_SFIV_T2_TEMPS(i), config->sfiv_table[1].temperatures[i]);
-			w83795_write(dev, W83795_REG_SFIV_T3_TEMPS(i), config->sfiv_table[2].temperatures[i]);
-			w83795_write(dev, W83795_REG_SFIV_T4_TEMPS(i), config->sfiv_table[3].temperatures[i]);
-			w83795_write(dev, W83795_REG_SFIV_T5_TEMPS(i), config->sfiv_table[4].temperatures[i]);
-			w83795_write(dev, W83795_REG_SFIV_T6_TEMPS(i), config->sfiv_table[5].temperatures[i]);
+			w83795_write(dev, W83795_REG_SFIV_T1_TEMPS(i), temp1_max * config->sfiv_table[0].temperatures[i] / 100);
+			w83795_write(dev, W83795_REG_SFIV_T2_TEMPS(i), temp2_max * config->sfiv_table[1].temperatures[i] / 100);
+			w83795_write(dev, W83795_REG_SFIV_T3_TEMPS(i), temp3_max * config->sfiv_table[2].temperatures[i] / 100);
+			w83795_write(dev, W83795_REG_SFIV_T4_TEMPS(i), temp4_max * config->sfiv_table[3].temperatures[i] / 100);
+			w83795_write(dev, W83795_REG_SFIV_T5_TEMPS(i), temp5_max * config->sfiv_table[4].temperatures[i] / 100);
+			w83795_write(dev, W83795_REG_SFIV_T6_TEMPS(i), temp6_max * config->sfiv_table[5].temperatures[i] / 100);
 			w83795_write(dev, W83795_REG_SFIV_T1_PWM(i), fan_pct_to_cfg_val(config->sfiv_table[0].fan_percents[i]));
 			w83795_write(dev, W83795_REG_SFIV_T2_PWM(i), fan_pct_to_cfg_val(config->sfiv_table[1].fan_percents[i]));
 			w83795_write(dev, W83795_REG_SFIV_T3_PWM(i), fan_pct_to_cfg_val(config->sfiv_table[2].fan_percents[i]));
 			w83795_write(dev, W83795_REG_SFIV_T4_PWM(i), fan_pct_to_cfg_val(config->sfiv_table[3].fan_percents[i]));
 			w83795_write(dev, W83795_REG_SFIV_T5_PWM(i), fan_pct_to_cfg_val(config->sfiv_table[4].fan_percents[i]));
 			w83795_write(dev, W83795_REG_SFIV_T6_PWM(i), fan_pct_to_cfg_val(config->sfiv_table[5].fan_percents[i]));
+			printk(BIOS_DEBUG, "SFIV T1[%d]: %dC -> %d%%\n", i, temp1_max * config->sfiv_table[0].temperatures[i] / 100, config->sfiv_table[0].fan_percents[i]);
+			printk(BIOS_DEBUG, "SFIV T2[%d]: %dC -> %d%%\n", i, temp2_max * config->sfiv_table[1].temperatures[i] / 100, config->sfiv_table[1].fan_percents[i]);
+			printk(BIOS_DEBUG, "SFIV T3[%d]: %dC -> %d%%\n", i, temp3_max * config->sfiv_table[2].temperatures[i] / 100, config->sfiv_table[2].fan_percents[i]);
+			printk(BIOS_DEBUG, "SFIV T4[%d]: %dC -> %d%%\n", i, temp4_max * config->sfiv_table[3].temperatures[i] / 100, config->sfiv_table[3].fan_percents[i]);
+			printk(BIOS_DEBUG, "SFIV T5[%d]: %dC -> %d%%\n", i, temp5_max * config->sfiv_table[4].temperatures[i] / 100, config->sfiv_table[4].fan_percents[i]);
+			printk(BIOS_DEBUG, "SFIV T6[%d]: %dC -> %d%%\n", i, temp6_max * config->sfiv_table[5].temperatures[i] / 100, config->sfiv_table[5].fan_percents[i]);
 		}
 	}
 

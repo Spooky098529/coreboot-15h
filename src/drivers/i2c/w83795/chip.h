@@ -22,6 +22,20 @@ struct w83795_sfiv_table {
 };
 
 struct drivers_i2c_w83795_config {
+	/* Temperature Maxima */
+	uint8_t temp1_max;
+	uint8_t temp2_max;
+	uint8_t temp3_max;
+	uint8_t temp4_max;
+	uint8_t temp5_max;
+	uint8_t temp6_max;
+	uint8_t tr1_max;
+	uint8_t tr2_max;
+	uint8_t tr3_max;
+	uint8_t tr4_max;
+	uint8_t tr5_max;
+	uint8_t tr6_max;
+	uint8_t dts_max;
 	/* Digital Sensors */
 	uint8_t dtse;
 	/* Voltage Sensors */
