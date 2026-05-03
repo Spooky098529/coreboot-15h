@@ -213,6 +213,9 @@ void  sbPowerOnInit (AMDSBCFG *pConfig){
     }
   }
 
+  // Set PwrFailShadow
+  RWPMIO(SB_PMIO_REG74, AccWidthUint8, 0xFC, BIT2|(pConfig->PowerFailOption & 0x03));
+
   if (getRevisionID() > SB700_A11) {
     if (pConfig->PciClk5 == 1)
       RWPMIO(SB_PMIO_REG41, AccWidthUint8, ~(UINT32)BIT1, BIT1);    // Enabled PCICLK5 for A12

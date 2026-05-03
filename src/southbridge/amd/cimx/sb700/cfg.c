@@ -88,6 +88,14 @@ void sb700_cimx_config(AMDSBCFG *sb_config)
 	sb_config->TimerClockSource = 2;  // Auto
 	sb_config->S3Resume = 0;
 	sb_config->RebootRequired = 0;
+	#ifdef CONFIG_MAINBOARD_POWER_FAILURE_STATE
+	sb_config->PowerFailOption = CONFIG_MAINBOARD_POWER_FAILURE_STATE;
+	if (sb_config->PowerFailOption == 0x02) {
+		sb_config->PowerFailOption |= 0x01;
+	}
+	#else
+	sb_config->PowerFailOption = 0;
+	#endif
 
 	/* HPET */
 	sb_config->HpetTimer = HPET_TIMER;

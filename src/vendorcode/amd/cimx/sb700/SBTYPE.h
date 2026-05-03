@@ -120,6 +120,7 @@ typedef struct _AMDSBCFG
                                                         //1: 14Mhz using 25M_48M_66M_OSC pin, 2: Auto (100Mhz for SB700-A12, 14Mhz
                                                         //using 25M_48m_66m_0SC pin for SB700-A14, SB710, SP5100
         UINT32  ResetCpuOnSyncFlood:1;                  //0:Reset CPU on Sync Flood, 1:Do not reset CPU on sync flood
+	UINT32  PowerFailOption:2;                      //0:OFF, 1:ON, 2:OFF, 3:LAST
         UINT32  MsgXchgBiosCimxDummyBB:23;
 
         /** BuildParameters - The STATIC platform information for CIMx Module. */
