@@ -221,11 +221,10 @@ AmdCpuEarly (
       }
 
       EndCore = (UINT8) HighCore;
+      IDS_HDT_CONSOLE (CPU_TRACE, "  Launching socket %d cores %d to %d\n", SocketNum, StartCore, EndCore);
       for (i = StartCore; i <= EndCore; i++) {
         FamilySpecificServices->SetApCoreNumber (FamilySpecificServices, SocketNum, ModuleNum, ApHeapIndex, StdHeader);
-        IDS_HDT_CONSOLE (CPU_TRACE, "  Launch socket %d core %d\n", SocketNum, i);
         if (FamilySpecificServices->LaunchApCore (FamilySpecificServices, SocketNum, ModuleNum, i, PrimaryCore, StdHeader)) {
-          IDS_HDT_CONSOLE (CPU_TRACE, "  Waiting for socket %d core %d\n", SocketNum, i);
           GetLocalApicIdForCore (SocketNum, i, &TargetApicId, StdHeader);
           WaitStatus = CORE_IDLE;
           WaitForStatus.Status = &WaitStatus;
