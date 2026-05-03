@@ -1,5 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 
+#include <console/console.h>
 #include <device/device.h>
 #include <device/pnp.h>
 #include <superio/conf_mode.h>
@@ -7,8 +8,15 @@
 
 #include "w83527hg.h"
 
+#define MAINBOARD_POWER_OFF     0
+#define MAINBOARD_POWER_ON      1
+#define MAINBOARD_POWER_KEEP    2
+
 static void w83527hg_init(struct device *dev)
 {
+	uint8_t byte;
+	uint8_t power_status;
+	const char *power_setting;
 
 	if (!dev->enabled)
 		return;
@@ -16,6 +24,32 @@ static void w83527hg_init(struct device *dev)
 	switch (dev->path.pnp.device) {
 	case W83527HG_KBC:
 		pc_keyboard_init(NO_AUX_DEVICE);
+		break;
+	case W83527HG_ACPI:
+		power_status = (CONFIG_MAINBOARD_POWER_FAILURE_STATE & 0x3);
+		pnp_enter_conf_mode_8787(dev);
+		pnp_set_logical_device(dev);
+		byte = pnp_read_config(dev, 0xe4);
+		byte &= ~0x60;
+		if(power_status) {
+			byte |= power_status << 5;
+		}
+		pnp_write_config(dev, 0xe4, byte);
+		pnp_exit_conf_mode_aa(dev);
+		switch(power_status) {
+			case 0x00:
+				power_setting = "OFF";
+				break;
+			case 0x01:
+				power_setting = "ON";
+				break;
+			case 0x02:
+				power_setting = "LAST";
+				break;
+			default:
+				power_setting = "INVALID";
+		}
+		printk(BIOS_INFO, "default power state set to %s\n", power_setting);
 		break;
 	}
 }
