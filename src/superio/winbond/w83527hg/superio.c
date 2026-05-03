@@ -8,10 +8,6 @@
 
 #include "w83527hg.h"
 
-#define MAINBOARD_POWER_OFF     0
-#define MAINBOARD_POWER_ON      1
-#define MAINBOARD_POWER_KEEP    2
-
 static void w83527hg_init(struct device *dev)
 {
 	uint8_t byte;
