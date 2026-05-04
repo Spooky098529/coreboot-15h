@@ -29,6 +29,8 @@ chip northbridge/amd/agesa/family15/root_complex	# Root complex
 					register "gpp2_configuration" = "1"	# Configuration 8:8
 					register "gpp3a_configuration" = "2"	# Configuration 4:1:1:0:0:0
 					register "port_enable" = "0x3E14"       # 0b11111000010100
+					register "port_aspm_disable" = "0"
+					register "port_gen1" = "0"
 				end
 				chip southbridge/amd/cimx/sb700		# Secondary southbridge
 					device pci 11.0 on end			# SATA
