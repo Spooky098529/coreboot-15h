@@ -403,13 +403,12 @@ static void rd890_init(void *chip_info) {
 	#endif
 }
 
-static void rd890_final(void *chip_info) {
-	struct northbridge_amd_cimx_rd890_config *rd890_info = chip_info;
-	PCI_ADDR PciAddress;
-	uint32_t value;
+static void rd890_aspm_cleanup(struct northbridge_amd_cimx_rd890_config *rd890_info) {
 	int i;
 
-	/* clear ASPM on port_aspm_disable ports: root+endpoint LnkCtl, LnkCap ASPMS, stale PME_Status */
+	/* clear ASPM on port_aspm_disable ports: root+endpoint LnkCtl, LnkCap ASPMS, stale PME_Status
+	 * required for buggy ASMEDIA chips (https://bugzilla.kernel.org/show_bug.cgi?id=102311)
+	 */
 	for (i = MIN_PORT_ID; i <= MAX_PORT_ID; i++) {
 		u16 cap;
 		u32 lnkcap;
@@ -466,6 +465,16 @@ static void rd890_final(void *chip_info) {
 				}
 			}
 		}
+	}
+}
+
+static void rd890_final(void *chip_info) {
+	struct northbridge_amd_cimx_rd890_config *rd890_info = chip_info;
+	PCI_ADDR PciAddress;
+	uint32_t value;
+
+	if (rd890_info->port_aspm_disable) {
+		rd890_aspm_cleanup(rd890_info);
 	}
 
 	if(RD890_TEST_THERMAL_SHUTDOWN) {
