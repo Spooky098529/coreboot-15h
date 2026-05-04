@@ -110,7 +110,7 @@ REG8MASK sbEarlyPostPmioInitTbl[]={
         {SB_PMIO_REG0F, 0xFF, 0x1F },
         {SB_PMIO_REG1D, 0xFF, 0xFF },
         {SB_PMIO_REG39, 0xFF, 0xFF },
-        {SB_PMIO_REG7C, ~(UINT8)(BIT5+BIT3+BIT2), BIT3+BIT2},          //Turn on BLink LED
+        {SB_PMIO_REG7C, ~(UINT8)(BIT5+BIT3+BIT2), 0x00},          //Turn off BLink LED
         {SB_PMIO_REG67, 0xFF, 0x06},            // C State enable, must be set in order to exercise C state
         {SB_PMIO_REG68, 0x38, 0x8C},            // THERMTRIP support
         {SB_PMIO_REG8D, 0xFF, 0x01},            // Set PM_Reg_0x8D[0] to enable PmeTurnOff/PmeMsgAck handshake to fix PCIE LAN S3/S4 wake failure
