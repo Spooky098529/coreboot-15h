@@ -375,9 +375,7 @@ static void rd890_init(void *chip_info) {
 	pcie_cfg[nb_index].CoreSetting[3].CplBufferAllocation = ON;
 
 	{
-		u8 default_aspm = rd890_info->port_aspm;
-		if (!default_aspm)
-			default_aspm = CONFIG_RD890_PCIE_ASPM_MODE;
+		u8 default_aspm = CONFIG_RD890_PCIE_ASPM_MODE;
 
 		for (i = MIN_PORT_ID; i <= MAX_PORT_ID; i++) {
 			if ((rd890_info->port_enable & (1 << i)) != 0) {
