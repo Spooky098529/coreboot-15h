@@ -156,6 +156,23 @@ static void spd_get_name(const uint8_t spd[], char spd_name[], int dram_type)
 	}
 }
 
+static const char * spd_get_module_ddr3_type_string(const uint8_t spd[]) {
+	int ddr3_type = spd[DDR3_TYPE];
+
+	switch(ddr3_type) {
+		case DDR3_RDIMM:
+			return "RDIMM";
+		case DDR3_UDIMM:
+			return "UDIMM";
+		case DDR3_SODIMM:
+			return "SODIMM";
+		case DDR3_LRDIMM:
+			return "LRDIMM";
+	}
+	printk(BIOS_WARNING, "SPD: unknown DDR3 type (0x%02X)\n", ddr3_type);
+	return "UNKNOWN";
+}
+
 void print_spd_info(uint8_t spd[])
 {
 	char spd_name[DDR4_SPD_PART_LEN+1] = { 0 };
@@ -171,6 +188,12 @@ void print_spd_info(uint8_t spd[])
 	/* Module type */
 	printk(BIOS_INFO, "SPD: module type is %s\n",
 		spd_get_module_type_string(type));
+
+	/* DDR 3 type */
+	if (type == SPD_DRAM_DDR3) {
+		printk(BIOS_INFO, "SPD: module ddr3 type is %s\n", spd_get_module_ddr3_type_string(spd));
+	}
+
 	/* Module Part Number */
 	spd_get_name(spd, spd_name, type);
 

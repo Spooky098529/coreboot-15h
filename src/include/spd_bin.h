@@ -31,6 +31,11 @@
 #define  SPD_DRAM_DDR4		0x0C
 #define SPD_DENSITY_BANKS	4
 #define SPD_ADDRESSING		5
+#define DDR3_TYPE		3
+#define  DDR3_RDIMM		0x01
+#define  DDR3_UDIMM		0x02
+#define  DDR3_SODIMM		0x03
+#define  DDR3_LRDIMM		0x0b
 #define DDR3_ORGANIZATION	7
 #define DDR3_BUS_DEV_WIDTH	8
 #define DDR4_ORGANIZATION	12
