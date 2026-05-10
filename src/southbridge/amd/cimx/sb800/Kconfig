@@ -50,36 +50,41 @@ config IDE_COMBINED_MODE
 	default 0x1 if !ENABLE_IDE_COMBINED_MODE
 
 choice
-	prompt "SATA Mode"
+	prompt "SATA Controller Mode"
 	default SB800_SATA_AHCI
-	help
-	  Select the mode in which SATA should be driven. NATIVE AHCI, or RAID.
-	  The default is AHCI.
 
-config SB800_SATA_IDE
-	bool "NATIVE"
-	help
-	  NATIVE does not require a ROM.
-
-config SB800_SATA_AHCI
-	bool "AHCI"
-	help
-	  AHCI is the default and may work with or without AHCI ROM. It depends on the payload support.
-	  For example, seabios does not require the AHCI ROM.
+config SB800_SATA_NATIVE_IDE
+	bool "Native IDE"
 
 config SB800_SATA_RAID
 	bool "RAID"
-	help
-	  sb800 RAID mode must have the two required ROM files.
+
+config SB800_SATA_AHCI
+	bool "AHCI"
+
+config SB800_SATA_LEGACY_IDE
+	bool "Legacy IDE"
+
+config SB800_SATA_IDE_TO_AHCI
+	bool "IDE -> AHCI"
+
+config SB800_SATA_AHCI_AMD
+	bool "AHCI, AMD driver"
+
+config SB800_SATA_IDE_TO_AHCI_AMD
+	bool "IDE -> AHCI, AMD driver"
 
 endchoice
 
 config SB800_SATA_MODE
 	hex
-	depends on (SB800_SATA_IDE || SB800_SATA_RAID || SB800_SATA_AHCI)
-	default 0x0 if SB800_SATA_IDE
-	default 0x1 if SB800_SATA_RAID
-	default 0x2 if SB800_SATA_AHCI
+	default 0x00 if SB800_SATA_NATIVE_IDE
+	default 0x01 if SB800_SATA_RAID
+	default 0x02 if SB800_SATA_AHCI
+	default 0x03 if SB800_SATA_LEGACY_IDE
+	default 0x04 if SB800_SATA_IDE_TO_AHCI
+	default 0x05 if SB800_SATA_AHCI_AMD
+	default 0x06 if SB800_SATA_IDE_TO_AHCI_AMD
 
 config SB800_SATA_CLK_AUTO_OFF
 	bool "SATA reference clock auto-off when idle (power saving)"

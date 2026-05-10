@@ -36,7 +36,7 @@ choice
 	default SB700_SATA_AHCI
 
 config SB700_SATA_NATIVE_IDE
-	bool "Native"
+	bool "Native IDE"
 
 config SB700_SATA_RAID
 	bool "RAID"
