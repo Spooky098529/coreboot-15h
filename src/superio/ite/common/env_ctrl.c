@@ -299,17 +299,11 @@ void ite_ec_init(const u16 base, const struct ite_ec_config *const conf)
 	/* clear on warm reboot; retained EC register state can override SmartGuardian config */
 	pnp_write_hwm5_index(base, ITE_EC_FAN_MAIN_CTL, 0);
 
-	/* FANCTL_ONOFF chips keep clock bits in separate regs; don't write them into reg 0x14 */
-#if CONFIG(SUPERIO_ITE_ENV_CTRL_FANCTL_ONOFF)
-	pnp_write_hwm5_index(base, ITE_EC_FAN_CTL_MODE,
-		ITE_EC_FAN_CTL_MASTER_ON | ITE_EC_FAN_CTL_ALL_POL_HIGH);
-#else
 	u8 fan_ctl = pnp_read_hwm5_index(base, ITE_EC_FAN_CTL_MODE);
 	fan_ctl &= ~ITE_EC_FAN_PWM_CLOCK_MASK;
 	fan_ctl |= ITE_EC_FAN_PWM_DEFAULT_CLOCK;
 	fan_ctl |= ITE_EC_FAN_CTL_POLARITY_HIGH;
 	pnp_write_hwm5_index(base, ITE_EC_FAN_CTL_MODE, fan_ctl);
-#endif
 
 	/* Enable HWM if configured */
 	for (i = 0; i < ITE_EC_TMPIN_CNT; ++i)

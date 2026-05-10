@@ -71,21 +71,35 @@ chip northbridge/amd/agesa/family15/root_complex
 							register "TMPIN1.mode"            = "THERMAL_RESISTOR"
 							register "TMPIN2.mode"            = "THERMAL_RESISTOR"
 
-							# FAN1=CPU_FAN+CPU_OPT (PWM1), FAN2=CHA_FAN1 (PWM2), FAN3=CHA_FAN2 (PWM3)
-							# FAN4=CHA_FAN3, FAN5=CHA_FAN4 (both mirror PWM3 via reg 0x0B)
+							# Sabertooth FAN_CTL mapping:
+							#  FAN_CTL1 (pin 8)   -> CPU_FAN + CPU_OPT, 4-pin PWM via OQ4 BJT
+							#  FAN_CTL2 (pin 10)  -> CHA_FAN4 only, voltage via PRN703 RC ->
+							#                       PU700 op-amp 3 -> PQ703 P-MOSFET ->
+							#                       +CHAFANPWR3 rail
+							#  FAN_CTL3 (pin 12)  -> CHA_FAN1 + CHA_FAN2 + CHA_FAN3 (one
+							#                       curve, shared reference): PRN702 RC ->
+							#                       op-amps 1 & 2 (shared P_CHAFAN1_REF_10)
+							#                       -> PQ701 / PQ702 -> +CHAFANPWR /
+							#                       +CHAFANPWR2 rails
+							#  FAN_CTL4 (pin 121) -> not wired (+3V pull-up only)
+							#  FAN_CTL5 (pin 2)   -> not wired
+							#
+							# Tach mapping is split: FAN_TAC1 = CPU_FAN, FAN_TAC2 = CPU_OPT,
+							# FAN_TAC3 = CHA_FAN1; CHA_FAN2/3/4 tachs go to the SB950
+							# FANIN0/1/2 inputs, not the SuperIO.
 
-							# FAN1 / CPU_FAN: 30% at 70°C, 100% at 100°C, stops below 60°C
+							# FAN1 / CPU fan (PWM): 30% at 60°C, 100% at 80°C, off below 45°C
 							register "FAN1.mode"              = "FAN_SMART_AUTOMATIC"
 							register "FAN1.smart.tmpin"       = "1"
-							register "FAN1.smart.tmp_off"     = "60"
-							register "FAN1.smart.tmp_start"   = "70"
-							register "FAN1.smart.tmp_full"    = "100"
+							register "FAN1.smart.tmp_off"     = "45"
+							register "FAN1.smart.tmp_start"   = "60"
+							register "FAN1.smart.tmp_full"    = "80"
 							register "FAN1.smart.tmp_delta"   = "2"
 							register "FAN1.smart.pwm_start"   = "30"
 							register "FAN1.smart.slope"       = "6"
 							register "FAN1.smart.smoothing"   = "0"
 
-							# FAN2 / CHA_FAN1: 30% at 45°C, 100% at 75°C
+							# FAN2 / CHA_FAN4 rear (voltage): 30% at 45°C, 100% at 75°C
 							register "FAN2.mode"              = "FAN_SMART_AUTOMATIC"
 							register "FAN2.smart.tmpin"       = "2"
 							register "FAN2.smart.tmp_off"     = "35"
@@ -96,7 +110,8 @@ chip northbridge/amd/agesa/family15/root_complex
 							register "FAN2.smart.slope"       = "6"
 							register "FAN2.smart.smoothing"   = "0"
 
-							# FAN3 / CHA_FAN2: same curve as FAN2
+							# FAN3 / CHA_FAN1+CHA_FAN2+CHA_FAN3 front bank (voltage,
+							# one curve, one rail): same shape as FAN2
 							register "FAN3.mode"              = "FAN_SMART_AUTOMATIC"
 							register "FAN3.smart.tmpin"       = "2"
 							register "FAN3.smart.tmp_off"     = "35"
@@ -107,11 +122,9 @@ chip northbridge/amd/agesa/family15/root_complex
 							register "FAN3.smart.slope"       = "6"
 							register "FAN3.smart.smoothing"   = "0"
 
-							# FAN4/FAN5 mirror PWM3 (no independent channel); pin-mux unlocked in romstage
-							register "FAN4.mode"              = "FAN_MODE_ON"
-							register "FAN4.pwm_source"        = "3"
-							register "FAN5.mode"              = "FAN_MODE_ON"
-							register "FAN5.pwm_source"        = "3"
+							# FAN_CTL4 / FAN_CTL5 outputs aren't wired on this board.
+							register "FAN4.mode"              = "FAN_IGNORE"
+							register "FAN5.mode"              = "FAN_IGNORE"
 
 							device pnp 2e.0 off end # FDC - no floppy drive
 							device pnp 2e.1 on

@@ -58,14 +58,4 @@ config SUPERIO_ITE_ENV_CTRL_7BIT_SLOPE_REG
 	  Slope PWM registers have no separate BIT6 and are set directly by
 	  7-bit values instead.
 
-config SUPERIO_ITE_ENV_CTRL_FANCTL_ONOFF
-	bool
-	help
-	  On IT8721F and later, register 0x14 (FAN_CTL) uses bit 0 as the
-	  master fan-controller on/off and bits 5:1 for per-channel active-high
-	  PWM polarity, rather than bit 7 for polarity and bits 6:4 for the PWM
-	  base clock.  Select this on chips with the FEAT_FANCTL_ONOFF property
-	  in the Linux it87 driver to program the correct polarity and enable
-	  the fan-controller output stage.
-
 endif

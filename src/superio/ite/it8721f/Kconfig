@@ -21,13 +21,4 @@ config SUPERIO_ITE_IT8721F
 	select SUPERIO_ITE_ENV_CTRL_PWM_FREQ2
 	select SUPERIO_ITE_ENV_CTRL_FAN16_CONFIG
 	select SUPERIO_ITE_ENV_CTRL_8BIT_PWM
-	# IT8721F has 5 fan tachometer inputs (FAN_TAC1-5) but only 3
-	# PWM outputs (FAN_CTL1-3).  FAN_OUT4/FAN_OUT5 are driven by
-	# pin-mux in LDN 7 (registers 0x25/0x27); tach inputs 4 and 5
-	# are enabled by EC register 0x0C bits 4-5.  Selecting 5FANS
-	# lets boards declare FAN4/FAN5 entries in their devicetree.cb
-	# so the secondary tach inputs are enabled.
 	select SUPERIO_ITE_ENV_CTRL_5FANS
-	# IT8721F has FEAT_FANCTL_ONOFF: register 0x14 uses bit 0 for
-	# master on/off and bits 5:1 for per-channel active-high polarity.
-	select SUPERIO_ITE_ENV_CTRL_FANCTL_ONOFF

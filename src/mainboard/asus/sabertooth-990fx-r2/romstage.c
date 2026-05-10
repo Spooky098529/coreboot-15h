@@ -33,28 +33,9 @@
 /* Super I/O at 0x2e - confirmed via probe */
 /* Single COM1 header on board connected to superio */
 #define SERIAL_DEV PNP_DEV(0x2e, IT8721F_SP1)
-#define GPIO_DEV   PNP_DEV(0x2e, IT8721F_GPIO)
 
 /* Guard variable to prevent repeat hardware init */
 static int platform_init_done = 0;
-
-/* route FAN_TAC4/5 and FAN_OUT4/5 to EC in LDN-7 regs 0x25/0x27; chip default is GPIO */
-static void it8721f_unlock_fan45_pinmux(void)
-{
-	const pnp_devfn_t dev = GPIO_DEV;
-	u8 r;
-
-	pnp_enter_conf_state(dev);
-	pnp_set_logical_device(dev);
-
-	r = pnp_read_config(dev, 0x25);
-	pnp_write_config(dev, 0x25, r & ~((1 << 5) | (1 << 6)));
-
-	r = pnp_read_config(dev, 0x27);
-	pnp_write_config(dev, 0x27, r & ~((1 << 1) | (1 << 3)));
-
-	pnp_exit_conf_state(dev);
-}
 
 void cache_as_ram_main(unsigned long bist, unsigned long cpu_init_detectedx)
 {
@@ -105,7 +86,6 @@ void cache_as_ram_main(unsigned long bist, unsigned long cpu_init_detectedx)
 	ite_enable_serial(SERIAL_DEV, CONFIG_TTYS0_BASE);
 	post_code(0x34);
 
-	it8721f_unlock_fan45_pinmux();
 	kb3722q_ec_init();
 	asp1000c_init(); /* must run before AGESA changes CPU voltage */
 

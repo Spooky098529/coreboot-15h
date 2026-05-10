@@ -91,17 +91,18 @@
 #define   ITE_EC_FAN_MAIN_CTL_SMART(x)		(1 << ((x)-1))
 #define ITE_EC_FAN_CTL_MODE			0x14
 /*
- * Older IT87xx (pre-IT8721F): bit 7 = global polarity, bits [6:4] = PWM
- * base-clock select, bits [2:0] = per-fan software on/off.
- *
- * IT8721F and later with FEAT_FANCTL_ONOFF: the register layout is
- * completely different — bit 0 = master fan-controller enable, bits [5:1] =
- * per-channel active-high polarity for PWM1..PWM5.  Polarity 0 = active-low
- * (inverted), 1 = active-high (normal).  The PWM base-clock is controlled by
- * register 0x0C upper bits (FAN1/3) and the FREQ2 register (FAN2), not here.
+ * IT87xx FAN_CTL register layout (default 0x40):
+ *   bit 7    = FAN_CTL polarity for all fans (0 = active-low, 1 = active-high)
+ *   bits 6:4 = PWM base-clock select for FAN1, FAN3 (`100b` = 6 MHz default)
+ *   bit 3    = PWM minimum-duty select for FAN1, FAN3 (1 = clamp to 20%)
+ *   bits 2:0 = per-fan ON/OFF mode control (only effective when the matching
+ *              channel is in ON/OFF mode per reg 0x13 bits 2:0; ignored in
+ *              SmartGuardian mode)
+ * FAN_CTL2 has its own PWM clock and min-duty bits in reg 0x55 — see the
+ * SUPERIO_ITE_ENV_CTRL_PWM_FREQ2 path in env_ctrl.c.
  */
-#define   ITE_EC_FAN_CTL_POLARITY_HIGH		(1 << 7)  /* older chips only */
-#define   ITE_EC_FAN_PWM_CLOCK_MASK		(7 << 4)  /* older chips only */
+#define   ITE_EC_FAN_CTL_POLARITY_HIGH		(1 << 7)
+#define   ITE_EC_FAN_PWM_CLOCK_MASK		(7 << 4)
 #define   ITE_EC_FAN_PWM_CLOCK_48MHZ		(0 << 4)
 #define   ITE_EC_FAN_PWM_CLOCK_24MHZ		(1 << 4)
 #define   ITE_EC_FAN_PWM_CLOCK_12MHZ		(2 << 4)
@@ -111,10 +112,7 @@
 #define   ITE_EC_FAN_PWM_CLOCK_1_5MHZ		(6 << 4)
 #define   ITE_EC_FAN_PWM_CLOCK_51KHZ		(7 << 4)
 #define   ITE_EC_FAN_PWM_MIN_DUTY_20		(1 << 3)
-/* FANCTL_ONOFF chips (IT8721F+): register 0x14 layout */
-#define   ITE_EC_FAN_CTL_MASTER_ON		(1 << 0)
-#define   ITE_EC_FAN_CTL_ALL_POL_HIGH		(0x1f << 1)  /* bits 5:1 */
-#define   ITE_EC_FAN_CTL_ON(x)			(1 << ((x)-1))
+#define   ITE_EC_FAN_CTL_ON(x)			(1 << ((x)-1))  /* fans 1..3 only */
 
 #define ITE_EC_FAN_CTL_PWM_CONTROL(x)					\
 	(((x) > 3 && CONFIG(SUPERIO_ITE_ENV_CTRL_5FANS))	\
