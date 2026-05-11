@@ -32,6 +32,14 @@ void sb800_cimx_config(AMDSBCFG *sb_config)
 		return;
 
 	sb_config->S3Resume = acpi_is_wakeup_s3();
+	#ifdef CONFIG_MAINBOARD_POWER_FAILURE_STATE
+	sb_config->PowerFailOption = CONFIG_MAINBOARD_POWER_FAILURE_STATE;
+	if (sb_config->PowerFailOption == 0x02) {
+		sb_config->PowerFailOption |= 0x01;
+	}
+	#else
+	sb_config->PowerFailOption = 0;
+	#endif
 
 	/* header */
 	sb_config->StdHeader.PcieBasePtr = PCIEX_BASE_ADDRESS;

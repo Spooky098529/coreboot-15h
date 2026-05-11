@@ -901,6 +901,14 @@ typedef struct _AMDSBCFG {
  *    @li <b>1</b> - enable
  */
   unsigned int   ResetCpuOnSyncFlood:1;       //27
+/**< PowerFailOption - Assumed power state after power less
+ *   @par
+ *    @li <b>0</b> - OFF
+ *    @li <b>1</b> - ON
+ *    @li <b>2</b> - OFF
+ *    @li <b>3</b> - LAST
+ */
+  unsigned int   PowerFailOption:2;           //28 (inserted, the rest are now off)
 /**< LdtStpDisable - LdtStp# output disable
  *   @par
  *    @li <b>0</b> - LdtStp# output enable

@@ -231,6 +231,8 @@ sbPowerOnInit (
 
   programSbAcpiMmioTbl ((AcpiRegWrite*) FIXUP_PTR (&sbPmioPorInitTable[0]));
 
+  // Set PwrFailShadow
+  RWPMIO(SB_PMIOA_REG5B, AccWidthUint8, 0xFC, BIT2|(pConfig->PowerFailOption & 0x03));
 
   SataPortNum = 0;
   for ( SataPortNum = 0; SataPortNum < 0x06; SataPortNum++ ) {
