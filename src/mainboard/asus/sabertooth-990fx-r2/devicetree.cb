@@ -104,7 +104,7 @@ chip northbridge/amd/agesa/family15/root_complex
 							register "FAN3.mode"              = "FAN_MODE_ON"
 							register "FAN4.mode"              = "FAN_MODE_ON"
 
-							# FAN5 is wired to VRMs
+							# FAN5 is not wired
 							register "FAN5.mode"              = "FAN_IGNORE"
 
 							device pnp 2e.0 off end # FDC - no floppy drive
