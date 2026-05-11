@@ -88,7 +88,7 @@ chip northbridge/amd/agesa/family15/root_complex
 							# FAN_TAC3 = CHA_FAN1; CHA_FAN2/3/4 tachs go to the SB950
 							# FANIN0/1/2 inputs, not the SuperIO.
 
-							# FAN1 / CPU fan (PWM): 30% at 60°C, 100% at 80°C, off below 45°C
+							# FAN1 / CPU fan (PWM): Fan Curve
 							register "FAN1.mode"              = "FAN_SMART_AUTOMATIC"
 							register "FAN1.smart.tmpin"       = "1"    # Temperature source
 							register "FAN1.smart.tmp_off"     = "20"   # Fan off temperature
@@ -99,31 +99,12 @@ chip northbridge/amd/agesa/family15/root_complex
 							register "FAN1.smart.slope"       = "0x1C" # Fan curve slope, 3.5 PWM per C
 							register "FAN1.smart.smoothing"   = "1"
 
-							# FAN2 / CHA_FAN4 rear (voltage): 30% at 45°C, 100% at 75°C
-							register "FAN2.mode"              = "FAN_SMART_AUTOMATIC"
-							register "FAN2.smart.tmpin"       = "2"
-							register "FAN2.smart.tmp_off"     = "35"
-							register "FAN2.smart.tmp_start"   = "45"
-							register "FAN2.smart.tmp_full"    = "75"
-							register "FAN2.smart.tmp_delta"   = "2"
-							register "FAN2.smart.pwm_start"   = "30"
-							register "FAN2.smart.slope"       = "6"
-							register "FAN2.smart.smoothing"   = "0"
+							# FAN2-4 / CHA fan (Voltage): 100%
+							register "FAN2.mode"              = "FAN_MODE_ON"
+							register "FAN3.mode"              = "FAN_MODE_ON"
+							register "FAN4.mode"              = "FAN_MODE_ON"
 
-							# FAN3 / CHA_FAN1+CHA_FAN2+CHA_FAN3 front bank (voltage,
-							# one curve, one rail): same shape as FAN2
-							register "FAN3.mode"              = "FAN_SMART_AUTOMATIC"
-							register "FAN3.smart.tmpin"       = "2"
-							register "FAN3.smart.tmp_off"     = "35"
-							register "FAN3.smart.tmp_start"   = "45"
-							register "FAN3.smart.tmp_full"    = "75"
-							register "FAN3.smart.tmp_delta"   = "2"
-							register "FAN3.smart.pwm_start"   = "30"
-							register "FAN3.smart.slope"       = "6"
-							register "FAN3.smart.smoothing"   = "0"
-
-							# FAN_CTL4 / FAN_CTL5 outputs aren't wired on this board.
-							register "FAN4.mode"              = "FAN_IGNORE"
+							# FAN5 is wired to VRMs
 							register "FAN5.mode"              = "FAN_IGNORE"
 
 							device pnp 2e.0 off end # FDC - no floppy drive
