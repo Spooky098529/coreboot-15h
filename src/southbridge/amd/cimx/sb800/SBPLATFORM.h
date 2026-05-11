@@ -21,6 +21,8 @@
 #define _AMD_SBPLATFORM_H_
 
 #include <stddef.h>
+#include <console/console.h>
+#include <commonlib/loglevel.h>
 
 typedef unsigned long long PLACEHOLDER;
 
@@ -46,6 +48,17 @@ typedef union _PCI_ADDR {
   EXT_PCI_ADDR            Addr; ///< / Extended PCI Address
 } PCI_ADDR;
 */
+
+#ifdef TRACE
+#undef TRACE
+#endif
+
+#if CONFIG(ENABLE_SB_CIMX_DEBUGGER)
+	#define TRACE(Arguments) printk Arguments
+#else
+	#define TRACE(Arguments) do {} while (0)
+#endif
+
 #endif
 #define FIXUP_PTR(ptr)  ptr
 

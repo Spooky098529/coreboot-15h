@@ -32,7 +32,9 @@ typedef uint64_t UINT64;
 typedef uint8_t BOOLEAN;
 
 #define DMSG_SB_TRACE   0x02
+#ifndef TRACE
 #define TRACE(Arguments)
+#endif
 
 #ifndef TRUE
 #define TRUE  1

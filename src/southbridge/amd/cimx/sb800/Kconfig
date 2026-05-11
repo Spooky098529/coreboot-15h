@@ -29,6 +29,15 @@ config SOUTHBRIDGE_AMD_CIMX_SB800
 	select AZALIA_PLUGIN_SUPPORT
 
 if SOUTHBRIDGE_AMD_CIMX_SB800
+
+config ENABLE_SB_CIMX_DEBUGGER
+	bool "Enable CIMx Debugging"
+	default n
+	help
+	  This option enables the AMD CIMX debugger and redirects it to the coreboot console.
+
+	  Warning: Only enable this option when debuging or tracing AMD CIMX code.
+
 config BOOTBLOCK_SOUTHBRIDGE_INIT
 	string
 	default "southbridge/amd/cimx/sb800/bootblock.c"

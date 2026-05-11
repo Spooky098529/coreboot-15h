@@ -147,6 +147,8 @@ sbPowerOnInit (
   UINT8  cimSioHwmPortEnable;
   UINT8  SataPortNum;
 
+  TRACE((DMSG_SB_TRACE, "CIMx - Entering %s \n", __func__));
+
   cimNbSbGen2 = pConfig->NbSbGen2;
   cimSataMode = pConfig->SATAMODE.SataModeReg;
 // Adding Fast Read Function support
