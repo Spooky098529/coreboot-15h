@@ -90,14 +90,14 @@ chip northbridge/amd/agesa/family15/root_complex
 
 							# FAN1 / CPU fan (PWM): 30% at 60°C, 100% at 80°C, off below 45°C
 							register "FAN1.mode"              = "FAN_SMART_AUTOMATIC"
-							register "FAN1.smart.tmpin"       = "1"
-							register "FAN1.smart.tmp_off"     = "45"
-							register "FAN1.smart.tmp_start"   = "60"
-							register "FAN1.smart.tmp_full"    = "80"
-							register "FAN1.smart.tmp_delta"   = "2"
-							register "FAN1.smart.pwm_start"   = "30"
-							register "FAN1.smart.slope"       = "6"
-							register "FAN1.smart.smoothing"   = "0"
+							register "FAN1.smart.tmpin"       = "1"    # Temperature source
+							register "FAN1.smart.tmp_off"     = "20"   # Fan off temperature
+							register "FAN1.smart.tmp_start"   = "30"   # Fan curve begin temperature
+							register "FAN1.smart.tmp_full"    = "68"   # Fan max temperature
+							register "FAN1.smart.tmp_delta"   = "5"    # Temperature interval for fan curve steps
+							register "FAN1.smart.pwm_start"   = "5"    # Start of fan curve
+							register "FAN1.smart.slope"       = "0x1C" # Fan curve slope, 3.5 PWM per C
+							register "FAN1.smart.smoothing"   = "1"
 
 							# FAN2 / CHA_FAN4 rear (voltage): 30% at 45°C, 100% at 75°C
 							register "FAN2.mode"              = "FAN_SMART_AUTOMATIC"
