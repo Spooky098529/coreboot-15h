@@ -117,6 +117,28 @@ static void setup_gpio(void) {
 	FCH_GPIO(216) = 0xA2;
 }
 
+static void cpu_limit_tdp(void) {
+	u32 val;
+	int cpu_limit;
+
+	// D18F4x10C TDP Limit 2
+	val = pci_read_config32(PCI_DEV(0, 0x18, 4), 0x10C);
+	cpu_limit = val & (0xfff);
+	printk(BIOS_INFO, "CPU TDP Limit: %d W\n", cpu_limit);
+
+	if(CONFIG_BOARD_CPU_TDP_LIMIT < 1) return;
+
+	if(CONFIG_BOARD_CPU_TDP_LIMIT > cpu_limit) {
+		printk(BIOS_ERR, "The requested CPU TDP Limit (%d) is invalid\n", CONFIG_BOARD_CPU_TDP_LIMIT);
+		return;
+	}
+
+	val &= ~(0xfff);
+	val |= (CONFIG_BOARD_CPU_TDP_LIMIT & 0xfff);
+	pci_write_config32(PCI_DEV(0, 0x18, 4), 0x10C, val);
+	printk(BIOS_INFO, "New CPU TDP Limit: %d W\n", CONFIG_BOARD_CPU_TDP_LIMIT);
+}
+
 void cache_as_ram_main(unsigned long bist, unsigned long cpu_init_detectedx)
 {
 	u32 val;
@@ -165,6 +187,8 @@ void cache_as_ram_main(unsigned long bist, unsigned long cpu_init_detectedx)
 		sb_Poweron_Init();
 		platform_init_done = 1;
 	}
+
+	cpu_limit_tdp();
 
 	post_code(0x3B);
 	printk(BIOS_DEBUG, "Calling agesawrapper_amdinitearly\n");

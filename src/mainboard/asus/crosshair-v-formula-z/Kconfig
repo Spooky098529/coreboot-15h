@@ -41,6 +41,21 @@ config HW_MEM_HOLE_SIZEK
 	hex
 	default 0x200000
 
+config BOARD_CPU_TDP_LIMIT
+	int "CPU TDP Limit (W)"
+	default 0
+	help
+	  Enable a CPU power cap (in Watts). Setting to 0 disables the TDP
+	  limit. The default value is CPU dependent and can not be increased.
+	  The FX-9590 has a default value of 705W. Review console output to
+	  determine your current CPU power cap ("CPU TDP Limit").
+
+	  This setting does not correlate directly with advertised CPU TDP or
+	  measured power consumption at the outlet. Testing the FX-9590 with
+	  a 500W cap limits full core performance to ~210W while matching the
+	  FX-8370 in multicore workloads. Single core performance with the
+	  500W cap was not limited.
+
 comment "VRM / PMBus configuration (ENE KB3722Q bridge on O2_SMB1)"
 
 config BOARD_VRM_REPORT
