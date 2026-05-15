@@ -244,7 +244,7 @@ floppyimg/memtest.lzma-type := raw
 floppyimg/memtest.lzma-compression := LZMA
 else
 cbfs-files-$(CONFIG_MEMTEST_SECONDARY_PAYLOAD) += img/memtest
-img/memtest-file := payloads/external/Memtest86Plus/memtest86plus/build32/memtest.bin
+img/memtest-file := payloads/external/Memtest86Plus/memtest86plus/build/i586/mt86plus
 img/memtest-type := payload
 img/memtest-compression := $(CBFS_SECONDARY_PAYLOAD_COMPRESS_FLAG)
 endif
@@ -255,7 +255,7 @@ ifeq ($(CONFIG_CONSOLE_SERIAL)$(CONFIG_DRIVERS_UART_8250IO),yy)
 		SERIAL_BAUD_RATE=$(CONFIG_TTYS0_BAUD)
 endif
 
-payloads/external/Memtest86Plus/memtest86plus/build32/floppy.img: $(DOTCONFIG)
+payloads/external/Memtest86Plus/memtest86plus/build/i586/floppy.img: $(DOTCONFIG)
 	$(MAKE) -C payloads/external/Memtest86Plus all \
 		CC="$(CC_x86_32)" \
 		LD="$(LD_x86_32)" \
@@ -268,7 +268,7 @@ payloads/external/Memtest86Plus/memtest86plus/build32/floppy.img: $(DOTCONFIG)
 		$(MEMTEST_SERIAL_OPTIONS) \
 		MFLAGS= MAKEFLAGS=
 
-payloads/external/Memtest86Plus/memtest86plus/build32/memtest.bin: $(DOTCONFIG)
+payloads/external/Memtest86Plus/memtest86plus/build/i586/mt86plus: $(DOTCONFIG)
 	$(MAKE) -C payloads/external/Memtest86Plus all \
 		CC="$(CC_x86_32)" \
 		LD="$(LD_x86_32)" \
