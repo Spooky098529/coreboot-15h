@@ -14,6 +14,9 @@
 #ifndef _CIMX_SB_GPIO_OEM_H_
 #define _CIMX_SB_GPIO_OEM_H_
 
+#include <lib.h>
+#include <vendorcode/amd/cimx/sb800/SB800.h>
+
 #define SB_GPIO_REG02   2
 #define SB_GPIO_REG09   9
 #define SB_GPIO_REG10   10
