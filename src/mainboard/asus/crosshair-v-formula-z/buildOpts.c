@@ -100,11 +100,13 @@ CONST AP_MTRR_SETTINGS ROMDATA board_ap_mtrr_list[] = {
 };
 #define BLDCFG_AP_MTRR_SETTINGS_LIST &board_ap_mtrr_list
 
-/*** VRM Configuration ***/
+/*** CPU VRM Configuration ***/
 
-#define BLDCFG_VRM_CURRENT_LIMIT     120000
-#define BLDCFG_VRM_INRUSH_CURRENT_LIMIT 0
-#define BLDCFG_VRM_LOW_POWER_THRESHOLD  24000
+#define BLDCFG_VRM_CURRENT_LIMIT		140000
+#define BLDCFG_VRM_LOW_POWER_THRESHOLD		12000
+#define BLDCFG_VRM_SLEW_RATE			5000
+#define BLDCFG_VRM_HIGH_SPEED_ENABLE		TRUE
+#define BLDCFG_VRM_INRUSH_CURRENT_LIMIT		0
 
 /****** AMD Platform Install ******/
 #include "ScorpiusInstall.h"

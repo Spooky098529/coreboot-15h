@@ -85,7 +85,7 @@ chip northbridge/amd/agesa/family15/root_complex
 							register "FAN1.smart.tmp_off"     = "20"   # Fan off temperature
 							register "FAN1.smart.tmp_start"   = "30"   # Fan curve begin temperature
 							register "FAN1.smart.tmp_full"    = "68"   # Fan max temperature
-							register "FAN1.smart.tmp_delta"   = "5"    # Temperature interval for fan curve steps
+							register "FAN1.smart.tmp_delta"   = "2"    # Temperature interval for fan curve steps
 							register "FAN1.smart.pwm_start"   = "5"    # Start of fan curve (PCT)
 							register "FAN1.smart.slope"       = "0x14" # Fan curve slope, 2.5 PCT per C
 							register "FAN1.smart.smoothing"   = "1"
