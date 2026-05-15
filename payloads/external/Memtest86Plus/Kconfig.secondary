@@ -6,7 +6,7 @@ choice
 	depends on MEMTEST_SECONDARY_PAYLOAD
 
 config MEMTEST_STABLE
-	bool "v7.20"
+	bool "v8.00"
 	help
 	  Stable Memtest86+ version.
 

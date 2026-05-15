@@ -239,7 +239,7 @@ img/tint-compression := $(CBFS_SECONDARY_PAYLOAD_COMPRESS_FLAG)
 
 ifeq ($(CONFIG_MEMTEST_FLOPPY),y)
 cbfs-files-$(CONFIG_MEMTEST_SECONDARY_PAYLOAD) += floppyimg/memtest.lzma
-floppyimg/memtest.lzma-file := payloads/external/Memtest86Plus/memtest86plus/build32/floppy.img
+floppyimg/memtest.lzma-file := payloads/external/Memtest86Plus/memtest86plus/build/i586/floppy.img
 floppyimg/memtest.lzma-type := raw
 floppyimg/memtest.lzma-compression := LZMA
 else

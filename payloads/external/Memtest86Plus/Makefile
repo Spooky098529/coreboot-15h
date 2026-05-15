@@ -15,13 +15,13 @@
 
 TAG-$(CONFIG_MEMTEST_MASTER)=origin/main
 NAME-$(CONFIG_MEMTEST_MASTER)=Master
-TAG-$(CONFIG_MEMTEST_STABLE)=f3846947bd8ff5a998cf0970b51727815cb11249
+TAG-$(CONFIG_MEMTEST_STABLE)=2e12eee44f9e843d021ea7115a4f23a8ae1844af
 NAME-$(CONFIG_MEMTEST_STABLE)=Stable
 TAG-$(CONFIG_MEMTEST_REVISION)=$(CONFIG_MEMTEST_REVISION_ID)
 
 project_name=Memtest86+
 project_dir=$(CURDIR)/memtest86plus
-project_make_dir=$(project_dir)/build32
+project_make_dir=$(project_dir)/build/i586
 project_git_repo=https://git.15h.org/mrothfuss/memtest86plus.git
 
 all: build
@@ -53,7 +53,7 @@ checkout: fetch
 
 build: checkout
 	echo "    MAKE       $(project_name) $(NAME-y)"
-	$(MAKE) -C $(project_make_dir) memtest.bin floppy.img
+	$(MAKE) -C $(project_make_dir) floppy.img
 
 clean:
 	test -d $(project_make_dir) && $(MAKE) -C $(project_make_dir) clean || exit 0
