@@ -113,6 +113,7 @@ STATIC CONST PSCFG_SAO_ENTRY OrAM3UDdr3SAO[] = {
   {.DimmPerCh = 2, .DDRrate = DDR1600, .VDDIO = V1_5, .Dimm0 = DIMM_DR, .Dimm1 = DIMM_SR + DIMM_DR, .Dimm2 = NP, .SlowMode = 1, .AddTmgCtl = 0x00000033, .ODC = 0x30222322},
   {.DimmPerCh = 2, .DDRrate = DDR1866, .VDDIO = V1_5, .Dimm0 = NP, .Dimm1 = DIMM_SR, .Dimm2 = NP, .SlowMode = 0, .AddTmgCtl = 0x00000000, .ODC = 0x30332222},
   {.DimmPerCh = 2, .DDRrate = DDR1866, .VDDIO = V1_5, .Dimm0 = NP, .Dimm1 = DIMM_DR, .Dimm2 = NP, .SlowMode = 1, .AddTmgCtl = 0x00000000, .ODC = 0x30332222},
+  {.DimmPerCh = 2, .DDRrate = DDR1866, .VDDIO = V1_5, .Dimm0 = DIMM_DR, .Dimm1 = DIMM_SR + DIMM_DR, .Dimm2 = NP, .SlowMode = 1, .AddTmgCtl = 0x00000000, .ODC = 0x30332222},
 };
 CONST PSC_TBL_ENTRY SAOTblEntUAM3 = {
    .Header = {.PSCType = PSCFG_SAO, .DimmType = UDIMM_TYPE, .NumOfDimm = NOD_DONT_CARE, .LogicalCpuid = {.Family = AMD_FAMILY_15_OR, .Revision = AMD_F15_ALL}, .PackageType = OR_SOCKET_AM3, .TechType = DDR3_TECHNOLOGY},
@@ -132,7 +133,10 @@ STATIC CONST PSCFG_S___ENTRY OrAM3UDdr3S__[] = {
   {.DimmPerCh = 2, .DDRrate = DDR1600, .VDDIO = V1_5, .Dimm0 = DIMM_SR, .Dimm1 = DIMM_SR, .Dimm2 = NP, .Enable__ = 0},
   {.DimmPerCh = 2, .DDRrate = DDR1600, .VDDIO = V1_5, .Dimm0 = DIMM_SR, .Dimm1 = DIMM_DR, .Dimm2 = NP, .Enable__ = 0},
   {.DimmPerCh = 2, .DDRrate = DDR1600, .VDDIO = V1_5, .Dimm0 = DIMM_DR, .Dimm1 = DIMM_SR + DIMM_DR, .Dimm2 = NP, .Enable__ = 0},
-  {.DimmPerCh = 2, .DDRrate = DDR1866, .VDDIO = V1_5, .Dimm0 = NP, .Dimm1 = DIMM_SR + DIMM_DR, .Dimm2 = NP, .Enable__ = 0},  };
+  {.DimmPerCh = 2, .DDRrate = DDR1866, .VDDIO = V1_5, .Dimm0 = NP, .Dimm1 = DIMM_SR + DIMM_DR, .Dimm2 = NP, .Enable__ = 0},
+  {.DimmPerCh = 2, .DDRrate = DDR1866, .VDDIO = V1_5, .Dimm0 = DIMM_SR, .Dimm1 = DIMM_SR, .Dimm2 = NP, .Enable__ = 0},
+  {.DimmPerCh = 2, .DDRrate = DDR1866, .VDDIO = V1_5, .Dimm0 = DIMM_SR, .Dimm1 = DIMM_DR, .Dimm2 = NP, .Enable__ = 0},
+  {.DimmPerCh = 2, .DDRrate = DDR1866, .VDDIO = V1_5, .Dimm0 = DIMM_DR, .Dimm1 = DIMM_SR + DIMM_DR, .Dimm2 = NP, .Enable__ = 0}, };
 CONST PSC_TBL_ENTRY S__TblEntUAM3 = {
    .Header = {.PSCType = PSCFG_S__, .DimmType = UDIMM_TYPE, .NumOfDimm = NOD_DONT_CARE, .LogicalCpuid = {.Family = AMD_FAMILY_15_OR, .Revision = AMD_F15_ALL}, .PackageType = OR_SOCKET_AM3, .TechType = DDR3_TECHNOLOGY},
    .TableSize = sizeof (OrAM3UDdr3S__) / sizeof (PSCFG_S___ENTRY),
@@ -213,6 +217,11 @@ STATIC CONST PSCFG_RTT_ENTRY DramTermOrAM3UDIMM[] = {
   {.DimmPerCh = 2, .DDRrate = DDR1600, .VDDIO = V1_5, .Dimm0 = DIMM_DR, .Dimm1 = DIMM_SR + DIMM_DR, .Dimm2 = NP, .Dimm = DIMM_DR, .Rank = R0 + R1, .RttNom = 4, .RttWr = 1},
   {.DimmPerCh = 2, .DDRrate = DDR1866, .VDDIO = V1_5, .Dimm0 = NP, .Dimm1 = DIMM_SR, .Dimm2 = NP, .Dimm = DIMM_SR, .Rank = R0, .RttNom = 3, .RttWr = 0},
   {.DimmPerCh = 2, .DDRrate = DDR1866, .VDDIO = V1_5, .Dimm0 = NP, .Dimm1 = DIMM_DR, .Dimm2 = NP, .Dimm = DIMM_DR, .Rank = R0 + R1, .RttNom = 3, .RttWr = 0},
+  {.DimmPerCh = 2, .DDRrate = DDR1866, .VDDIO = V1_5, .Dimm0 = DIMM_SR, .Dimm1 = DIMM_SR, .Dimm2 = NP, .Dimm = DIMM_SR, .Rank = R0, .RttNom = 4, .RttWr = 1},
+  {.DimmPerCh = 2, .DDRrate = DDR1866, .VDDIO = V1_5, .Dimm0 = DIMM_SR, .Dimm1 = DIMM_DR, .Dimm2 = NP, .Dimm = DIMM_SR, .Rank = R0, .RttNom = 4, .RttWr = 1},
+  {.DimmPerCh = 2, .DDRrate = DDR1866, .VDDIO = V1_5, .Dimm0 = DIMM_SR, .Dimm1 = DIMM_DR, .Dimm2 = NP, .Dimm = DIMM_DR, .Rank = R0 + R1, .RttNom = 4, .RttWr = 1},
+  {.DimmPerCh = 2, .DDRrate = DDR1866, .VDDIO = V1_5, .Dimm0 = DIMM_DR, .Dimm1 = DIMM_SR, .Dimm2 = NP, .Dimm = DIMM_SR, .Rank = R0, .RttNom = 4, .RttWr = 1},
+  {.DimmPerCh = 2, .DDRrate = DDR1866, .VDDIO = V1_5, .Dimm0 = DIMM_DR, .Dimm1 = DIMM_SR + DIMM_DR, .Dimm2 = NP, .Dimm = DIMM_DR, .Rank = R0 + R1, .RttNom = 4, .RttWr = 1},
 };
 CONST PSC_TBL_ENTRY DramTermTblEntUAM3 = {
    .Header = {.PSCType = PSCFG_RTT, .DimmType = UDIMM_TYPE, .NumOfDimm = NOD_DONT_CARE, .LogicalCpuid = {.Family = AMD_FAMILY_15_OR, .Revision = AMD_F15_ALL}, .PackageType = OR_SOCKET_AM3, .TechType = DDR3_TECHNOLOGY},
@@ -227,11 +236,11 @@ CONST PSC_TBL_ENTRY DramTermTblEntUAM3 = {
 STATIC CONST PSCFG_MAXFREQ_ENTRY ROMDATA MaxFreqOrAM3UDIMM[] = {
   {._MAXFREQ_ENTRY = {.DimmPerCh = 1, .Dimms = 1, .SR = 1, .DR = 0, .QR = 0, .Speed1_5V = DDR1866_FREQUENCY, .Speed1_35V = 0, .Speed1_25V = 0}},
   {._MAXFREQ_ENTRY = {.DimmPerCh = 1, .Dimms = 1, .SR = 0, .DR = 1, .QR = 0, .Speed1_5V = DDR1866_FREQUENCY, .Speed1_35V = 0, .Speed1_25V = 0}},
-  {._MAXFREQ_ENTRY = {.DimmPerCh = 2, .Dimms = 1, .SR = 1, .DR = 0, .QR = 0, .Speed1_5V = DDR1600_FREQUENCY, .Speed1_35V = 0, .Speed1_25V = 0}},
-  {._MAXFREQ_ENTRY = {.DimmPerCh = 2, .Dimms = 1, .SR = 0, .DR = 1, .QR = 0, .Speed1_5V = DDR1600_FREQUENCY, .Speed1_35V = 0, .Speed1_25V = 0}},
-  {._MAXFREQ_ENTRY = {.DimmPerCh = 2, .Dimms = 2, .SR = 2, .DR = 0, .QR = 0, .Speed1_5V = DDR1600_FREQUENCY, .Speed1_35V = 0, .Speed1_25V = 0}},
-  {._MAXFREQ_ENTRY = {.DimmPerCh = 2, .Dimms = 2, .SR = 1, .DR = 1, .QR = 0, .Speed1_5V = DDR1333_FREQUENCY, .Speed1_35V = 0, .Speed1_25V = 0}},
-  {._MAXFREQ_ENTRY = {.DimmPerCh = 2, .Dimms = 2, .SR = 0, .DR = 2, .QR = 0, .Speed1_5V = DDR1333_FREQUENCY, .Speed1_35V = 0, .Speed1_25V = 0}}
+  {._MAXFREQ_ENTRY = {.DimmPerCh = 2, .Dimms = 1, .SR = 1, .DR = 0, .QR = 0, .Speed1_5V = DDR1866_FREQUENCY, .Speed1_35V = 0, .Speed1_25V = 0}},
+  {._MAXFREQ_ENTRY = {.DimmPerCh = 2, .Dimms = 1, .SR = 0, .DR = 1, .QR = 0, .Speed1_5V = DDR1866_FREQUENCY, .Speed1_35V = 0, .Speed1_25V = 0}},
+  {._MAXFREQ_ENTRY = {.DimmPerCh = 2, .Dimms = 2, .SR = 2, .DR = 0, .QR = 0, .Speed1_5V = DDR1866_FREQUENCY, .Speed1_35V = 0, .Speed1_25V = 0}},
+  {._MAXFREQ_ENTRY = {.DimmPerCh = 2, .Dimms = 2, .SR = 1, .DR = 1, .QR = 0, .Speed1_5V = DDR1866_FREQUENCY, .Speed1_35V = 0, .Speed1_25V = 0}},
+  {._MAXFREQ_ENTRY = {.DimmPerCh = 2, .Dimms = 2, .SR = 0, .DR = 2, .QR = 0, .Speed1_5V = DDR1866_FREQUENCY, .Speed1_35V = 0, .Speed1_25V = 0}}
 };
 CONST PSC_TBL_ENTRY MaxFreqTblEntUAM3 = {
    .Header = {.PSCType = PSCFG_MAXFREQ, .DimmType = UDIMM_TYPE, .NumOfDimm = NOD_DONT_CARE, .LogicalCpuid = {.Family = AMD_FAMILY_15_OR, .Revision = AMD_F15_ALL}, .PackageType = OR_SOCKET_AM3, .TechType = DDR3_TECHNOLOGY},
