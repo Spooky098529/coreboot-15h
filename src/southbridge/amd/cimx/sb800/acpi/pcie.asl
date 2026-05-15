@@ -13,6 +13,54 @@
  * GNU General Public License for more details.
  */
 
+/* PCIe Dev 15.0  */
+#ifdef SB800_GPP_PORT_0_ACTIVE
+Device(PE20) {
+	Name(_ADR, 0x00150000)
+	Name(_PRW, Package() {0x0F, 4})
+	Method(_PRT,0) {
+		If(PMOD){ Return(APE0) }   /* APIC mode */
+		Return (PE0)                  /* PIC Mode */
+	} /* end _PRT */
+} /* end PE20 */
+#endif
+
+/* PCIe Dev 15.1  */
+#ifdef SB800_GPP_PORT_1_ACTIVE
+Device(PE21) {
+	Name(_ADR, 0x00150001)
+	Name(_PRW, Package() {0x10, 4})
+	Method(_PRT,0) {
+		If(PMOD){ Return(APE1) }   /* APIC mode */
+		Return (PE1)                  /* PIC Mode */
+	} /* end _PRT */
+} /* end PE21 */
+#endif
+
+/* PCIe Dev 15.2  */
+#ifdef SB800_GPP_PORT_2_ACTIVE
+Device(PE22) {
+	Name(_ADR, 0x00150002)
+	Name(_PRW, Package() {0x11, 4})
+	Method(_PRT,0) {
+		If(PMOD){ Return(APE2) }   /* APIC mode */
+		Return (APE2)                  /* PIC Mode */
+	} /* end _PRT */
+} /* end PE22 */
+#endif
+
+/* PCIe Dev 15.3  */
+#ifdef SB800_GPP_PORT_3_ACTIVE
+Device(PE23) {
+	Name(_ADR, 0x00150003)
+	Name(_PRW, Package() {0x12, 4})
+	Method(_PRT,0) {
+		If(PMOD){ Return(APE3) }   /* APIC mode */
+		Return (PE3)                  /* PIC Mode */
+	} /* end _PRT */
+} /* end PE23 */
+#endif
+
 Scope(\) {
 	/* PCI IRQ mapping registers, C00h-C01h. */
 	OperationRegion(PRQM, SystemIO, 0x00000C00, 0x00000002)
