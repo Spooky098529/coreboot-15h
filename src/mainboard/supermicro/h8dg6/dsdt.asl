@@ -45,6 +45,11 @@ DefinitionBlock (
 			#include <northbridge/amd/agesa/family15/acpi/northbridge.asl>
 
 			/* RD890 PCIe root ports */
+			#define RD890_GFX_PORT_0_ACTIVE
+			#define RD890_GPP_PORT_0_ACTIVE
+			#define RD890_GFX2_PORT_0_ACTIVE
+			#define RD890_GFX2_PORT_1_ACTIVE
+			#define RD890_GPP2_PORT_0_ACTIVE
 			#include <northbridge/amd/cimx/rd890/acpi/northbridge.asl>
 
 			/* SB700 CIMx southbridge */

@@ -47,6 +47,7 @@
  */
 
 /* Dev 2 - GFX port 0 (primary x16 graphics slot on some NBs) */
+#ifdef RD890_GFX_PORT_0_ACTIVE
 Device(PBR2) {
 	Name(_ADR, 0x00020000)
 	Name(_PRW, Package() {0x18, 4})
@@ -55,8 +56,22 @@ Device(PBR2) {
 		Return (PS2)			/* PIC Mode */
 	} /* end _PRT */
 } /* end PBR2 */
+#endif
+
+/* Dev 3 - GFX port 1 (split x8 graphics slot on some NBs) */
+#ifdef RD890_GFX_PORT_1_ACTIVE
+Device(PBR3) {
+	Name(_ADR, 0x00030000)
+	Name(_PRW, Package() {0x18, 4})
+	Method(_PRT,0) {
+		If(PMOD) { Return(APS3) }	/* APIC mode */
+		Return (PS3)			/* PIC Mode */
+	} /* end _PRT */
+} /* end PBR3 */
+#endif
 
 /* Dev 4 - GPP port 0 */
+#ifdef RD890_GPP_PORT_0_ACTIVE
 Device(PBR4) {
 	Name(_ADR, 0x00040000)
 	Name(_PRW, Package() {0x18, 4})
@@ -65,6 +80,7 @@ Device(PBR4) {
 		Return (PS4)			/* PIC Mode */
 	} /* end _PRT */
 } /* end PBR4 */
+#endif
 
 /* Dev 5 - GPP port 1 (AM3+ boards only; define PS5/APS5 in routing.asl) */
 #ifdef RD890_GPP_PORT_1_ACTIVE
@@ -74,6 +90,30 @@ Device(PBR5) {
 	Method(_PRT,0) {
 		If(PMOD) { Return(APS5) }	/* APIC mode */
 		Return (PS5)			/* PIC Mode */
+	} /* end _PRT */
+} /* end PBR5 */
+#endif
+
+/* Dev 6 - GPP port 2 (AM3+ boards only; define PS6/APS6 in routing.asl) */
+#ifdef RD890_GPP_PORT_2_ACTIVE
+Device(PBR6) {
+	Name(_ADR, 0x00060000)
+	Name(_PRW, Package() {0x18, 4})
+	Method(_PRT,0) {
+		If(PMOD) { Return(APS6) }	/* APIC mode */
+		Return (PS6)			/* PIC Mode */
+	} /* end _PRT */
+} /* end PBR5 */
+#endif
+
+/* Dev 7 - GPP port 3 (AM3+ boards only; define PS7/APS7 in routing.asl) */
+#ifdef RD890_GPP_PORT_3_ACTIVE
+Device(PBR7) {
+	Name(_ADR, 0x00070000)
+	Name(_PRW, Package() {0x18, 4})
+	Method(_PRT,0) {
+		If(PMOD) { Return(APS7) }	/* APIC mode */
+		Return (PS7)			/* PIC Mode */
 	} /* end _PRT */
 } /* end PBR5 */
 #endif
@@ -103,6 +143,7 @@ Device(PBRa) {
 #endif
 
 /* Dev b - second x16 graphics / PCIe slot */
+#ifdef RD890_GFX2_PORT_0_ACTIVE
 Device(PBRb) {
 	Name(_ADR, 0x000B0000)
 	Name(_PRW, Package() {0x18, 4})
@@ -111,8 +152,10 @@ Device(PBRb) {
 		Return (PSb)			/* PIC Mode */
 	} /* end _PRT */
 } /* end PBRb */
+#endif
 
 /* Dev c - second x16 graphics port 1 / PCIe slot */
+#ifdef RD890_GFX2_PORT_1_ACTIVE
 Device(PBRc) {
 	Name(_ADR, 0x000C0000)
 	Name(_PRW, Package() {0x18, 4})
@@ -121,8 +164,10 @@ Device(PBRc) {
 		Return (PSc)			/* PIC Mode */
 	} /* end _PRT */
 } /* end PBRc */
+#endif
 
 /* Dev d - GPP2 port 0 */
+#ifdef RD890_GPP2_PORT_0_ACTIVE
 Device(PBRd) {
 	Name(_ADR, 0x000D0000)
 	Name(_PRW, Package() {0x18, 4})
@@ -131,3 +176,4 @@ Device(PBRd) {
 		Return (PSd)			/* PIC Mode */
 	} /* end _PRT */
 } /* end PBRd */
+#endif
