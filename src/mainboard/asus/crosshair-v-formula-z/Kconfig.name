@@ -1,0 +1,2 @@
+config BOARD_ASUS_CROSSHAIR_V_FORMULA_Z
+	bool "Crosshair V Formula-Z"

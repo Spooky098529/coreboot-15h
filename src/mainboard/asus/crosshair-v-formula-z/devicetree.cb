@@ -1,0 +1,172 @@
+chip northbridge/amd/agesa/family15/root_complex
+	device cpu_cluster 0 on
+		chip cpu/amd/agesa/family15
+			device lapic 10 on end
+		end
+	end
+	device domain 0 on
+		subsystemid 0x1043 0x8163 inherit
+		chip northbridge/amd/agesa/family15
+			device pci 18.0 on
+				chip northbridge/amd/cimx/rd890
+					device pci 0.0 on  end # Host bridge
+					device pci 0.1 off end # CLKCONFIG
+					device pci 0.2 off end # IOMMU
+					device pci 2.0 on  end # GFX port 0 - PCIE_X16_1 (x16)
+					device pci 3.0 off end # GFX port 1 - not wired
+					device pci 4.0 on  end # GPP port 0 - ASMedia ASM1061 SATA (x2)
+					device pci 5.0 on  end # GPP port 1 - Intel GBE (x1)
+					device pci 6.0 on  end # GPP port 2 - ASMedia ASM1042A USB3 (x1)
+					device pci 7.0 on  end # GPP port 3 - ASMedia ASM1042A USB3 (x1)
+					device pci 9.0 on  end # GPP port 4 - ASMedia ASM1042A USB3 (x1)
+					device pci a.0 on  end # GPP port 5 - ASMedia ASM1061 SATA (x1)
+					device pci b.0 on  end # GFX2 port 0 - PCIE_X16/X8_3 (x8 in x16)
+					device pci c.0 on  end # GFX2 port 1 - PCIE_X8_2 (x8 in x16)
+					device pci d.0 on  end # GPP2 port 0 - PCIE_x4_4 (x4 in x16)
+					device pci 8.0 off end # NB/SB Link P2P bridge, hidden by design
+
+					register "gpp1_configuration" = "0" # AAAA: GFX
+					register "gpp2_configuration" = "1" # AABB: GFX2
+					register "gpp3a_configuration" = "6" # 111111: GPP ports
+					register "port_enable" = "0x3EF4" # 0b11111011110100
+
+					# ASM1061 (ports 4,10) and ASM1042A (ports 6,7,9) are incompatible with PCIe L1
+					register "port_aspm_disable" = "(1 << 4) | (1 << 6) | (1 << 7) | (1 << 9) | (1 << 10)"
+
+					# ASM1042A (ports 6,7,9) shows correctable errors at Gen2; marginal board trace
+					register "port_gen1" = "(1 << 6) | (1 << 7) | (1 << 9)"
+				end # cimx/rd890
+				chip southbridge/amd/cimx/sb800
+					device pci 11.0 on end # SATA (AHCI, 6 ports)
+					device pci 12.0 on end # USB OHCI0
+					device pci 12.2 on end # USB EHCI
+					device pci 13.0 on end # USB OHCI0
+					device pci 13.2 on end # USB EHCI
+					device pci 14.5 on end # USB OHCI2
+					device pci 16.0 on end # USB OHCI0
+					device pci 16.2 on end # USB EHCI
+					device pci 14.6 off end # SB950 GBe MAC not used, onboard LAN is PCIe
+					device pci 14.0 on # SMBus
+						chip drivers/generic/generic #dimm 0-0-0
+							device i2c 50 on end
+						end
+						chip drivers/generic/generic #dimm 0-0-1
+							device i2c 51 on end
+						end
+						chip drivers/generic/generic #dimm 0-1-0
+							device i2c 52 on end
+						end
+						chip drivers/generic/generic #dimm 0-1-1
+							device i2c 53 on end
+						end
+					end # SMBus
+					device pci 14.1 off end # IDE
+					device pci 14.2 on end # HD Audio
+					device pci 14.3 on # LPC bridge
+						chip superio/ite/it8721f # ITE IT8721F
+							# VIN0=+12V, VIN1=+5V, VIN2=VCORE, VIN3=+3.3V, VIN5=VDDA; others unwired
+							register "ec.vin_mask"            = "VIN0 | VIN1 | VIN2 | VIN3 | VIN5"
+
+							# TMPIN3 unused on R2.0; leave unconfigured to avoid open-input alarm
+							register "TMPIN1.mode"            = "THERMAL_RESISTOR" # CPU
+							register "TMPIN2.mode"            = "THERMAL_RESISTOR" # MB
+							register "TMPIN3.mode"            = "THERMAL_RESISTOR" # NB
+
+							# Sabertooth FAN_CTL mapping:
+							#  FAN_CTL1 (pin 8)   -> CPUFAN PWM
+							#  FAN_CTL2 (pin 10)  -> CPUFAN Voltage
+							#  FAN_CTL3 (pin 12)  -> CHAFAN Voltage
+							#  FAN_CTL4 (pin 121) -> CHAFAN Voltage
+							#  FAN_CTL5 (pin 2)   -> NC
+
+							# FAN1 / CPU fan (PWM): CPU Fan Curve, 5-100%
+							register "FAN1.mode"              = "FAN_SMART_AUTOMATIC"
+							register "FAN1.smart.tmpin"       = "1"    # Temperature source (CPU)
+							register "FAN1.smart.tmp_off"     = "20"   # Fan off temperature
+							register "FAN1.smart.tmp_start"   = "30"   # Fan curve begin temperature
+							register "FAN1.smart.tmp_full"    = "68"   # Fan max temperature
+							register "FAN1.smart.tmp_delta"   = "5"    # Temperature interval for fan curve steps
+							register "FAN1.smart.pwm_start"   = "5"    # Start of fan curve (PCT)
+							register "FAN1.smart.slope"       = "0x14" # Fan curve slope, 2.5 PCT per C
+							register "FAN1.smart.smoothing"   = "1"
+
+							# FAN2 / CPU fan (Voltage): 100%
+							register "FAN2.mode"              = "FAN_MODE_ON"
+
+							## FAN3 and FAN4 both control CHA fans
+							## the maximum of the two curves sets the fan speed.
+							# FAN3 / CHA fan (Voltage): CPU Fan Curve, 50-100%
+							register "FAN3.mode"              = "FAN_SMART_AUTOMATIC"
+							register "FAN3.smart.tmpin"       = "1"    # Temperature source (CPU)
+							register "FAN3.smart.tmp_off"     = "0x80" # Never turn off
+							register "FAN3.smart.tmp_start"   = "30"   # Fan curve begin temperature
+							register "FAN3.smart.tmp_full"    = "68"   # Fan max temperature
+							register "FAN3.smart.tmp_delta"   = "5"    # Temperature interval for fan curve steps
+							register "FAN3.smart.pwm_start"   = "50"   # Start of fan curve
+							register "FAN3.smart.slope"       = "0x0A" # Fan curve slope, 1.25 PWM per C
+							register "FAN3.smart.smoothing"   = "1"
+							# FAN4 / CHA fan (Voltage): NB Fan Curve, 50-100%
+							register "FAN4.mode"              = "FAN_SMART_AUTOMATIC"
+							register "FAN4.smart.tmpin"       = "3"    # Temperature source (NB)
+							register "FAN4.smart.tmp_off"     = "0x80" # Never turn off
+							register "FAN4.smart.tmp_start"   = "40"   # Fan curve begin temperature
+							register "FAN4.smart.tmp_full"    = "85"   # Fan max temperature
+							register "FAN4.smart.tmp_delta"   = "5"    # Temperature interval for fan curve steps
+							register "FAN4.smart.pwm_start"   = "50"   # Start of fan curve
+							register "FAN4.smart.slope"       = "0x09" # Fan curve slope, 1.125 PWM per C
+							register "FAN4.smart.smoothing"   = "1"
+
+							# FAN5 is not wired
+							register "FAN5.mode"              = "FAN_IGNORE"
+
+							device pnp 2e.0 off end # FDC - no floppy drive
+							device pnp 2e.1 on      # COM1 - wired on header
+								io 0x60 = 0x3f8
+								irq 0x70 = 4
+							end
+							device pnp 2e.2 off end # COM2 - unused/not wired
+							device pnp 2e.3 off end # PP - no parallel port
+							device pnp 2e.4 on      # # EC/HWM
+								io 0x60 = 0x290
+								io 0x62 = 0x298
+								irq 0x70 = 0    # no interrupt - TODO: Confirm if HWM uses polling
+							end
+							device pnp 2e.5 on      # KBC
+								io 0x60 = 0x60
+								io 0x62 = 0x64
+								irq 0x70 = 1
+								irq 0x72 = 12
+							end
+							device pnp 2e.6 off end # MOUSE - already claimed by KBC (2e.5)
+						end # superio
+						chip drivers/pc80/tpm
+							device pnp 4e.0 on end # Infineon TPM 2.0
+						end # drivers/pc80/tpm
+					end # LPC
+					device pci 14.4 off end # PCI bridge
+					device pci 15.0 on  end # SB PCIe 0 - PCIEX1_1 (x1)
+					device pci 15.1 on  end # SB PCIe 1 - PCIEX1_2 (x1)
+					device pci 15.2 off end # SB PCIe 2 - not wired
+					device pci 15.3 off end # SB PCIe 3 - not wired
+
+					register "gpp_configuration" = "4" # PCIe GPP lane config 1:1:1:1
+					register "boot_switch_sata_ide" = "0" # 0=SATA primary, 1=IDE primary
+					register "gpp_aspm_disable" = "0"
+				end # southbridge/amd/cimx/sb800
+			end # D18F0
+			device pci 18.1 on end
+			device pci 18.2 on end
+			device pci 18.3 on end
+			device pci 18.4 on end
+			device pci 18.5 on end
+			device pci 18.6 off end
+			device pci 18.7 off end
+
+			# AGESA SPD address lookup (8-bit shifted: 0x50<<1=0xA0, 0x51<<1=0xA2, ...)
+			register "spdAddrLookup" = "
+			{
+				{ {0xA0, 0xA4, 0x00, 0x00}, {0xA2, 0xA6, 0x00, 0x00} },
+			}"
+		end # northbridge/amd/agesa/family15
+	end # domain 0
+end # root_complex

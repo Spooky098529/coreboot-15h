@@ -1,0 +1,89 @@
+if BOARD_ASUS_CROSSHAIR_V_FORMULA_Z
+
+config BOARD_SPECIFIC_OPTIONS
+	def_bool y
+	select AGESA_LEGACY
+	select CPU_AMD_AGESA_FAMILY15
+	select CPU_AMD_SOCKET_AM3R2
+	select NORTHBRIDGE_AMD_AGESA_FAMILY15
+	select NORTHBRIDGE_AMD_CIMX_RD890
+	select SOUTHBRIDGE_AMD_CIMX_SB800
+	select SB_SUPERIO_HWM
+	select HAVE_PIRQ_TABLE
+	select HAVE_ACPI_TABLES
+	select HAVE_OPTION_TABLE
+	select BOARD_ROMSIZE_KB_8192
+	select SUPERIO_ITE_IT8721F
+	select DRIVERS_PC80_PC_KBD
+	select MAINBOARD_HAS_LPC_TPM
+
+config MAINBOARD_DIR
+	string
+	default "asus/crosshair-v-formula-z"
+
+config MAINBOARD_PART_NUMBER
+	string
+	default "Crosshair V Formula-Z"
+
+config MAX_CPUS
+	int
+	default 8
+
+config IRQ_SLOT_COUNT
+	int
+	default 21
+
+config HPET_ADDRESS
+	hex
+	default 0xFED00000
+
+config HW_MEM_HOLE_SIZEK
+	hex
+	default 0x200000
+
+comment "VRM / PMBus configuration (ENE KB3722Q bridge on O2_SMB1)"
+
+config BOARD_VRM_REPORT
+	bool "Log VCore voltage at POST time"
+	default y
+	help
+	  Read ASP1000C READ_VOUT (PMBus 0x8B) after AGESA memory init and
+	  print the measured CPU VCore in millivolts to the coreboot console.
+	  Useful for confirming that the voltage rail is within spec.
+
+config BOARD_VRM_ASP0911
+	bool "Enable ASP0911 power meter driver"
+	default y
+	help
+	  Build and probe the ASP0911 (UPI Semiconductor, component PU2000)
+	  CPU power meter via the KB3722Q PMBus bridge.  Logs VIN, IOUT, and
+	  POUT at BIOS_INFO level during ramstage.  The driver will probe
+	  candidate addresses on O2_SMB1 to locate the device; set
+	  ASP0911_SLAVE_ADDR to skip the probe if the address is known.
+
+config ASP0911_SLAVE_ADDR
+	hex "ASP0911 PMBus 8-bit write address (0 = probe at runtime)"
+	depends on BOARD_VRM_ASP0911
+	default 0x0
+	help
+	  Set to the confirmed 8-bit write address of the ASP0911 power meter
+	  on O2_SMB1 (7-bit addr << 1).  Leave at 0 to auto-probe from the
+	  candidate list: 0x44 (7-bit 0x22), 0x80 (0x40), 0x88 (0x44),
+	  0x90 (0x48).  The confirmed address can be read from the coreboot
+	  console after the first successful probe.
+
+config BOARD_VRM_DIAG
+	bool "Dump full PMBus register set for all known VRM devices at boot"
+	default n
+	help
+	  At ramstage mainboard init, read and log every standard and
+	  vendor-specific PMBus register from the ASP1000C CPU VCore controller
+	  and the ASP0911 CPU power meter (and probe for the ASP1103 DRAM VRM).
+	  Output includes PMBUS_REVISION, CAPABILITY, VOUT_MODE, all VOUT config
+	  registers decoded both ways (packed-linear and VOUT_MODE-scaled), all
+	  STATUS_* registers decoded to named fault bits, all READ_* telemetry
+	  registers, MFR_ID/MODEL/REVISION block reads, and a scan of unknown
+	  vendor-specific registers.  Enable this to characterise the VRM devices
+	  and confirm register encodings; leave disabled in normal builds.
+
+endif # BOARD_ASUS_CROSSHAIR_V_FORMULA_Z
