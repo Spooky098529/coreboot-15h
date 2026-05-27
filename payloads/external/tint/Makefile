@@ -1,5 +1,5 @@
-project_url=https://mirror.fsf.org/trisquel/pool/main/t/tint/tint_0.04+nmu1.tar.gz
-archive_name=tint_0.04+nmu1.tar.gz
+project_url=https://mirror.fsf.org/trisquel/pool/main/t/tint/tint_0.04+nmu1build2.tar.xz
+archive_name=tint_0.04+nmu1build2.tar.xz
 
 unexport KCONFIG_AUTOHEADER
 unexport KCONFIG_AUTOCONFIG
