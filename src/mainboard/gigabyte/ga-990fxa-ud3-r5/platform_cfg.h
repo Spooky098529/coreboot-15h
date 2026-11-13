@@ -60,4 +60,7 @@
 /* NB configuration */
 #define MAX_NB_COUNT 1
 
+/* NB IOAPIC address override, see rd890_cfg.c */
+#define RD890_MAINBOARD_OVERRIDE_CFG
+
 #endif /* PLATFORM_CFG_H */

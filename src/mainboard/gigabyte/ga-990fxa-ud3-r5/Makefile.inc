@@ -20,3 +20,4 @@ ramstage-y += buildOpts.c
 ramstage-y += BiosCallOuts.c
 ramstage-y += OemCustomize.c
 ramstage-y += it8620e_board.c
+ramstage-y += rd890_cfg.c
