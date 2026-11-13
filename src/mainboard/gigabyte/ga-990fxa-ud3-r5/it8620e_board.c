@@ -148,22 +148,38 @@ struct ec_reg {
 	u8 val;
 };
 
+/*
+ * PWM outputs vs headers (measured, dumps/pwm-map-*.log): PWM3 (0x17,
+ * curve 0x70-0x77) drives CPU_FAN (tach FAN1); PWM2 (0x16, 0x68-0x6F)
+ * drives SYS_FAN1 (tach FAN2); PWM1 (0x15) has no visible effect (SYS_FAN2
+ * is 3-pin, always full). Curve bytes per the Linux it87 "newer autopwm"
+ * layout: +1 start temp, +2 full temp, +3 start PWM (8-bit; also the
+ * software-mode duty), +4 slope (PWM/C x8). The vendor CPU curve
+ * (20 C -> 65 C, start 0x60, slope 0x1C) fits that: 0x60 + 3.5*45 = 255.
+ *
+ * Owner's choices, deviating from the vendor:
+ *  - CPU_FAN: start 15 C, full 55 C, start PWM 0x80 (~50 %), slope 0x1A
+ *    (3.25/C: 0x80 + 3.25*39 = 255). TMPIN3 is the CPU's raw Tctl, which
+ *    idles at ~8 C on this FX-8350, so idle runs at the 50 % floor.
+ *  - SYS_FAN1: always full: duty 0x6B = 0xFF, then 0x16 = 0x7F (software
+ *    mode), same as the full-speed fallback.
+ */
 static const struct ec_reg vendor_fan_regs[] = {
 	{ 0x13, 0x76 },	/* fan main control (tach enables, SmartGuardian) */
 	{ 0x14, 0xc7 },	/* fan ctl mode / PWM polarity & clock */
 	{ 0x0c, 0x30 },	/* tach 16-bit enables */
-	{ 0x15, 0x82 },	/* FAN1 PWM: automatic, TMPIN3 */
-	{ 0x16, 0x80 },	/* FAN2 PWM: automatic, TMPIN1 */
-	{ 0x17, 0x82 },	/* FAN3 PWM: automatic, TMPIN3 */
-	/* FAN1 auto curve 0x60-0x67 */
+	{ 0x15, 0x82 },	/* PWM1 (no header seen): automatic, TMPIN3 */
+	{ 0x17, 0x82 },	/* PWM3 = CPU_FAN: automatic, TMPIN3 */
+	/* PWM1 auto curve 0x60-0x67 (vendor: all zero) */
 	{ 0x60, 0x00 }, { 0x61, 0x00 }, { 0x62, 0x00 }, { 0x63, 0x00 },
 	{ 0x64, 0x00 }, { 0x65, 0x00 }, { 0x66, 0x00 }, { 0x67, 0x00 },
-	/* FAN2 auto curve 0x68-0x6F */
-	{ 0x68, 0x00 }, { 0x69, 0x14 }, { 0x6a, 0x32 }, { 0x6b, 0x46 },
+	/* PWM2 = SYS_FAN1 block 0x68-0x6F; 0x6B is the software-mode duty */
+	{ 0x68, 0x00 }, { 0x69, 0x14 }, { 0x6a, 0x32 }, { 0x6b, 0xff },
 	{ 0x6c, 0x20 }, { 0x6d, 0x03 }, { 0x6e, 0x00 }, { 0x6f, 0x00 },
-	/* FAN3 auto curve 0x70-0x77 */
-	{ 0x70, 0x00 }, { 0x71, 0x14 }, { 0x72, 0x41 }, { 0x73, 0x60 },
-	{ 0x74, 0x1c }, { 0x75, 0x03 }, { 0x76, 0x00 }, { 0x77, 0x3f },
+	{ 0x16, 0x7f },	/* PWM2 = SYS_FAN1: software mode, full (after 0x6B) */
+	/* PWM3 = CPU_FAN auto curve 0x70-0x77 */
+	{ 0x70, 0x00 }, { 0x71, 0x0f }, { 0x72, 0x37 }, { 0x73, 0x80 },
+	{ 0x74, 0x1a }, { 0x75, 0x03 }, { 0x76, 0x00 }, { 0x77, 0x3f },
 };
 
 /*
@@ -172,9 +188,10 @@ static const struct ec_reg vendor_fan_regs[] = {
  * hardware: CPU fan 333 rpm, SYS_FAN1 stopped). Values:
  *  - vendor end state from the live dump (dumps/hwtest-20261113-153848),
  *    for registers that differed under coreboot;
- *  - external-sensor host registers 0x89-0x9E from the vendor PEI EC init
+ *  - external-sensor host registers 0x89-0x96 from the vendor PEI EC init
  *    table (CORE_PEI, table at 0xFFFB0604), since their end-state values
  *    include live status/data bytes.
+ * 0x98-0x9E are not written here: they are set by vendor_tmpin3_seq below.
  * Reg 0x00 is handled separately (START bit only).
  */
 static const struct ec_reg vendor_temp_regs[] = {
@@ -189,8 +206,25 @@ static const struct ec_reg vendor_temp_regs[] = {
 	{ 0x8d, 0x00 }, { 0x8e, 0xe0 },
 	{ 0x90, 0xff }, { 0x91, 0x00 }, { 0x92, 0x00 },
 	{ 0x94, 0xff }, { 0x95, 0x00 }, { 0x96, 0x00 },
-	{ 0x98, 0x40 }, { 0x99, 0x97 }, { 0x9c, 0x40 }, { 0x9e, 0xc2 },
 	{ 0x51, 0xca },	/* TMPIN1 thermistor, TMPIN2 diode, TMPIN3 = external (CPU) */
+};
+
+/*
+ * TMPIN3 external (CPU) sensor setup, replayed from the vendor DXE (F2
+ * CORE_DXE 0x18004c1bc, run once for a TMPIN of type 2 = external; table at
+ * 0x1800614d8). Order matters: 0x99/0x9C/0x9E are written more than once.
+ * Then 0x9E = (3 << 4) - 0x3d and 0x51 bits 7:6 = 3 (TMPIN3). The vendor
+ * also sets offset reg 0x59 = 0 inside a 0x5C bit7 window; 0x59 is already
+ * 0, so that is skipped. Without this TMPIN3 stays at 0x80 (-128 C);
+ * replaying it on hardware made TMPIN3 match k10temp within 1 s and left
+ * 0x98-0x9E identical to the vendor dump
+ * (dumps/tsi-experiment3-20261113-192258.log).
+ */
+static const struct ec_reg vendor_tmpin3_seq[] = {
+	{ 0x98, 0x40 }, { 0x99, 0x98 }, { 0x9c, 0x03 }, { 0x9d, 0x40 },
+	{ 0x9e, 0x03 }, { 0x99, 0x99 }, { 0x9c, 0x01 }, { 0x9e, 0xf3 },
+	{ 0x9e, 0xf3 },	/* (3 << 4) - 0x3d */
+	{ 0x51, 0xca },	/* (0x51 & 0x3f) | (3 << 6) */
 };
 
 #define EC_REG_CONFIG		0x00
@@ -243,6 +277,11 @@ void it8620e_program_vendor_fans(u16 base)
 	pnp_write_hwm5_index(base, EC_REG_CONFIG,
 			     (val & ~EC_CONFIG_INIT) | EC_CONFIG_START);
 
+	/* After START, as in the vendor flow (PEI starts the EC, DXE runs this). */
+	for (i = 0; i < ARRAY_SIZE(vendor_tmpin3_seq); i++)
+		pnp_write_hwm5_index(base, vendor_tmpin3_seq[i].reg,
+				     vendor_tmpin3_seq[i].val);
+
 	for (i = 0; i < ARRAY_SIZE(vendor_fan_regs); i++) {
 		val = pnp_read_hwm5_index(base, vendor_fan_regs[i].reg);
 		if (val != vendor_fan_regs[i].val) {
@@ -252,7 +291,7 @@ void it8620e_program_vendor_fans(u16 base)
 		}
 	}
 
-	/* The curves follow TMPIN1 (FAN2) and TMPIN3 (FAN1/FAN3): both must report. */
+	/* CPU_FAN (PWM3) follows TMPIN3; TMPIN1 is a sanity check on monitoring. */
 	for (ms = 0; ms < 3000; ms += 100) {
 		t1 = pnp_read_hwm5_index(base, EC_REG_TMPIN(1));
 		t3 = pnp_read_hwm5_index(base, EC_REG_TMPIN(3));
@@ -273,7 +312,7 @@ void it8620e_program_vendor_fans(u16 base)
 		return;
 	}
 
-	printk(BIOS_INFO, "IT8620E EC @0x%x: vendor fan configuration applied\n", base);
+	printk(BIOS_INFO, "IT8620E EC @0x%x: fan configuration applied (CPU_FAN curve 15-55 C, SYS_FAN1 full)\n", base);
 }
 
 /*
