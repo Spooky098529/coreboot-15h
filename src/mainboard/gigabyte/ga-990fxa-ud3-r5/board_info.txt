@@ -1,0 +1,7 @@
+Board name: GA-990FXA-UD3 R5
+Category: desktop
+ROM package: SOIC-8
+ROM protocol: SPI
+ROM socketed: n
+Flashrom support: y
+Release year: 2014

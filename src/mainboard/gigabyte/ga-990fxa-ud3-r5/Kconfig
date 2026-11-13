@@ -1,0 +1,49 @@
+if BOARD_GIGABYTE_GA_990FXA_UD3_R5
+
+config BOARD_SPECIFIC_OPTIONS
+	def_bool y
+	select AGESA_LEGACY
+	select CPU_AMD_AGESA_FAMILY15
+	select CPU_AMD_SOCKET_AM3R2
+	select NORTHBRIDGE_AMD_AGESA_FAMILY15
+	select NORTHBRIDGE_AMD_CIMX_RD890
+	select SOUTHBRIDGE_AMD_CIMX_SB800
+	select SB_SUPERIO_HWM
+	select HAVE_PIRQ_TABLE
+	select HAVE_MP_TABLE
+	select HAVE_ACPI_TABLES
+	select HAVE_OPTION_TABLE
+	select BOARD_ROMSIZE_KB_4096
+	select SUPERIO_ITE_IT8620E
+	select DRIVERS_PC80_PC_KBD
+
+config MAINBOARD_DIR
+	string
+	default "gigabyte/ga-990fxa-ud3-r5"
+
+config MAINBOARD_PART_NUMBER
+	string
+	default "GA-990FXA-UD3 R5"
+
+config MAX_CPUS
+	int
+	default 8
+
+config IRQ_SLOT_COUNT
+	int
+	default 6
+
+config HPET_ADDRESS
+	hex
+	default 0xFED00000
+
+config HW_MEM_HOLE_SIZEK
+	hex
+	default 0x200000
+
+# The vendor ROM carries an SB800 firmware signature at 0xFFC20000 pointing
+# at IMC code at 0xFFC10000, but the vendor does not run the IMC (EcEnable
+# strap = 0). SB800_IMC_FWM stays off, so no signature is emitted at all;
+# if the IMC is ever enabled, choose SB800_FWM_AT_FFC20000 to match vendor.
+
+endif # BOARD_GIGABYTE_GA_990FXA_UD3_R5

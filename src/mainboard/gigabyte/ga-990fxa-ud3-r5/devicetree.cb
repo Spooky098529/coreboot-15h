@@ -1,0 +1,136 @@
+chip northbridge/amd/agesa/family15/root_complex
+	device cpu_cluster 0 on
+		chip cpu/amd/agesa/family15
+			device lapic 10 on end
+		end
+	end
+	device domain 0 on
+		subsystemid 0x1458 0x5004 inherit # Gigabyte; SB USB SSID [confirmed]
+		chip northbridge/amd/agesa/family15
+			device pci 18.0 on
+				chip northbridge/amd/cimx/rd890
+					device pci 0.0 on end # Host bridge
+					device pci 0.1 off end # CLKCONFIG
+					device pci 0.2 off end # IOMMU
+					device pci 2.0 on end # GFX port 0 - PCIEX16_1 [confirmed]
+					device pci 3.0 off end # GFX port 1 - unused (GFX is AAAA/x16)
+					device pci 4.0 on end # GPP3a port 0 - TODO(ud3r5): Q1 likely the x4 port (PCIEX4_1 or PCIEX4_2)
+					device pci 5.0 on end # GPP3a port 1 - TODO(ud3r5): Q1 probably no lanes in GPP411000
+					device pci 6.0 on end # GPP3a port 2 - TODO(ud3r5): Q1 probably no lanes in GPP411000
+					device pci 7.0 on end # GPP3a port 3 - TODO(ud3r5): Q1 probably no lanes in GPP411000
+					device pci 9.0 on end # GPP3a port 4 - VIA VL805 USB 3.0 [1106:3483] [confirmed]
+					device pci a.0 on end # GPP3a port 5 - Marvell 88SE9172 SATA [1b4b:9172] [confirmed]
+					device pci b.0 on end # GFX2 port 0 - PCIEX16_2 [inferred]
+					device pci c.0 off end # GFX2 port 1 - unused (GFX2 is AAAA/x16)
+					device pci d.0 on end # GPP3b port 0 (x4) - PCIEX4_1 or PCIEX4_2 [inferred]
+					device pci 8.0 off end # NB/SB Link P2P bridge, hidden by design
+
+					register "gpp1_configuration" = "0" # AAAA: PCIEX16_1 x16 (vendor NBMISC 0x08 bit8 = 0)
+					register "gpp2_configuration" = "0" # AAAA: PCIEX16_2 x16 (vendor NBMISC 0x08 bit9 = 0)
+					register "gpp3a_configuration" = "2" # GPP411000: x4 slot + VL805 x1 + Marvell x1 (vendor NBMISC 0x67[3:0] = 2)
+
+					# Ports 2,4,5,6,7,9,a,b,d. Every candidate port is trained for
+					# first boot; ports without lanes just fail training.
+					# TODO(ud3r5): Q1 - narrow down once the slot map is confirmed.
+					register "port_enable" = "0x2EF4"
+
+					# TODO(ud3r5): VL805 (port 9) / 88SE9172 (port a) may need
+					# port_aspm_disable if they misbehave with L1 - untested.
+				end # cimx/rd890
+				chip southbridge/amd/cimx/sb800
+					device pci 11.0 on end # SATA (AHCI)
+					device pci 12.0 on end # USB OHCI
+					device pci 12.2 on end # USB EHCI
+					device pci 13.0 on end # USB OHCI
+					device pci 13.2 on end # USB EHCI
+					device pci 14.5 on end # USB OHCI2
+					device pci 16.0 on end # USB OHCI
+					device pci 16.2 on end # USB EHCI
+					device pci 14.6 off end # SB950 GbE MAC not used, onboard LAN is PCIe
+					device pci 14.0 on # SMBus
+						chip drivers/generic/generic # DDR3_4, channel A [inferred]
+							device i2c 50 on end
+						end
+						chip drivers/generic/generic # DDR3_3, channel B [inferred]
+							device i2c 51 on end
+						end
+						chip drivers/generic/generic # DDR3_2, channel A [confirmed]
+							device i2c 52 on end
+						end
+						chip drivers/generic/generic # DDR3_1, channel B [confirmed]
+							device i2c 53 on end
+						end
+					end # SMBus
+					device pci 14.1 off end # IDE (vendor leaves it on; unused)
+					device pci 14.2 on end # HD Audio (Realtek ALC1150)
+					device pci 14.3 on # LPC bridge
+						chip superio/ite/it8620e # ITE IT8620E rev 4 at 0x2E [confirmed]
+							# ite_ec_init() writes the voltage-channel enable (EC reg
+							# 0x50) from vin_mask; vendor value is 0xFF (all on).
+							register "ec.vin_mask" = "VIN_ALL"
+
+							# Fans are NOT configured here: every FANx stays FAN_IGNORE
+							# and TMPINx disabled, so the generic driver doesn't touch
+							# them. mainboard_final() writes the vendor fan registers
+							# after device init (see it8620e_board.c).
+
+							device pnp 2e.0 off end # FDC - none
+							device pnp 2e.1 on # COM1 -> COMA header
+								io 0x60 = 0x3f8
+								irq 0x70 = 4
+							end
+							device pnp 2e.2 off end # COM2 - not wired (vendor: inactive)
+							device pnp 2e.3 off end # LPT - none
+							device pnp 2e.4 on # EC / HWM (vendor: 0x228 / 0x230, no IRQ)
+								io 0x60 = 0x228
+								io 0x62 = 0x230
+								irq 0x70 = 0
+							end
+							device pnp 2e.5 on # PS/2 keyboard
+								io 0x60 = 0x60
+								io 0x62 = 0x64
+								irq 0x70 = 1
+							end
+							device pnp 2e.6 on # PS/2 mouse (vendor: separate LDN6, IRQ 12)
+								irq 0x70 = 12
+							end
+							# GPIO / watchdog / DualBIOS mailbox. The vendor leaves
+							# LDN7 inactive (CR30 = 0); the watchdog and CR EF
+							# registers work regardless and are driven by raw
+							# config-port access from romstage/mainboard.c.
+							device pnp 2e.7 off end
+							device pnp 2e.a off end # CIR / PME (vendor: inactive)
+						end # superio
+						# TPM header present (manual), TPM support intentionally off.
+					end # LPC
+					device pci 14.4 on end # PCI bridge -> 32-bit PCI slot (04:06 under vendor)
+					device pci 15.0 on end # SB GPP 0 - Realtek RTL8111 [10ec:8168] [confirmed]
+					device pci 15.1 on end # SB GPP 1 - TODO(ud3r5): PCIEX1_1 or PCIEX1_2 [unknown]
+					device pci 15.2 on end # SB GPP 2 - TODO(ud3r5): PCIEX1_1 or PCIEX1_2 [unknown]
+					device pci 15.3 on end # SB GPP 3 - TODO(ud3r5): maybe unused [unknown]
+
+					register "gpp_configuration" = "4" # 1:1:1:1 (three x1 consumers) [inferred]
+					register "boot_switch_sata_ide" = "0" # 0=SATA primary, 1=IDE primary
+				end # southbridge/amd/cimx/sb800
+			end # D18F0
+			device pci 18.1 on end
+			device pci 18.2 on end
+			device pci 18.3 on end
+			device pci 18.4 on end
+			device pci 18.5 on end
+			device pci 18.6 off end
+			device pci 18.7 off end
+
+			# AGESA SPD address lookup (8-bit: 0x50<<1=0xA0, ...).
+			# Channel A: DIMM0 = DDR3_4 (0x50), DIMM1 = DDR3_2 (0x52)
+			# Channel B: DIMM0 = DDR3_3 (0x51), DIMM1 = DDR3_1 (0x53)
+			# Q2 confirmed from the vendor SMBIOS (dmidecode.txt): with DIMMs
+			# at 0x52/0x53 AGESA reports Node0_Dimm1 and Node0_Dimm3 populated,
+			# i.e. DIMM1 of channel A and DIMM1 of channel B.
+			register "spdAddrLookup" = "
+			{
+				{ {0xA0, 0xA4, 0x00, 0x00}, {0xA2, 0xA6, 0x00, 0x00} },
+			}"
+		end # northbridge/amd/agesa/family15
+	end # domain 0
+end # root_complex
