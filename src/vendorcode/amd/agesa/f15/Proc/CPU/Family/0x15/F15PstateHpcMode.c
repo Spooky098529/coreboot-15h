@@ -181,7 +181,7 @@ F15InitializePstateHpcMode (
         for (i = 0; i < SocketCount; i++) {
           PStateLevelingBufferTemp->PStateCoreStruct[0].PStateStruct[X + 1].PStateEnable = 0;
           //Calculate next node buffer address
-          PStateLevelingBufferTemp = (PSTATE_LEVELING *) ((UINT8 *) PStateLevelingBufferTemp + (UINTN) sizeof (PSTATE_LEVELING) + (UINTN) (PStateLevelingBufferTemp->PStateCoreStruct[0].PStateMaxValue * sizeof (S_PSTATE_VALUES)));
+          PStateLevelingBufferTemp = (PSTATE_LEVELING *) ((UINT8 *) PStateLevelingBufferTemp + (UINTN) sizeof (PSTATE_LEVELING) + (UINTN) ((PStateLevelingBufferTemp->PStateCoreStruct[0].PStateMaxValue + 1) * sizeof (S_PSTATE_VALUES)));
         }
       }
       X++;

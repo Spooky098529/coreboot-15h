@@ -220,7 +220,7 @@ CalAcpiTablesSize (
       }
     }
     ScopeSize += MaxCoreNumberInCurrentSocket;
-    PStateLevelingBufferStructPtr = (PSTATE_LEVELING *) ((UINT8 *) PStateLevelingBufferStructPtr + (UINTN) sizeof (PSTATE_LEVELING) + (UINTN) (PStateLevelingBufferStructPtr->PStateCoreStruct[0].PStateMaxValue * sizeof (S_PSTATE_VALUES)));
+    PStateLevelingBufferStructPtr = (PSTATE_LEVELING *) ((UINT8 *) PStateLevelingBufferStructPtr + (UINTN) sizeof (PSTATE_LEVELING) + (UINTN) ((PStateLevelingBufferStructPtr->PStateCoreStruct[0].PStateMaxValue + 1) * sizeof (S_PSTATE_VALUES)));
   }
   AmdPstatePtr->SizeOfBytes = ScopeSize;
 
@@ -422,7 +422,7 @@ GenerateSsdt (
       ScopeAcpiTablesStructPtr = ScopeAcpiTablesStructPtrTemp;
     }
     //Calculate next node buffer address
-    PStateLevelingBufferStructPtr = (PSTATE_LEVELING *) ((UINT8 *) PStateLevelingBufferStructPtr + (UINTN) sizeof (PSTATE_LEVELING) + (UINTN) (PStateLevelingBufferStructPtr->PStateCoreStruct[0].PStateMaxValue * sizeof (S_PSTATE_VALUES)));
+    PStateLevelingBufferStructPtr = (PSTATE_LEVELING *) ((UINT8 *) PStateLevelingBufferStructPtr + (UINTN) sizeof (PSTATE_LEVELING) + (UINTN) ((PStateLevelingBufferStructPtr->PStateCoreStruct[0].PStateMaxValue + 1) * sizeof (S_PSTATE_VALUES)));
   }
   //Update SSDT header Checksum
   ((ACPI_TABLE_HEADER *) *SsdtPtr)->TableLength = (ScopeSize + CoreCount + sizeof (ACPI_TABLE_HEADER));

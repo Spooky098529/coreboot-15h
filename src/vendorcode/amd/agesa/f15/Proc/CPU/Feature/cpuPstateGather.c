@@ -247,9 +247,9 @@ PStateGatherMain (
   //Calculate next node buffer address
   //
   PStateBufferPtr->SocketNumber = (UINT8) BscSocket;
-  PStateBufferPtr->PStateLevelingSizeOfBytes = (UINT16) (sizeof (PSTATE_LEVELING) + (UINT32) (PStateBufferPtr->PStateCoreStruct[0].PStateMaxValue * sizeof (S_PSTATE_VALUES)));
-  PStateStrucPtr->SizeOfBytes += (UINT32) (PStateBufferPtr->PStateCoreStruct[0].PStateMaxValue * sizeof (S_PSTATE_VALUES));
-  PStateBufferPtr = (PSTATE_LEVELING *) ((UINT8 *) PStateBufferPtr + (UINTN) sizeof (PSTATE_LEVELING) + (UINTN) (PStateBufferPtr->PStateCoreStruct[0].PStateMaxValue * sizeof (S_PSTATE_VALUES)));
+  PStateBufferPtr->PStateLevelingSizeOfBytes = (UINT16) (sizeof (PSTATE_LEVELING) + (UINT32) ((PStateBufferPtr->PStateCoreStruct[0].PStateMaxValue + 1) * sizeof (S_PSTATE_VALUES)));
+  PStateStrucPtr->SizeOfBytes += (UINT32) ((PStateBufferPtr->PStateCoreStruct[0].PStateMaxValue + 1) * sizeof (S_PSTATE_VALUES));
+  PStateBufferPtr = (PSTATE_LEVELING *) ((UINT8 *) PStateBufferPtr + (UINTN) sizeof (PSTATE_LEVELING) + (UINTN) ((PStateBufferPtr->PStateCoreStruct[0].PStateMaxValue + 1) * sizeof (S_PSTATE_VALUES)));
   CpuGetPStateLevelStructure (&PStateBufferPtr, PStateStrucPtr, 1, StdHeader);
   //
   //Get CPU P-States and fill the PStateBufferPtr for each node(BSC)
@@ -265,9 +265,9 @@ PStateGatherMain (
         //
         //Calculate next node buffer address
         //
-        PStateBufferPtr->PStateLevelingSizeOfBytes = (UINT16) (sizeof (PSTATE_LEVELING) + (UINT32) (PStateBufferPtr->PStateCoreStruct[0].PStateMaxValue * sizeof (S_PSTATE_VALUES)));
+        PStateBufferPtr->PStateLevelingSizeOfBytes = (UINT16) (sizeof (PSTATE_LEVELING) + (UINT32) ((PStateBufferPtr->PStateCoreStruct[0].PStateMaxValue + 1) * sizeof (S_PSTATE_VALUES)));
         PStateStrucPtr->SizeOfBytes += PStateBufferPtr->PStateLevelingSizeOfBytes;
-        PStateBufferPtr = (PSTATE_LEVELING *) ((UINT8 *) PStateBufferPtr + (UINTN) sizeof (PSTATE_LEVELING) + (UINTN) (PStateBufferPtr->PStateCoreStruct[0].PStateMaxValue * sizeof (S_PSTATE_VALUES)));
+        PStateBufferPtr = (PSTATE_LEVELING *) ((UINT8 *) PStateBufferPtr + (UINTN) sizeof (PSTATE_LEVELING) + (UINTN) ((PStateBufferPtr->PStateCoreStruct[0].PStateMaxValue + 1) * sizeof (S_PSTATE_VALUES)));
       }
     }
   }
