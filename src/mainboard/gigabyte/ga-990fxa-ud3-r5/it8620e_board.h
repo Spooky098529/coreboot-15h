@@ -26,6 +26,9 @@ void it8620e_rearm_wdt_max(void);
 /* Write the DualBIOS handshake stage to LDN7 CR EF (romstage + ramstage). */
 void it8620e_dualbios_stage(u8 stage);
 
+/* Drive GP17 high like the vendor BIOS (PS/2 power); ramstage, after LPC decode. */
+void it8620e_gp17_high(void);
+
 /* Program the vendor fan registers into the EC at @ec_base (ramstage). */
 void it8620e_program_vendor_fans(u16 ec_base);
 

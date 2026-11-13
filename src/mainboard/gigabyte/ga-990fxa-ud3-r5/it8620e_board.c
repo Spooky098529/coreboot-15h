@@ -19,6 +19,7 @@
 
 #include <arch/io.h>
 #include <console/console.h>
+#include <delay.h>
 #include <superio/hwm5_conf.h>
 #include <superio/ite/it8620e/it8620e.h>
 
@@ -166,14 +167,37 @@ static const struct ec_reg vendor_fan_regs[] = {
 };
 
 /*
- * Not part of the PORTING_PLAN.md section 5.5 table; logged only, for
- * comparison with the vendor values on first boot.
+ * Temperature-monitoring setup the fan curves depend on. Without it every
+ * TMPIN reads -128 C under coreboot and the curves sit at minimum (seen on
+ * hardware: CPU fan 333 rpm, SYS_FAN1 stopped). Values:
+ *  - vendor end state from the live dump (dumps/hwtest-20261113-153848),
+ *    for registers that differed under coreboot;
+ *  - external-sensor host registers 0x89-0x9E from the vendor PEI EC init
+ *    table (CORE_PEI, table at 0xFFFB0604), since their end-state values
+ *    include live status/data bytes.
+ * Reg 0x00 is handled separately (START bit only).
  */
 static const struct ec_reg vendor_temp_regs[] = {
-	{ 0x00, 0x1b },	/* EC configuration */
-	{ 0x0a, 0x48 },	/* interface select */
-	{ 0x51, 0xca },	/* temperature channel enable / sensor types */
+	{ 0x04, 0xff },	/* SMI# mask 1 (all masked) */
+	{ 0x05, 0xef },	/* SMI# mask 2 */
+	{ 0x0a, 0x48 },	/* interface select (external temp source) */
+	{ 0x0b, 0x05 },	/* fan PWM smoothing / FAN4-5 source */
+	{ 0x55, 0x80 },
+	{ 0x5c, 0x65 },
+	{ 0x84, 0xff }, { 0x85, 0xff }, { 0x86, 0xff }, { 0x87, 0xff },
+	{ 0x89, 0x30 }, { 0x8a, 0x01 }, { 0x8b, 0x02 }, { 0x8c, 0x01 },
+	{ 0x8d, 0x00 }, { 0x8e, 0xe0 },
+	{ 0x90, 0xff }, { 0x91, 0x00 }, { 0x92, 0x00 },
+	{ 0x94, 0xff }, { 0x95, 0x00 }, { 0x96, 0x00 },
+	{ 0x98, 0x40 }, { 0x99, 0x97 }, { 0x9c, 0x40 }, { 0x9e, 0xc2 },
+	{ 0x51, 0xca },	/* TMPIN1 thermistor, TMPIN2 diode, TMPIN3 = external (CPU) */
 };
+
+#define EC_REG_CONFIG		0x00
+#define EC_CONFIG_START		(1 << 0)
+#define EC_CONFIG_INIT		(1 << 4)	/* write 1 = reset; never write it */
+#define EC_REG_TMPIN(n)		(0x28 + (n))	/* TMPIN1..3 = 0x29..0x2b */
+#define EC_TEMP_INVALID		0x80		/* reads as -128 C */
 
 /*
  * Full-speed fallback. PORTING_PLAN.md suggests 0x15-0x17 = 0x7F, but the
@@ -203,12 +227,21 @@ static void it8620e_fans_full_speed(u16 base)
 void it8620e_program_vendor_fans(u16 base)
 {
 	size_t i;
-	u8 val;
-	int bad = 0;
+	u8 val, t1 = EC_TEMP_INVALID, t3 = EC_TEMP_INVALID;
+	int bad = 0, ms;
+
+	for (i = 0; i < ARRAY_SIZE(vendor_temp_regs); i++)
+		pnp_write_hwm5_index(base, vendor_temp_regs[i].reg,
+				     vendor_temp_regs[i].val);
 
 	for (i = 0; i < ARRAY_SIZE(vendor_fan_regs); i++)
 		pnp_write_hwm5_index(base, vendor_fan_regs[i].reg,
 				     vendor_fan_regs[i].val);
+
+	/* Start monitoring. Not bit 1 (SMI# enable): coreboot has no handler. */
+	val = pnp_read_hwm5_index(base, EC_REG_CONFIG);
+	pnp_write_hwm5_index(base, EC_REG_CONFIG,
+			     (val & ~EC_CONFIG_INIT) | EC_CONFIG_START);
 
 	for (i = 0; i < ARRAY_SIZE(vendor_fan_regs); i++) {
 		val = pnp_read_hwm5_index(base, vendor_fan_regs[i].reg);
@@ -219,17 +252,56 @@ void it8620e_program_vendor_fans(u16 base)
 		}
 	}
 
-	for (i = 0; i < ARRAY_SIZE(vendor_temp_regs); i++)
-		printk(BIOS_DEBUG, "IT8620E EC: reg %02x = %02x (vendor %02x)\n",
-		       vendor_temp_regs[i].reg,
-		       pnp_read_hwm5_index(base, vendor_temp_regs[i].reg),
-		       vendor_temp_regs[i].val);
+	/* The curves follow TMPIN1 (FAN2) and TMPIN3 (FAN1/FAN3): both must report. */
+	for (ms = 0; ms < 3000; ms += 100) {
+		t1 = pnp_read_hwm5_index(base, EC_REG_TMPIN(1));
+		t3 = pnp_read_hwm5_index(base, EC_REG_TMPIN(3));
+		if (t1 != EC_TEMP_INVALID && t3 != EC_TEMP_INVALID)
+			break;
+		mdelay(100);
+	}
+	printk(BIOS_INFO, "IT8620E EC: reg00=%02x TMPIN1=%d C TMPIN3=%d C (after %d ms)\n",
+	       pnp_read_hwm5_index(base, EC_REG_CONFIG), (s8)t1, (s8)t3, ms);
+	if (t1 == EC_TEMP_INVALID || t3 == EC_TEMP_INVALID) {
+		printk(BIOS_WARNING, "IT8620E EC: temperature inputs not reporting\n");
+		bad = 1;
+	}
 
 	if (bad) {
-		printk(BIOS_WARNING, "IT8620E EC: vendor fan table did not read back\n");
+		printk(BIOS_WARNING, "IT8620E EC: fan curves can't be trusted\n");
 		it8620e_fans_full_speed(base);
 		return;
 	}
 
 	printk(BIOS_INFO, "IT8620E EC @0x%x: vendor fan configuration applied\n", base);
+}
+
+/*
+ * GP17 as a GPIO output driven high, exactly as the vendor BIOS does on every
+ * boot (CORE_PEI 0xfffadf22, pin table entry "17 25 7f 80 c0 7f 80", output
+ * table entry "17 41"): CR25 bit7 (GPIO function), LDN7 CRC0 bit7 (simple
+ * I/O), CRB0 bit7 = 0 (polarity), CRC8 bit7 (output), simple-I/O base 0x220
+ * (LDN7 CR62/63), port 0x220 bit7 = 1. Vendor CR25 = 0x80; it was 0x00 under
+ * coreboot, where the PS/2 port had no power. Needs LPC decode of 0x220.
+ */
+#define IT8620E_SIMPLE_IO_BASE	0x220
+
+void it8620e_gp17_high(void)
+{
+	u8 cr25;
+
+	ite_enter_ldn(IT8620E_GPIO);
+	ite_cr_write(0x62, IT8620E_SIMPLE_IO_BASE >> 8);
+	ite_cr_write(0x63, IT8620E_SIMPLE_IO_BASE & 0xff);
+	cr25 = ite_cr_read(0x25);
+	ite_cr_write(0x25, cr25 | 0x80);
+	ite_cr_write(0xc0, ite_cr_read(0xc0) | 0x80);
+	ite_cr_write(0xb0, ite_cr_read(0xb0) & 0x7f);
+	ite_cr_write(0xc8, ite_cr_read(0xc8) | 0x80);
+	ite_exit();
+
+	outb(inb(IT8620E_SIMPLE_IO_BASE) | 0x80, IT8620E_SIMPLE_IO_BASE);
+
+	printk(BIOS_INFO, "IT8620E: GP17 output high (CR25 %02x -> %02x, port 0x220 = %02x)\n",
+	       cr25, cr25 | 0x80, inb(IT8620E_SIMPLE_IO_BASE));
 }

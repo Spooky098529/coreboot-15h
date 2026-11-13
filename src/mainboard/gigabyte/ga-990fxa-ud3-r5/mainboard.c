@@ -244,6 +244,9 @@ static void mainboard_enable(struct device *dev)
 		pci_write_config32(lpc, 0x44,
 				   pci_read_config32(lpc, 0x44) | (1 << 8));
 
+	/* GP17 high, as the vendor BIOS does; uses simple I/O at 0x220 (above). */
+	it8620e_gp17_high();
+
 	/* ASF register init (suppress SMBus event storms) */
 	pm_iowrite(0x29, 0x80);
 	pm_iowrite(0x28, 0x61);
