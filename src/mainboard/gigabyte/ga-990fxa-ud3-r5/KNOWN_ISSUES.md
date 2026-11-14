@@ -1,19 +1,38 @@
 # GA-990FXA-UD3 R5: known issues
 
 Tested on rev 5.x with an FX-8350, SeaBIOS payload, Linux. Boot, CPU P-states,
-fan control, SATA and USB 2.0 work. The items below are open.
+fan control, SATA, USB 2.0 and the reset button work. The items below are open
+or only partly understood.
 
-## PS/2 keyboard does not work
+## Legacy ISA interrupts are not delivered (PS/2 keyboard, RTC)
 
-The PS/2 keyboard gets power (GP17 is driven high, as the vendor BIOS does),
-but it does not work in SeaBIOS, GRUB or Linux. Its Caps Lock LED flashes
-periodically. Use a USB keyboard instead.
+Under this port, Linux never receives IRQ 1 (keyboard), 8 (RTC), 9 (ACPI SCI)
+or 12 (PS/2 mouse port), and the timer (IRQ 0) doesn't reach the IOAPIC.
+It is the same with `noapic` (8259 mode), so the interrupts are lost before
+either interrupt controller. The vendor BIOS doesn't have this problem.
 
-Not yet investigated:
-- The vendor BIOS writes IT8620E LDN5 (KBC) register 0xF0 = 0x08. This port
-  never writes it, and its meaning is unknown (no datasheet).
-- `CONFIG_DRIVERS_PS2_KEYBOARD` is unset, so `pc_keyboard_init()` does nothing.
-- `CONFIG_SEABIOS_PS2_TIMEOUT` is 0.
+Visible effects:
+- **PS/2 keyboard doesn't work in Linux.** The keyboard controller and the
+  keyboard respond (an `i8042.debug=1` trace shows the keyboard's ACKs, and
+  SeaBIOS, which polls, initializes it), but IRQ 1 never fires. Use a USB
+  keyboard.
+- **`hwclock` fails** with "select() to /dev/rtc to wait for clock tick timed
+  out", because the RTC's update interrupt never arrives. The kernel still
+  sets the clock at boot. Workaround: `hwclock --directisa` (OpenRC:
+  `clock_args="--directisa"` in `/etc/conf.d/hwclock`).
+- Linux logs `..MP-BIOS bug: 8254 timer not connected to IO-APIC` and falls
+  back to a virtual-wire timer. The comment in `acpi_tables.c` about leaving
+  out the IRQ0 -> GSI2 override is a symptom of this, not a fix.
+
+Lead (untested): the SB950 PCI IRQ routing table (ports 0xC00/0xC01) in
+`mainboard.c`, copied from the Sabertooth port. Its APIC table sets index
+0x09 (MISC0) to 0x00 "disabled"; coreboot's older native SB800 code writes
+0xF7 there ("Enabled IRQ input"). The Sabertooth and Crosshair V ports use the
+same tables and probably have the same problem.
+
+PS/2 power is fine (GP17 is driven high, as the vendor BIOS does). IT8620E
+LDN5 register 0xF0 reads 0x48 here and 0x08 under the vendor BIOS; setting
+0x08 at runtime made no difference.
 
 ## IT8620E watchdog / DualBIOS handling is reverse-engineered
 
@@ -23,7 +42,9 @@ detection. This port, like the vendor BIOS:
 1. romstage: leaves the watchdog running (only logs it), sends DualBIOS
    stage 6 (LDN7 CR EF).
 2. ramstage (`mainboard_final`): sends stage 7, then turns the watchdog off
-   (CR73 = CR74 = 0), which is the vendor BIOS's end state.
+   (CR73 = CR74 = 0) and clears the "reached 0" status bit (CR71 bit 0),
+   which zeroing a running counter sometimes sets. LDN7 CR70-7F and CRE0-EF
+   then match the vendor BIOS's end state.
 
 coreboot reaches step 2 about 5 s after romstage starts, well inside the
 EC's limit. If a boot hangs, the EC falls back to the backup BIOS chip, which
@@ -69,5 +90,6 @@ check that it doesn't conflict with coreboot's azalia verb loading and the
   its firmware every boot. This port contains no vendor firmware, so the
   controller stays down until the firmware is loaded from the OS (done from
   Linux with a small userspace loader). Until then, Linux's xhci probe fails
-  with -110, and there is a ~5 s `quirk_usb_early_handoff` delay at boot.
+  with -110, which delays boot by about 20 s (5 s in
+  `quirk_usb_early_handoff`, the rest in the failing probe).
 - **Not supported:** S3 suspend, XMP, a setup UI. Windows is untested.
