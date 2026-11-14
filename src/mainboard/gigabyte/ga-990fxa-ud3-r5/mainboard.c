@@ -297,6 +297,9 @@ static void mainboard_final(void *chip_info)
 
 	/* DualBIOS: report the ramstage ("DXE") stage, as DualBiosDxe does. */
 	it8620e_dualbios_stage(DUALBIOS_STAGE_DXE);
+
+	/* Then turn the watchdog off, or a reset-button press triggers recovery. */
+	it8620e_disarm_wdt();
 }
 
 struct chip_operations mainboard_ops = {

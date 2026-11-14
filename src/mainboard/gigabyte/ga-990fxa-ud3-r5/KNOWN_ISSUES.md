@@ -15,30 +15,31 @@ Not yet investigated:
 - `CONFIG_DRIVERS_PS2_KEYBOARD` is unset, so `pc_keyboard_init()` does nothing.
 - `CONFIG_SEABIOS_PS2_TIMEOUT` is 0.
 
-## IT8620E watchdog handling is a best guess
+## IT8620E watchdog / DualBIOS handling is reverse-engineered
 
-The IT8620E's EC firmware arms the LDN7 watchdog at power-on. The vendor
-BIOS uses it for DualBIOS boot-failure detection. A timeout of 56 was
-observed (CR72 = 0x20, CR73 = 0x38).
+The IT8620E's EC firmware arms the LDN7 watchdog at power-on (timeout 56,
+CR72 = 0x20, CR73 = 0x38). Gigabyte uses it for DualBIOS boot-failure
+detection. This port, like the vendor BIOS:
+1. romstage: leaves the watchdog running (only logs it), sends DualBIOS
+   stage 6 (LDN7 CR EF).
+2. ramstage (`mainboard_final`): sends stage 7, then turns the watchdog off
+   (CR73 = CR74 = 0), which is the vendor BIOS's end state.
 
-romstage re-arms it to the maximum (CR73 = CR74 = 0xFF, CR72 = 0x20) so it
-cannot fire during boot. It then sends the same DualBIOS stage handshake as
-the vendor BIOS (LDN7 CR EF: stage 6 in romstage, stage 7 in ramstage). It
-never disarms the watchdog.
+coreboot reaches step 2 about 5 s after romstage starts, well inside the
+EC's limit. If a boot hangs, the EC falls back to the backup BIOS chip, which
+restores the vendor BIOS (see below).
 
-- After a vendor boot, CR73/74 read 0. After a coreboot boot they read 0xFFFF:
-  the EC did not clear the value coreboot wrote.
-- The register did not change over 150 s of sampling, so the counter is
-  probably stopped. It is not proven, because it is unknown whether CR73/74
-  read back the live count.
-- The unit is also unknown. CR72 bit 7 = 0 means minutes on other ITE parts
-  (65535 min is about 45 days). If it is seconds, 65535 s is about 18 h.
-- If it does fire, KRST# resets the board, and the EC may then boot from the
-  backup BIOS chip. The vendor BIOS there overwrites coreboot in the main chip
-  automatically, because coreboot has no UEFI firmware volumes.
+The disarm matters: without it, pressing the **reset button** after boot
+made the EC treat the boot as failed and start from the backup BIOS chip. The
+vendor BIOS there then overwrites coreboot in the main chip automatically
+(coreboot has no UEFI firmware volumes). With it, reset works normally.
+Software reboots were never affected. Tested on hardware.
 
-Possible fix (untested): write CR73 = CR74 = 0 after the stage-7 handshake,
-so the end state matches the vendor's.
+Not fully understood:
+- The EC firmware is closed; the behaviour above is inferred from tests.
+- LDN7 CR F0 and CR F6 still differ from the vendor's end state (vendor 0x10 /
+  0x1c, coreboot 0x00 / 0x0e). Their meaning is unknown.
+- The timeout unit (seconds or minutes) is unknown; 56 s is the worst case.
 
 ## SB800 CIMx sbAfterPciInit / sbMidPostInit never run
 

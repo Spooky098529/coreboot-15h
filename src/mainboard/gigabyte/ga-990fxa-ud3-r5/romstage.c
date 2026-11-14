@@ -54,13 +54,13 @@ void cache_as_ram_main(unsigned long bist, unsigned long cpu_init_detectedx)
 	console_init();
 
 	/*
-	 * Gigabyte DualBIOS: keep the EC's boot-fail watchdog from firing
-	 * during a long first boot (memory training), then report the
-	 * romstage ("PEI") stage to the EC exactly as the vendor DualBiosPei
-	 * does. If the EC decides boot failed it may switch to the backup chip,
-	 * whose BIOS then restores itself over coreboot in the main chip.
+	 * Gigabyte DualBIOS: log the EC's boot-fail watchdog (left running,
+	 * disarmed at the end of ramstage), then report the romstage ("PEI")
+	 * stage to the EC exactly as the vendor DualBiosPei does. If the EC
+	 * decides boot failed it switches to the backup chip, whose BIOS then
+	 * restores itself over coreboot in the main chip.
 	 */
-	it8620e_rearm_wdt_max();
+	it8620e_log_wdt();
 	it8620e_dualbios_stage(DUALBIOS_STAGE_PEI);
 
 	/*

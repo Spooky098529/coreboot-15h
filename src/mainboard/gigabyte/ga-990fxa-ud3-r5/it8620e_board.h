@@ -20,8 +20,11 @@
 #define DUALBIOS_STAGE_PEI	6	/* vendor DualBiosPei: romstage */
 #define DUALBIOS_STAGE_DXE	7	/* vendor DualBiosDxe: ramstage */
 
-/* Re-arm the EC's LDN7 watchdog to its maximum timeout (romstage). */
-void it8620e_rearm_wdt_max(void);
+/* Log the watchdog value the EC set at power-on (romstage). */
+void it8620e_log_wdt(void);
+
+/* Turn the watchdog off at the end of ramstage (vendor end state). */
+void it8620e_disarm_wdt(void);
 
 /* Write the DualBIOS handshake stage to LDN7 CR EF (romstage + ramstage). */
 void it8620e_dualbios_stage(u8 stage);

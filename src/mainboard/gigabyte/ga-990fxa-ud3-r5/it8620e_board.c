@@ -56,41 +56,55 @@ static void ite_exit(void)
 }
 
 /*
- * The IT8620E's LDN7 watchdog may be armed by the EC's own firmware out of
- * reset (Gigabyte DualBIOS boot-fail detection) and reset the board if it's
- * never serviced. Zeroing CR72/73/74 does not stop a counter the EC has
- * already started, so re-arm it to the maximum timeout instead (0xFFFF s,
- * ~18 h). Copied from the GA-78LMT-USB3 WIP board (same Super I/O).
- *
- * The "before" values logged below show whether the EC armed the watchdog
- * at power-on (Q3); the vendor-OS dumps can't, since the vendor BIOS has
- * already run by then.
- *
- * TODO(ud3r5): Q3 - stopgap; nothing services the watchdog after coreboot.
- * The vendor BIOS ends with CR73=CR74=0 (disabled). Add that as the disarm
- * in mainboard_final() once the first boot log shows the EC state.
+ * The IT8620E's EC firmware arms the LDN7 watchdog at power-on (Gigabyte
+ * DualBIOS boot-fail detection; timeout 56 observed). It's left running
+ * during boot, as the vendor BIOS does: coreboot reaches
+ * it8620e_disarm_wdt() at the end of ramstage about 5 s after romstage
+ * starts, well inside that limit. If a boot hangs, the EC falls back to the
+ * backup BIOS chip, which restores the vendor BIOS.
+ * This only logs the EC's value, for diagnosis.
  */
-void it8620e_rearm_wdt_max(void)
+void it8620e_log_wdt(void)
 {
-	u8 b72, b73, b74, a72, a73, a74;
+	u8 r72, r73, r74;
 
 	ite_enter_ldn(IT8620E_GPIO);	/* LDN 7 (GPIO/WDT) */
-
-	b72 = ite_cr_read(0x72);
-	b73 = ite_cr_read(0x73);
-	b74 = ite_cr_read(0x74);
-	ite_cr_write(0x73, 0xff);	/* WDT timeout LSB -> max */
-	ite_cr_write(0x74, 0xff);	/* WDT timeout MSB -> max (0xFFFF units) */
-	ite_cr_write(0x72, 0x20);	/* WDT control last: enable, EC's seconds mode */
-	a72 = ite_cr_read(0x72);
-	a73 = ite_cr_read(0x73);
-	a74 = ite_cr_read(0x74);
-
+	r72 = ite_cr_read(0x72);
+	r73 = ite_cr_read(0x73);
+	r74 = ite_cr_read(0x74);
 	ite_exit();
 
-	printk(BIOS_INFO, "IT8620E WDT(LDN7): before CR72=%02x CR73=%02x CR74=%02x "
-	       "(timeout=%u) -> rearm-max CR72=%02x CR73=%02x CR74=%02x (timeout=%u)\n",
-	       b72, b73, b74, (b74 << 8) | b73, a72, a73, a74, (a74 << 8) | a73);
+	printk(BIOS_INFO, "IT8620E WDT(LDN7): EC set CR72=%02x CR73=%02x CR74=%02x "
+	       "(timeout=%u), left running until the end of ramstage\n",
+	       r72, r73, r74, (r74 << 8) | r73);
+}
+
+/*
+ * Turn the watchdog off once boot is done, ending in the same state as the
+ * vendor BIOS (CR71 = 00, CR73 = CR74 = 0, CR72 kept). If it's left armed,
+ * pressing the reset button makes the EC treat the boot as failed and start
+ * from the backup BIOS chip, which then overwrites coreboot in the main chip.
+ *
+ * Zeroing the timeout while the EC's counter is running sets CR71 bit 0
+ * (the "counter reached 0" status), so clear that too; writing 0 clears it.
+ * Tested on hardware: with CR71 = 00 and CR73/74 = 0, a reset-button press
+ * reboots normally.
+ */
+void it8620e_disarm_wdt(void)
+{
+	u8 a71, a73, a74;
+
+	ite_enter_ldn(IT8620E_GPIO);	/* LDN 7 */
+	ite_cr_write(0x73, 0x00);
+	ite_cr_write(0x74, 0x00);
+	ite_cr_write(0x71, ite_cr_read(0x71) & ~0x01);	/* clear status */
+	a71 = ite_cr_read(0x71);
+	a73 = ite_cr_read(0x73);
+	a74 = ite_cr_read(0x74);
+	ite_exit();
+
+	printk(BIOS_INFO, "IT8620E WDT(LDN7): disarmed, CR71=%02x CR73=%02x CR74=%02x\n",
+	       a71, a73, a74);
 }
 
 /*
