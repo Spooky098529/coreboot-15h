@@ -1,13 +1,30 @@
 # GA-990FXA-UD3 R5: known issues
 
 Tested on rev 5.x with an FX-8350, SeaBIOS payload, Linux. Boot, CPU P-states,
-fan control, SATA and USB 2.0 work. The items below are open or only partly
-understood.
+fan control, SATA, USB 2.0 and the reset button work. The items below are
+open or only partly understood.
 
-**Don't use the reset button.** It is unreliable under this port: a reset
-press sometimes works, sometimes leaves the SB950 USB 2.0 ports dead until a
-full power-off, and once made the board restore the vendor BIOS over coreboot
-(see the watchdog section). Use a software reboot or a full power-off instead.
+## Reset button: fixed with a board-level workaround for a shared-code bug
+
+The shared `southbridge/amd/cimx/sb800/late.c` ("A13+ errata" block in
+`sb800_init()`) sets SB950 PMIO 0xC1 bit 2, taken from SB900 code as "RPR
+2.14: Enable delayed SLP_S3/S5". On SB800/SB950 that bit is UserRst2EcEn,
+which routes reset-button events to the integrated microcontroller (IMC):
+"The bit should be set to 1 when IMC is enabled" (`SBCMN.c`). The IMC is off
+on this board, and the vendor BIOS leaves the bit at 0.
+
+With the bit set, the reset button only partly reset the southbridge: its
+USB controllers and device 00:14.6 kept their state from the previous boot
+(USB 2.0 was dead once), and a reset pressed about 20 min or more after
+power-on made the IT8620E EC start the DualBIOS recovery, which overwrites
+coreboot with the vendor BIOS (3 out of 3 times).
+
+`mainboard_final()` now clears the bit again (`sb950_user_reset_to_sb()`).
+Tested: resets a few minutes and 25 minutes after power-on both work, and the
+southbridge comes back fully reset. This is based on a small number of
+tests. The proper fix belongs in `late.c` (only set the bit when the IMC is
+enabled); other SB800/SB950 boards in this tree probably have the same
+partial reset.
 
 ## Legacy ISA interrupts are not delivered (PS/2 keyboard, RTC)
 
@@ -55,24 +72,11 @@ coreboot reaches step 2 about 5 s after romstage starts, well inside the
 EC's limit. If a boot hangs, the EC falls back to the backup BIOS chip, which
 restores the vendor BIOS (see below).
 
-The disarm matters: without it, pressing the **reset button** after boot
-made the EC treat the boot as failed and start from the backup BIOS chip. The
+The disarm matters: without it, pressing the reset button after boot made
+the EC treat the boot as failed and start from the backup BIOS chip. The
 vendor BIOS there then overwrites coreboot in the main chip automatically
-(coreboot has no UEFI firmware volumes). With it, a reset press in a boot
-that started from power-on works normally (tested twice). Software reboots
-were never affected.
-
-**Still broken:** pressing reset in a boot that itself started from a
-reset-button press triggered the recovery again once; another time the same
-sequence worked. The LDN7, SB950 reset and CMOS registers read the same after
-a cold boot and after a reset, so the cause isn't visible from the OS. Under
-the vendor BIOS, repeated resets are fine.
-
-On one boot started by a reset press, the SB950 USB 2.0 controllers didn't
-work (no devices on any SB950 port, Linux reports an OHCI "HC died"), until a
-full power-off. A possible factor is that the southbridge isn't fully
-re-initialised after a reset; see the CIMx section below (USB PHY calibration
-is never run). Unproven.
+(coreboot has no UEFI firmware volumes). Software reboots were never
+affected. Late resets also needed the southbridge fix above.
 
 Not fully understood:
 - The EC firmware is closed; the behaviour above is inferred from tests.

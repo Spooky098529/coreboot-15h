@@ -280,6 +280,34 @@ static void mainboard_enable(struct device *dev)
 }
 
 /*
+ * WORKAROUND for a bug in shared code: southbridge/amd/cimx/sb800/late.c
+ * (sb800_init(), "A13+ errata" block) sets PMIO 0xC1 bit 2 as the SB900
+ * "RPR 2.14: Enable delayed SLP_S3/S5". On SB800/SB950 that bit (PM_Reg C0
+ * bit 10) is UserRst2EcEn instead: "Set to 1 to route user reset event to
+ * Ec. The bit should be set to 1 when IMC is enabled."
+ * (vendorcode/amd/cimx/sb800/SBCMN.c). The IMC is off on this board.
+ *
+ * With the bit set, the reset button only partly resets the southbridge
+ * (its USB controllers and 00:14.6 keep their state from the previous
+ * boot), and a reset pressed ~20 min or more after power-on made the
+ * IT8620E EC treat the boot as failed and start the DualBIOS recovery,
+ * which overwrites coreboot. Clearing it (the vendor BIOS's value, PMIO
+ * C1 = 0x0b) gives a full reset; both problems are gone on hardware.
+ *
+ * Must run after sb800_init(). Drop this once late.c only sets the bit
+ * when the IMC is enabled; other SB800/SB950 boards are likely affected too.
+ */
+#define SB_PMIO_C1	((void *)(uintptr_t)(0xfed80000 + 0x300 + 0xc1))
+static void sb950_user_reset_to_sb(void)
+{
+	u8 before = read8(SB_PMIO_C1);
+
+	write8(SB_PMIO_C1, before & ~(1 << 2));
+	printk(BIOS_INFO, "SB950 PMIO C1 (UserRst2EcEn = bit2): %02x -> %02x\n",
+	       before, read8(SB_PMIO_C1));
+}
+
+/*
  * Runs from dev_finalize_chips(), i.e. after device init. The fan setup has
  * to come after the IT8620E chip driver's ite_ec_init() (device init),
  * which clears EC reg 0x13 and rewrites 0x14/0x50; programming it from
@@ -287,6 +315,8 @@ static void mainboard_enable(struct device *dev)
  */
 static void mainboard_final(void *chip_info)
 {
+	sb950_user_reset_to_sb();
+
 	const struct device *ec = dev_find_slot_pnp(0x2e, IT8620E_EC);
 	const struct resource *res = ec ? find_resource(ec, PNP_IDX_IO0) : NULL;
 
