@@ -4,9 +4,10 @@ Tested on rev 5.x with an FX-8350, SeaBIOS payload, Linux. Boot, CPU P-states,
 fan control, SATA and USB 2.0 work. The items below are open or only partly
 understood.
 
-**Don't use the reset button.** A second reset-button press without a power-off
-in between still makes the board restore the vendor BIOS over coreboot (see
-the watchdog section). Use a software reboot or a full power-off instead.
+**Don't use the reset button.** It is unreliable under this port: a reset
+press sometimes works, sometimes leaves the SB950 USB 2.0 ports dead until a
+full power-off, and once made the board restore the vendor BIOS over coreboot
+(see the watchdog section). Use a software reboot or a full power-off instead.
 
 ## Legacy ISA interrupts are not delivered (PS/2 keyboard, RTC)
 
@@ -62,9 +63,16 @@ that started from power-on works normally (tested twice). Software reboots
 were never affected.
 
 **Still broken:** pressing reset in a boot that itself started from a
-reset-button press triggered the recovery again. Under the vendor BIOS,
-repeated resets are fine, so coreboot is still missing something the EC
-checks. Not yet investigated.
+reset-button press triggered the recovery again once; another time the same
+sequence worked. The LDN7, SB950 reset and CMOS registers read the same after
+a cold boot and after a reset, so the cause isn't visible from the OS. Under
+the vendor BIOS, repeated resets are fine.
+
+On one boot started by a reset press, the SB950 USB 2.0 controllers didn't
+work (no devices on any SB950 port, Linux reports an OHCI "HC died"), until a
+full power-off. A possible factor is that the southbridge isn't fully
+re-initialised after a reset; see the CIMx section below (USB PHY calibration
+is never run). Unproven.
 
 Not fully understood:
 - The EC firmware is closed; the behaviour above is inferred from tests.
