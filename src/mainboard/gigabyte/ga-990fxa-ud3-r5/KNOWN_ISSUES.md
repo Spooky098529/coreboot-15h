@@ -1,8 +1,12 @@
 # GA-990FXA-UD3 R5: known issues
 
 Tested on rev 5.x with an FX-8350, SeaBIOS payload, Linux. Boot, CPU P-states,
-fan control, SATA, USB 2.0 and the reset button work. The items below are open
-or only partly understood.
+fan control, SATA and USB 2.0 work. The items below are open or only partly
+understood.
+
+**Don't use the reset button.** A second reset-button press without a power-off
+in between still makes the board restore the vendor BIOS over coreboot (see
+the watchdog section). Use a software reboot or a full power-off instead.
 
 ## Legacy ISA interrupts are not delivered (PS/2 keyboard, RTC)
 
@@ -53,8 +57,14 @@ restores the vendor BIOS (see below).
 The disarm matters: without it, pressing the **reset button** after boot
 made the EC treat the boot as failed and start from the backup BIOS chip. The
 vendor BIOS there then overwrites coreboot in the main chip automatically
-(coreboot has no UEFI firmware volumes). With it, reset works normally.
-Software reboots were never affected. Tested on hardware.
+(coreboot has no UEFI firmware volumes). With it, a reset press in a boot
+that started from power-on works normally (tested twice). Software reboots
+were never affected.
+
+**Still broken:** pressing reset in a boot that itself started from a
+reset-button press triggered the recovery again. Under the vendor BIOS,
+repeated resets are fine, so coreboot is still missing something the EC
+checks. Not yet investigated.
 
 Not fully understood:
 - The EC firmware is closed; the behaviour above is inferred from tests.
