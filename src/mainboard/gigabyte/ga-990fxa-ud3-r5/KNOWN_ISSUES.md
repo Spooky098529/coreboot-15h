@@ -60,11 +60,11 @@ Leads (untested):
 The Sabertooth and Crosshair V ports use the same southbridge code and tables
 and probably have the same problem.
 
-Related, separate issue: `acpi/gpe.asl` (from the Sabertooth port) has an
-empty `_L09`, so Linux enables GPE 9, nothing clears its source, and it fires
-about 40 times a second (all SCIs are GPE 9). The vendor DSDT has no `_L09`.
-What drives GEVENT9 is unknown. Disable it at runtime with
-`echo disable > /sys/firmware/acpi/interrupts/gpe09`.
+Related, fixed: `acpi/gpe.asl` (from the Sabertooth port) had an empty
+`_L09` ("Temp warning"), so Linux enabled GPE 9, nothing cleared its source,
+and it fired about 40 times a second. The handler is now removed, as in the
+vendor DSDT, and GPE 9 stays at 0. What drives GEVENT9 is unknown; the
+Sabertooth port probably has the same storm.
 
 PS/2 power is fine (GP17 is driven high, as the vendor BIOS does). IT8620E
 LDN5 register 0xF0 reads 0x48 here and 0x08 under the vendor BIOS; setting

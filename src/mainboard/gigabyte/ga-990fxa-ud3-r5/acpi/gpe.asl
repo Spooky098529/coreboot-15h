@@ -8,8 +8,12 @@ Scope(\_GPE) {
 	/* Gevent0 - ExtEvent0 SCI - Legacy PM Event */
 	Method(_L08) { }
 
-	/* Gevent1 - ExtEvent1 SCI - Temp warning */
-	Method(_L09) { }
+	/*
+	 * Gevent1 (GPE 9, "Temp warning"): no handler, like the vendor DSDT.
+	 * Its source stays asserted on this board; with an empty _L09 Linux
+	 * enabled it and it fired ~40 times a second. Without a handler Linux
+	 * leaves it disabled.
+	 */
 
 	/* Gevent3 - USB PME event */
 	Method(_L0B) {
