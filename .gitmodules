@@ -8,7 +8,7 @@
 	url = ../nvidia-cbootimage.git
 [submodule "vboot"]
 	path = 3rdparty/vboot
-	url = ../vboot.git
+	url = https://git.15h.org/mrothfuss/vboot.git
 [submodule "arm-trusted-firmware"]
 	path = 3rdparty/arm-trusted-firmware
 	url = ../arm-trusted-firmware.git
