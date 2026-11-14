@@ -28,10 +28,10 @@ partial reset.
 
 ## Legacy ISA interrupts are not delivered (PS/2 keyboard, RTC)
 
-Under this port, Linux never receives IRQ 1 (keyboard), 8 (RTC), 9 (ACPI SCI)
-or 12 (PS/2 mouse port), and the timer (IRQ 0) doesn't reach the IOAPIC.
-It is the same with `noapic` (8259 mode), so the interrupts are lost before
-either interrupt controller. The vendor BIOS doesn't have this problem.
+Under this port, Linux never receives IRQ 1 (keyboard), 8 (RTC) or 12 (PS/2
+mouse port), and the timer (IRQ 0) doesn't reach the IOAPIC. With `noapic`
+(8259 mode) these are lost as well, and IRQ 9 (ACPI SCI) too. In normal APIC
+mode the SCI does arrive. The vendor BIOS doesn't have this problem.
 
 Visible effects:
 - **PS/2 keyboard doesn't work in Linux.** The keyboard controller and the
@@ -46,11 +46,25 @@ Visible effects:
   back to a virtual-wire timer. The comment in `acpi_tables.c` about leaving
   out the IRQ0 -> GSI2 override is a symptom of this, not a fix.
 
-Lead (untested): the SB950 PCI IRQ routing table (ports 0xC00/0xC01) in
-`mainboard.c`, copied from the Sabertooth port. Its APIC table sets index
-0x09 (MISC0) to 0x00 "disabled"; coreboot's older native SB800 code writes
-0xF7 there ("Enabled IRQ input"). The Sabertooth and Crosshair V ports use the
-same tables and probably have the same problem.
+Leads (untested):
+- SB950 PMIO 0xED bit 1 ("SbEnableUsbIrq1Irq12ToPicApic" in CIMx) is 1 under
+  the vendor BIOS and 0 here. CIMx sets it in `usbInitAfterPciInit`, which
+  never runs on this board (see the CIMx section below). By its name it
+  routes IRQ 1 and 12 (keyboard, mouse) to the PIC/APIC, so it is the main
+  suspect for the PS/2 part. It doesn't explain IRQ 8 or the timer.
+- The SB950 PCI IRQ routing table (ports 0xC00/0xC01) in `mainboard.c`,
+  copied from the Sabertooth port. Its APIC table sets index 0x09 (MISC0) to
+  0x00 "disabled"; coreboot's older native SB800 code writes 0xF7 there
+  ("Enabled IRQ input").
+
+The Sabertooth and Crosshair V ports use the same southbridge code and tables
+and probably have the same problem.
+
+Related, separate issue: `acpi/gpe.asl` (from the Sabertooth port) has an
+empty `_L09`, so Linux enables GPE 9, nothing clears its source, and it fires
+about 40 times a second (all SCIs are GPE 9). The vendor DSDT has no `_L09`.
+What drives GEVENT9 is unknown. Disable it at runtime with
+`echo disable > /sys/firmware/acpi/interrupts/gpe09`.
 
 PS/2 power is fine (GP17 is driven high, as the vendor BIOS does). IT8620E
 LDN5 register 0xF0 reads 0x48 here and 0x08 under the vendor BIOS; setting
