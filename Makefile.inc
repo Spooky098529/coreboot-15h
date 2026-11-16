@@ -411,7 +411,8 @@ else
 	endif
 endif
 BOOTSPLASH_TEXT-CT-y :=$(BOOTSPLASH_TEXT-CT-y)\n\n$(call strip_quotes,$(CONFIG_BOOTSPLASH_CONVERT_TEXT_BOOTMENU))
-BOOTSPLASH_TEXT-$(CONFIG_BOOTSPLASH_CONVERT_TEXT) = -pointsize 12 -fill 'rgba(255,255,255,0.5)' -gravity Center -annotate $(CONFIG_BOOTSPLASH_CONVERT_TEXT_OFFSET) '$(BOOTSPLASH_TEXT-CT-y)'
+# Set BOOTSPLASH_FONT=/path/to/font.ttf if ImageMagick has no default font
+BOOTSPLASH_TEXT-$(CONFIG_BOOTSPLASH_CONVERT_TEXT) = $(if $(BOOTSPLASH_FONT),-font '$(BOOTSPLASH_FONT)') -pointsize 12 -fill 'rgba(255,255,255,0.5)' -gravity Center -annotate $(CONFIG_BOOTSPLASH_CONVERT_TEXT_OFFSET) '$(BOOTSPLASH_TEXT-CT-y)'
 BOOTSPLASH_FLOOR = $$(($${res%%x*} & ~15))x$$(($${res\#\#*x} & ~15))
 BOOTSPLASH_RESIZE-$(CONFIG_BOOTSPLASH_CONVERT_RESIZE) = -resize $(BOOTSPLASH_FLOOR)
 BOOTSPLASH_CEIL = $$((($${res%%x*} + 15) & ~15))x$$((($${res\#\#*x} + 15) & ~15))
